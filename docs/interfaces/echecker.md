@@ -85,4 +85,4 @@ MDFixer 先核验 EChecker Job 为 `SUCCEEDED`，下载并校验 `INCREMENTAL_CH
 
 ## 7. 本轮验证边界
 
-`python scripts/validate.py` 验证全部 JSON 的可解析性、Schema 基本元数据与本地 `$ref`，还检查 BuildChecker 成功/失败样例和两份来源错配负例的部分跨文档语义；它目前不验证 EChecker 样例是否满足公共 Schema，也不验证 EChecker 的基线/当前来源、delta 集合或 MDFixer 筛选。生产方另用 Draft 2020-12 验证两份 EChecker Job，并核对这些交接条件。刘君杰的消费方 PR 负责持久化缺基线、commit 错配和配置错配的负例，扩展校验脚本并反向验证交接。本生产方 PR 使用 `Related to #8`，消费方最终 PR 才使用 `Closes #8`。
+`python scripts/validate.py` 验证全部 JSON 的可解析性、Schema 基本元数据与本地 `$ref`，还检查 BuildChecker 成功/失败样例、两份来源错配负例，以及 DRAFT 成功交接和缺 commit/镜像负例的部分跨文档语义；它目前不验证 EChecker 样例是否满足公共 Schema，也不验证 EChecker 的基线/当前来源、delta 集合或 MDFixer 筛选。生产方另用 Draft 2020-12 验证两份 EChecker Job，并核对这些交接条件。刘君杰的消费方 PR 负责持久化缺基线、commit 错配和配置错配的负例，扩展校验脚本并反向验证交接。本生产方 PR 使用 `Related to #8`，消费方最终 PR 才使用 `Closes #8`。
