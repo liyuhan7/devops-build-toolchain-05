@@ -33,6 +33,7 @@ fix(e2): align error response example
 
 - 文件位于约定目录，命名清楚；
 - JSON 示例可解析，输入输出字段一致；
+- 已运行 `python scripts/validate.py`；
 - 文档说明失败场景、产物位置和下游读取方式；
 - `AI_USAGE.md` 已如实更新；
 - 没有提交密钥、个人配置或生成缓存。
