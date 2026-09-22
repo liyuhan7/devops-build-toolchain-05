@@ -12,6 +12,7 @@ from urllib.parse import unquote
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 CONTRACTS_ROOT = REPOSITORY_ROOT / "contracts"
 REQUIRED_SCHEMA_FIELDS = {"$schema", "$id", "title", "type"}
+ECHECKER_ROOT = CONTRACTS_ROOT / "echecker"
 BUILDCHECKER_ROOT = CONTRACTS_ROOT / "buildchecker"
 DRAFT_ROOT = CONTRACTS_ROOT / "draft"
 NEGATIVE_ROOT = CONTRACTS_ROOT / "negative"
@@ -380,6 +381,7 @@ def validate() -> list[str]:
 
     errors.extend(validate_buildchecker_semantics())
     errors.extend(validate_draft_semantics())
+    errors.extend(validate_echecker_semantics())
 
     if not errors:
         schema_count = sum(path.name.endswith(".schema.json") for path in json_files)
@@ -399,6 +401,202 @@ def main() -> int:
         return 1
     return 0
 
+
+def _load_json_example(path: Path, errors: list[str]) -> Any | None:
+    relative_path = path.relative_to(REPOSITORY_ROOT)
+    if not path.is_file():
+        errors.append(f"{relative_path}: required example is missing")
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        errors.append(f"{relative_path}: cannot parse JSON: {exc}")
+        return None
+
+
+def _artifact_map(artifacts: Any) -> dict[str, dict[str, Any]]:
+    if not isinstance(artifacts, list):
+        return {}
+    return {
+        artifact["kind"]: artifact
+        for artifact in artifacts
+        if isinstance(artifact, dict) and isinstance(artifact.get("kind"), str)
+    }
+
+
+def _is_commit_mismatch_case(case: dict[str, Any]) -> bool:
+    request = case.get("request")
+    if not isinstance(request, dict):
+        return False
+    repository = request.get("repository")
+    baseline = request.get("baseline")
+    return (
+        isinstance(repository, dict)
+        and isinstance(baseline, dict)
+        and repository.get("base_commit") != baseline.get("source_commit")
+    )
+
+
+def _is_configuration_mismatch_case(case: dict[str, Any]) -> bool:
+    request = case.get("request")
+    if not isinstance(request, dict):
+        return False
+    configuration = request.get("configuration")
+    baseline = request.get("baseline")
+    artifacts = request.get("input_artifacts")
+    if not isinstance(configuration, dict) or not isinstance(baseline, dict):
+        return False
+    configuration_id = configuration.get("configuration_id")
+    if baseline.get("configuration_id") != configuration_id:
+        return True
+    return isinstance(artifacts, list) and any(
+        isinstance(artifact, dict)
+        and artifact.get("configuration_digest") != configuration_id
+        for artifact in artifacts
+    )
+
+
+def _validate_echecker_negative_case(
+    path: Path, expected_code: str, demonstrates_case: Any
+) -> list[str]:
+    errors: list[str] = []
+    relative_path = path.relative_to(REPOSITORY_ROOT)
+    case = _load_json_example(path, errors)
+    if case is None:
+        return errors
+    if not isinstance(case, dict):
+        return [f"{relative_path}: root must be an object"]
+    if case.get("expected_rejection") is not True:
+        errors.append(f"{relative_path}: expected_rejection must be true")
+    if case.get("expected_error_code") != expected_code:
+        errors.append(f"{relative_path}: expected_error_code must be {expected_code}")
+    if not demonstrates_case(case):
+        errors.append(f"{relative_path}: case does not demonstrate {expected_code}")
+    return errors
+
+
+def validate_echecker_semantics() -> list[str]:
+    """Check EChecker provenance, failure, and MDFixer handoff invariants."""
+    errors: list[str] = []
+    request = _load_json_example(ECHECKER_ROOT / "incremental-check.request.json", errors)
+    response = _load_json_example(ECHECKER_ROOT / "incremental-check.response.json", errors)
+    failed = _load_json_example(ECHECKER_ROOT / "incremental-check.failed.json", errors)
+    if errors:
+        return errors
+    if not all(isinstance(document, dict) for document in (request, response, failed)):
+        return ["contracts/echecker: all examples must have object roots"]
+
+    repository = request.get("repository")
+    configuration = request.get("configuration")
+    baseline = request.get("baseline")
+    input_artifacts = request.get("input_artifacts")
+    if not isinstance(repository, dict) or not isinstance(configuration, dict):
+        errors.append("incremental-check.request.json: repository and configuration must be objects")
+        return errors
+    if not isinstance(baseline, dict):
+        errors.append("incremental-check.request.json: baseline must be an object")
+        return errors
+    if not isinstance(input_artifacts, list):
+        errors.append("incremental-check.request.json: input_artifacts must be an array")
+        return errors
+
+    base_commit = repository.get("base_commit")
+    current_commit = repository.get("commit")
+    configuration_id = configuration.get("configuration_id")
+    if base_commit == current_commit:
+        errors.append("incremental-check.request.json: base_commit and commit must differ")
+    if baseline.get("source_commit") != base_commit:
+        errors.append("incremental-check.request.json: baseline source_commit does not match base_commit")
+    if baseline.get("configuration_id") != configuration_id:
+        errors.append("incremental-check.request.json: baseline configuration does not match request")
+    if baseline.get("trace_id") != request.get("trace_id"):
+        errors.append("incremental-check.request.json: baseline trace_id does not match request")
+
+    artifacts_by_kind = _artifact_map(input_artifacts)
+    required_kinds = {
+        "ACTUAL_DEPENDENCY_GRAPH",
+        "DECLARED_DEPENDENCY_GRAPH",
+        "FULL_CHECK_REPORT",
+        "CONTAINER_IMAGE",
+    }
+    for kind in sorted(required_kinds - artifacts_by_kind.keys()):
+        errors.append(f"incremental-check.request.json: missing input artifact {kind}")
+    for kind in sorted(required_kinds - {"CONTAINER_IMAGE"}):
+        artifact = artifacts_by_kind.get(kind)
+        if artifact is None:
+            continue
+        if artifact.get("produced_by_job_id") != baseline.get("job_id"):
+            errors.append(f"incremental-check.request.json: {kind} must come from baseline job")
+        if artifact.get("source_commit") != base_commit:
+            errors.append(f"incremental-check.request.json: {kind} source_commit does not match baseline")
+        if artifact.get("configuration_digest") != configuration_id:
+            errors.append(f"incremental-check.request.json: {kind} configuration does not match request")
+    image = artifacts_by_kind.get("CONTAINER_IMAGE")
+    if image is not None:
+        if image.get("source_commit") != current_commit:
+            errors.append("incremental-check.request.json: current image source_commit does not match commit")
+        if image.get("configuration_digest") != configuration_id:
+            errors.append("incremental-check.request.json: current image configuration does not match request")
+
+    if response.get("status") != "SUCCEEDED" or response.get("error") is not None:
+        errors.append("incremental-check.response.json: successful result must have SUCCEEDED and null error")
+    if response.get("job_type") != "E_CHECKER" or response.get("trace_id") != request.get("trace_id"):
+        errors.append("incremental-check.response.json: job_type and trace_id must match request")
+    response_input_artifacts = _artifact_map(response.get("input_artifacts"))
+    if set(response_input_artifacts) != set(artifacts_by_kind):
+        errors.append("incremental-check.response.json: input artifact kinds do not match request")
+    findings = response.get("findings")
+    output_artifacts = response.get("output_artifacts")
+    if not isinstance(findings, list) or not isinstance(output_artifacts, list):
+        errors.append("incremental-check.response.json: findings and output_artifacts must be arrays")
+    else:
+        categories: set[str] = set()
+        for index, finding in enumerate(findings):
+            if not isinstance(finding, dict):
+                errors.append(f"incremental-check.response.json: finding[{index}] must be an object")
+                continue
+            if finding.get("source_commit") != current_commit:
+                errors.append(f"incremental-check.response.json: finding[{index}] source_commit does not match current commit")
+            if finding.get("configuration_id") != configuration_id:
+                errors.append(f"incremental-check.response.json: finding[{index}] configuration does not match request")
+            if finding.get("category") not in {"MISSING", "REDUNDANT"}:
+                errors.append(f"incremental-check.response.json: finding[{index}] has an unsupported category")
+            else:
+                categories.add(finding["category"])
+        for index, artifact in enumerate(output_artifacts):
+            if not isinstance(artifact, dict):
+                errors.append(f"incremental-check.response.json: output_artifacts[{index}] must be an object")
+                continue
+            if artifact.get("source_commit") != current_commit:
+                errors.append(f"incremental-check.response.json: output_artifacts[{index}] source_commit does not match current commit")
+            if artifact.get("configuration_digest") != configuration_id:
+                errors.append(f"incremental-check.response.json: output_artifacts[{index}] configuration does not match request")
+            if artifact.get("produced_by_job_id") != response.get("job_id"):
+                errors.append(f"incremental-check.response.json: output_artifacts[{index}] producer does not match job_id")
+        if categories != {"MISSING", "REDUNDANT"}:
+            errors.append("incremental-check.response.json: sample must demonstrate MISSING and REDUNDANT findings")
+
+    if failed.get("status") != "FAILED" or not isinstance(failed.get("error"), dict):
+        errors.append("incremental-check.failed.json: failed result must have FAILED and an error object")
+    if failed.get("findings") != [] or failed.get("output_artifacts") != []:
+        errors.append("incremental-check.failed.json: failed result cannot expose findings or output artifacts")
+
+    errors.extend(_validate_echecker_negative_case(
+        NEGATIVE_ROOT / "incremental-missing-baseline.json",
+        "INVALID_REQUEST",
+        lambda case: "baseline" not in case.get("request", {}),
+    ))
+    errors.extend(_validate_echecker_negative_case(
+        NEGATIVE_ROOT / "incremental-commit-mismatch.json",
+        "BASELINE_COMMIT_MISMATCH",
+        _is_commit_mismatch_case,
+    ))
+    errors.extend(_validate_echecker_negative_case(
+        NEGATIVE_ROOT / "incremental-configuration-mismatch.json",
+        "CONFIGURATION_MISMATCH",
+        _is_configuration_mismatch_case,
+    ))
+    return errors
 
 if __name__ == "__main__":
     raise SystemExit(main())
