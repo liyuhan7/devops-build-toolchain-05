@@ -1,0 +1,102 @@
+{
+  "case": "repair-redundant-finding",
+  "description": "Single-field mutation of the production request: finding.category",
+  "expected_rejection": true,
+  "expected_error_code": "FINDING_NOT_REPAIRABLE",
+  "request": {
+    "contract_version": "1.0.0",
+    "trace_id": "e2-example-001",
+    "job_type": "MD_FIXER",
+    "repository": {
+      "url": "https://example.org/team/demo.git",
+      "commit": "fedcba9876543210fedcba9876543210fedcba98"
+    },
+    "configuration": {
+      "configuration_id": "make-debug-linux-v1",
+      "working_directory": ".",
+      "build_system": "make",
+      "targets": [
+        "build/app"
+      ]
+    },
+    "finding": {
+      "finding_id": "ec-finding-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_id": "make-debug-linux-v1",
+      "target": "build/app",
+      "location": {
+        "path": "Makefile",
+        "line": 9,
+        "column": 1
+      },
+      "category": "REDUNDANT",
+      "severity": "WARNING",
+      "message": "当前构建读取 include/feature.h，但目标未声明该前置依赖。",
+      "dependency": {
+        "ecosystem": "make",
+        "name": "include/feature.h",
+        "scope": "build"
+      },
+      "evidence": [
+        "artifact:ec-actual-graph#/edges/2",
+        "artifact:ec-declared-graph#/edges",
+        "artifact:ec-log#L20-L32"
+      ]
+    },
+    "finding_delta": "introduced",
+    "declaration": {
+      "path": "Makefile",
+      "format": "make",
+      "target": "build/app"
+    },
+    "repair_policy": {
+      "strategy": "ADD_MISSING_DEPENDENCY",
+      "allowed_paths": [
+        "Makefile"
+      ],
+      "maximum_changed_files": 1,
+      "allow_source_changes": false
+    },
+    "validation": {
+      "build_command": [
+        "make",
+        "build/app"
+      ],
+      "test_command": [
+        "make",
+        "test"
+      ],
+      "recheck_command": [
+        "echecker",
+        "workspace-check",
+        "--workspace",
+        "."
+      ],
+      "timeout_seconds": 600
+    },
+    "input_artifacts": [
+      {
+        "artifact_id": "ec-report",
+        "kind": "INCREMENTAL_CHECK_REPORT",
+        "uri": "https://artifacts.example.org/e2/ec-report",
+        "media_type": "application/json",
+        "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "produced_by_job_id": "ec-001",
+        "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+        "configuration_digest": "make-debug-linux-v1",
+        "created_at": "2026-09-22T12:03:00Z"
+      },
+      {
+        "artifact_id": "ec-declared-graph",
+        "kind": "DECLARED_DEPENDENCY_GRAPH",
+        "uri": "https://artifacts.example.org/e2/ec-declared-graph",
+        "media_type": "application/json",
+        "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "produced_by_job_id": "ec-001",
+        "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+        "configuration_digest": "make-debug-linux-v1",
+        "created_at": "2026-09-22T12:03:00Z"
+      }
+    ]
+  }
+}
