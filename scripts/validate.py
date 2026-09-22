@@ -12,6 +12,8 @@ from urllib.parse import unquote
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 CONTRACTS_ROOT = REPOSITORY_ROOT / "contracts"
 REQUIRED_SCHEMA_FIELDS = {"$schema", "$id", "title", "type"}
+BUILDCHECKER_ROOT = CONTRACTS_ROOT / "buildchecker"
+NEGATIVE_ROOT = CONTRACTS_ROOT / "negative"
 
 
 def iter_references(value: Any) -> Iterable[str]:
@@ -77,6 +79,99 @@ def resolve_fragment(document: Any, fragment: str) -> None:
             current = current[index]
             continue
         raise ValueError(f"cannot descend through scalar at token {token!r}")
+
+
+def validate_buildchecker_semantics() -> list[str]:
+    """Check the cross-document invariants consumed by EChecker and MDFixer."""
+    errors: list[str] = []
+    negative_files = (
+        NEGATIVE_ROOT / "finding-commit-mismatch.json",
+        NEGATIVE_ROOT / "finding-configuration-mismatch.json",
+    )
+
+    for path in negative_files:
+        if not path.is_file():
+            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: required negative case is missing")
+            continue
+        try:
+            case = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: cannot parse negative case: {exc}")
+            continue
+        if not isinstance(case, dict):
+            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: negative case root must be an object")
+            continue
+        request = case.get("request")
+        finding = case.get("finding")
+        if not isinstance(request, dict) or not isinstance(finding, dict):
+            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: request and finding objects are required")
+            continue
+        request_commit = request.get("repository", {}).get("commit")
+        finding_commit = finding.get("source_commit")
+        request_config = request.get("configuration", {}).get("configuration_id")
+        finding_config = finding.get("configuration_id")
+        if path.name == "finding-commit-mismatch.json" and request_commit == finding_commit:
+            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: commit must be deliberately mismatched")
+        if path.name == "finding-configuration-mismatch.json" and request_config == finding_config:
+            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: configuration must be deliberately mismatched")
+        if case.get("expected_rejection") is not True:
+            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: expected_rejection must be true")
+
+    request_path = BUILDCHECKER_ROOT / "full-check.request.json"
+    response_path = BUILDCHECKER_ROOT / "full-check.response.json"
+    failed_path = BUILDCHECKER_ROOT / "full-check.failed.json"
+    if not all(path.is_file() for path in (request_path, response_path, failed_path)):
+        return errors
+
+    try:
+        request = json.loads(request_path.read_text(encoding="utf-8"))
+        response = json.loads(response_path.read_text(encoding="utf-8"))
+        failed = json.loads(failed_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        errors.append(f"contracts/buildchecker: cannot parse semantic examples: {exc}")
+        return errors
+
+    if not all(isinstance(document, dict) for document in (request, response, failed)):
+        errors.append("contracts/buildchecker: semantic examples must have object roots")
+        return errors
+
+    if response.get("status") != "SUCCEEDED" or response.get("error") is not None:
+        errors.append("full-check.response.json: successful report must have SUCCEEDED and null error")
+    if failed.get("status") != "FAILED" or not isinstance(failed.get("error"), dict):
+        errors.append("full-check.failed.json: failed report must have FAILED and an error object")
+    repository = request.get("repository")
+    configuration = request.get("configuration")
+    findings = response.get("findings")
+    output_artifacts = response.get("output_artifacts")
+    if not isinstance(repository, dict) or not isinstance(configuration, dict):
+        errors.append("full-check.request.json: repository and configuration must be objects")
+        return errors
+    if not isinstance(findings, list) or not isinstance(output_artifacts, list):
+        errors.append("full-check.response.json: findings and output_artifacts must be arrays")
+        return errors
+    expected_commit = repository.get("commit")
+    expected_config = configuration.get("configuration_id")
+    for index, finding in enumerate(findings):
+        if not isinstance(finding, dict):
+            errors.append(f"full-check.response.json: finding[{index}] must be an object")
+            continue
+        if finding.get("source_commit") != expected_commit:
+            errors.append(f"full-check.response.json: finding[{index}] source_commit does not match request")
+        if finding.get("configuration_id") != expected_config:
+            errors.append(f"full-check.response.json: finding[{index}] configuration_id does not match request")
+        if finding.get("category") not in {"MISSING", "REDUNDANT"}:
+            errors.append(f"full-check.response.json: finding[{index}] has an unsupported category")
+    for index, artifact in enumerate(output_artifacts):
+        if not isinstance(artifact, dict):
+            errors.append(f"full-check.response.json: output_artifacts[{index}] must be an object")
+            continue
+        if artifact.get("source_commit") != expected_commit:
+            errors.append(f"full-check.response.json: output_artifacts[{index}] source_commit does not match request")
+        if artifact.get("configuration_digest") != expected_config:
+            errors.append(f"full-check.response.json: output_artifacts[{index}] configuration_digest does not match request")
+        if artifact.get("produced_by_job_id") != response.get("job_id"):
+            errors.append(f"full-check.response.json: output_artifacts[{index}] producer does not match job_id")
+    return errors
 
 
 def validate() -> list[str]:
@@ -148,6 +243,8 @@ def validate() -> list[str]:
                     errors.append(
                         f"{relative_path}: unresolved local $ref {reference}: {exc}"
                     )
+
+    errors.extend(validate_buildchecker_semantics())
 
     if not errors:
         schema_count = sum(path.name.endswith(".schema.json") for path in json_files)
