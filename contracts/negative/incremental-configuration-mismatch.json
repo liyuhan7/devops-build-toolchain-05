@@ -1,0 +1,30 @@
+{
+  "case": "incremental-configuration-mismatch",
+  "description": "A baseline configuration that differs from the requested configuration must be rejected.",
+  "expected_rejection": true,
+  "expected_error_code": "CONFIGURATION_MISMATCH",
+  "request": {
+    "contract_version": "1.0.0",
+    "trace_id": "e2-negative-configuration-001",
+    "job_type": "E_CHECKER",
+    "repository": {
+      "url": "https://example.org/team/demo.git",
+      "base_commit": "0123456789abcdef0123456789abcdef01234567",
+      "commit": "fedcba9876543210fedcba9876543210fedcba98"
+    },
+    "configuration": {
+      "configuration_id": "make-debug-linux-v1",
+      "working_directory": ".",
+      "build_system": "make",
+      "targets": ["build/app"]
+    },
+    "baseline": {
+      "job_id": "bc-001",
+      "trace_id": "e2-negative-configuration-001",
+      "source_commit": "0123456789abcdef0123456789abcdef01234567",
+      "configuration_id": "make-release-linux-v2"
+    },
+    "input_artifacts": []
+  },
+  "consumer_rule": "Reject before comparing Finding deltas because baseline and current configurations differ."
+}

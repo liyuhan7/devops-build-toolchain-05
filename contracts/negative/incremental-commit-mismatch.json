@@ -1,0 +1,30 @@
+{
+  "case": "incremental-commit-mismatch",
+  "description": "A baseline whose source commit differs from repository.base_commit must be rejected.",
+  "expected_rejection": true,
+  "expected_error_code": "BASELINE_COMMIT_MISMATCH",
+  "request": {
+    "contract_version": "1.0.0",
+    "trace_id": "e2-negative-commit-001",
+    "job_type": "E_CHECKER",
+    "repository": {
+      "url": "https://example.org/team/demo.git",
+      "base_commit": "0123456789abcdef0123456789abcdef01234567",
+      "commit": "fedcba9876543210fedcba9876543210fedcba98"
+    },
+    "configuration": {
+      "configuration_id": "make-debug-linux-v1",
+      "working_directory": ".",
+      "build_system": "make",
+      "targets": ["build/app"]
+    },
+    "baseline": {
+      "job_id": "bc-001",
+      "trace_id": "e2-negative-commit-001",
+      "source_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "configuration_id": "make-debug-linux-v1"
+    },
+    "input_artifacts": []
+  },
+  "consumer_rule": "Reject before EChecker or MDFixer consumes any baseline artifact."
+}

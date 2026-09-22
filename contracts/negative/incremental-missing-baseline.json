@@ -1,0 +1,24 @@
+{
+  "case": "incremental-missing-baseline",
+  "description": "An EChecker request without a baseline must be rejected before a Job is created.",
+  "expected_rejection": true,
+  "expected_error_code": "INVALID_REQUEST",
+  "request": {
+    "contract_version": "1.0.0",
+    "trace_id": "e2-negative-missing-baseline-001",
+    "job_type": "E_CHECKER",
+    "repository": {
+      "url": "https://example.org/team/demo.git",
+      "base_commit": "0123456789abcdef0123456789abcdef01234567",
+      "commit": "fedcba9876543210fedcba9876543210fedcba98"
+    },
+    "configuration": {
+      "configuration_id": "make-debug-linux-v1",
+      "working_directory": ".",
+      "build_system": "make",
+      "targets": ["build/app"]
+    },
+    "input_artifacts": []
+  },
+  "consumer_rule": "Reject the request because baseline identity and artifacts are required."
+}
