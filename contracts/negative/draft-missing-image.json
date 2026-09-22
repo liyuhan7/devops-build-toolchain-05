@@ -1,0 +1,19 @@
+{
+  "case": "draft-missing-image",
+  "description": "A DRAFT handoff without an immutable image URI cannot identify the environment for BuildChecker.",
+  "expected_rejection": true,
+  "handoff": {
+    "trace_id": "e2-negative-draft-image-001",
+    "job_id": "draft-negative-missing-image-001",
+    "status": "SUCCEEDED",
+    "source_commit": "0123456789abcdef0123456789abcdef01234567",
+    "working_directory": ".",
+    "dockerfile_path": "Dockerfile",
+    "context_path": ".",
+    "configuration_digest": "sha256:ed50c8428eb0b998e77dfd71e9f4b98a8ea6974c0b56d9b8ef2fa89d472f60d1",
+    "build_exit_code": 0,
+    "validation_exit_code": 0,
+    "final_validation_passed": true
+  },
+  "consumer_rule": "BuildChecker must reject the handoff because image_uri is absent."
+}
