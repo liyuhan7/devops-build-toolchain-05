@@ -9,11 +9,11 @@ MDFixer 接收 EChecker 交付的单个、当前仍有效的 `introduced + MISSI
 ## 端点
 
 ```text
-POST /v1/mdfixer/repairs
+POST /v1/jobs
 GET  /v1/jobs/{job_id}
 ```
 
-`POST` 接受 `contracts/mdfixer/repair.request.json` 所示请求。服务端接受请求后返回 HTTP 202 和服务端生成的 `job_id`；客户端通过公共 Job 查询端点轮询状态。最终成功 Job 见 `repair.response.json`，无法制定安全修复计划的结果见 `repair.rejected.json`。
+MDFixer 在自己的服务基础 URL 下使用 ADR-0001 统一规定的端点。`POST /v1/jobs` 接受 `contracts/mdfixer/repair.request.json` 所示请求，通过 `job_type: "MD_FIXER"` 选择任务类型。服务端接受请求后返回 HTTP 202 和服务端生成的 `job_id`；客户端通过公共 Job 查询端点轮询状态。最终成功 Job 见 `repair.response.json`，无法制定安全修复计划的结果见 `repair.rejected.json`。本接口不另设 `/v1/mdfixer/repairs`。
 
 请求在创建任务前无法通过结构或来源校验时，服务端应返回 HTTP 4xx 和公共 Error；已经创建的任务在计划、应用或验证阶段失败时返回 `status: "FAILED"` 的 Job。
 
@@ -54,6 +54,27 @@ MDFixer 必须按 `artifact.kind` 查找输入，不依赖数组顺序。`INCREM
 
 声明存在歧义、依赖无法表示或必须越过策略边界时，应以 `REPAIR_REJECTED` 结束，并在 `error.details.reason_code` 中返回稳定的可机读原因。拒绝结果不得产生 `GIT_PATCH`。
 
+## 未提交工作区的重检方式
+
+MDFixer 不为候选修复创建 Commit，因此不能把 Patch 应用后的状态冒充为一个新的 `repository.commit`。重检按以下流程执行：
+
+1. 从 `repository.commit` 创建干净、隔离的临时工作区；
+2. 对 `GIT_PATCH` 校验 SHA-256，并执行 `git apply --check`；
+3. 将 Patch 应用到临时工作区，但不执行 `git commit`；
+4. 对应用 Patch 后的文件树生成确定性的 `workspace_digest`；
+5. 在该目录中调用 EChecker 检查引擎的 `workspace-check` 模式；
+6. 将 `base_commit`、`patch_sha256` 和 `workspace_digest` 一起写入修复清单和重检报告。
+
+`workspace-check` 是 MDFixer 内部调用 EChecker 检查引擎的工作区模式，不是 EChecker 对外的增量 Job 接口，也不改变 EChecker 原有的 commit-based 契约。它直接检查当前文件系统中的 Patch Overlay；公共 Artifact 的 `source_commit` 仍记录基准 Commit，而精确的候选状态由以下三元组标识：
+
+```text
+(base_commit, patch_sha256, workspace_digest)
+```
+
+消费者不得只根据 `source_commit` 认定重检对象与原 Commit 相同。`workspace_digest` 应由排序后的仓库相对路径、文件类型和文件内容摘要确定性计算，忽略 `.git` 目录、构建输出和命令产生的临时文件。相同的基准 Commit 和 Patch 必须生成相同的 digest。
+
+请求中的 `recheck_command` 只声明调用方式，因为请求创建时 Patch 尚未生成。MDFixer 生成 Patch 后必须把实际的 `base_commit`、`patch_sha256` 和 configuration 参数加入最终执行命令；解析后的完整命令记录在 `REPAIR_MANIFEST.gates.recheck.command` 中。
+
 ## 成功响应与 Artifact
 
 成功响应遵守公共 Job Schema：`status` 为 `SUCCEEDED`、`error` 为 `null`、`findings` 为空。MDFixer 的专属数据放在 Artifact 中，避免扩展公共 Job 根对象。
@@ -67,6 +88,25 @@ MDFixer 必须按 `artifact.kind` 查找输入，不依赖数组顺序。`INCREM
 | `RECHECK_REPORT` | EChecker 重检结果；包含原 Finding 的处置结果和 `remaining_missing` 计数 |
 
 所有输出 Artifact 的 `produced_by_job_id` 必须等于 MDFixer Job ID，`source_commit` 和 `configuration_digest` 仍指向输入快照。Patch 是相对该 commit 的候选修改，不得把一个尚未创建的新 Commit SHA 写入 Artifact。
+
+`REPAIR_MANIFEST` 的具体载荷见 `contracts/mdfixer/repair.manifest.json`，至少包含：
+
+- `source_commit`、`configuration_id`、`finding_id` 和修复策略；
+- Patch Artifact ID 与 SHA-256；
+- `workspace_snapshot` 三元组及 `commit_created: false`；
+- 修改文件列表；
+- patch apply、build、test、recheck 四个 gate 的状态、命令和退出码；
+- build/test 日志 Artifact 和 recheck 报告 Artifact 的引用。
+
+`RECHECK_REPORT` 的具体载荷见 `contracts/mdfixer/recheck.report.json`，至少包含：
+
+- EChecker 的执行模式和退出码；
+- 与修复清单完全一致的 `workspace_snapshot`；
+- 重检使用的 configuration；
+- 原 Finding ID、category 和 `RESOLVED` 结果；
+- `remaining_findings` 和整数 `remaining_missing`。
+
+消费方必须同时核对两个载荷中的 `trace_id`、MDFixer Job ID、configuration 和工作区三元组，不能只依赖 Job 外层的 Artifact 元数据。
 
 只有同时满足以下条件，Job 才能成功：
 
@@ -102,6 +142,8 @@ git apply --check == PASS
 contracts/mdfixer/repair.request.json
 contracts/mdfixer/repair.response.json
 contracts/mdfixer/repair.rejected.json
+contracts/mdfixer/repair.manifest.json
+contracts/mdfixer/recheck.report.json
 ```
 
 样例 URI、commit、SHA-256、命令输出和时间均为接口说明用的虚构值，不表示真实构建或 Artifact 下载结果。运行：

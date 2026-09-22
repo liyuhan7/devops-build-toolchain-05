@@ -47,7 +47,7 @@
     {
       "artifact_id": "mdf-manifest",
       "kind": "REPAIR_MANIFEST",
-      "uri": "https://artifacts.example.org/e2/mdf-manifest.json",
+      "uri": "https://artifacts.example.org/e2/repair.manifest.json",
       "media_type": "application/json",
       "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
       "produced_by_job_id": "mdf-001",
@@ -80,7 +80,7 @@
     {
       "artifact_id": "mdf-recheck-report",
       "kind": "RECHECK_REPORT",
-      "uri": "https://artifacts.example.org/e2/mdf-recheck-report.json",
+      "uri": "https://artifacts.example.org/e2/recheck.report.json",
       "media_type": "application/json",
       "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
       "produced_by_job_id": "mdf-001",

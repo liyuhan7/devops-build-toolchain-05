@@ -1,0 +1,26 @@
+{
+  "contract_version": "1.0.0",
+  "trace_id": "e2-example-001",
+  "mdfixer_job_id": "mdf-001",
+  "checker": {
+    "job_type": "E_CHECKER",
+    "execution_mode": "PATCHED_WORKSPACE",
+    "exit_code": 0
+  },
+  "workspace_snapshot": {
+    "base_commit": "fedcba9876543210fedcba9876543210fedcba98",
+    "patch_artifact_id": "mdf-patch",
+    "patch_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "workspace_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+    "commit_created": false
+  },
+  "configuration_id": "make-debug-linux-v1",
+  "original_finding": {
+    "finding_id": "ec-finding-001",
+    "category": "MISSING",
+    "result": "RESOLVED"
+  },
+  "remaining_findings": [],
+  "remaining_missing": 0,
+  "checked_at": "2026-09-22T12:06:00Z"
+}

@@ -63,9 +63,9 @@
     ],
     "recheck_command": [
       "echecker",
-      "incremental-check",
-      "--configuration",
-      "make-debug-linux-v1"
+      "workspace-check",
+      "--workspace",
+      "."
     ],
     "timeout_seconds": 600
   },
