@@ -1,0 +1,94 @@
+{
+  "contract_version": "1.0.0",
+  "trace_id": "e2-example-001",
+  "job_id": "mdf-001",
+  "job_type": "MD_FIXER",
+  "status": "SUCCEEDED",
+  "progress_percent": 100,
+  "created_at": "2026-09-22T12:04:00Z",
+  "updated_at": "2026-09-22T12:06:00Z",
+  "finished_at": "2026-09-22T12:06:00Z",
+  "input_artifacts": [
+    {
+      "artifact_id": "ec-report",
+      "kind": "INCREMENTAL_CHECK_REPORT",
+      "uri": "https://artifacts.example.org/e2/ec-report",
+      "media_type": "application/json",
+      "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "produced_by_job_id": "ec-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:03:00Z"
+    },
+    {
+      "artifact_id": "ec-declared-graph",
+      "kind": "DECLARED_DEPENDENCY_GRAPH",
+      "uri": "https://artifacts.example.org/e2/ec-declared-graph",
+      "media_type": "application/json",
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "produced_by_job_id": "ec-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:03:00Z"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "artifact_id": "mdf-patch",
+      "kind": "GIT_PATCH",
+      "uri": "https://artifacts.example.org/e2/mdf-patch.diff",
+      "media_type": "text/x-diff",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "produced_by_job_id": "mdf-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:05:00Z"
+    },
+    {
+      "artifact_id": "mdf-manifest",
+      "kind": "REPAIR_MANIFEST",
+      "uri": "https://artifacts.example.org/e2/mdf-manifest.json",
+      "media_type": "application/json",
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "produced_by_job_id": "mdf-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:06:00Z"
+    },
+    {
+      "artifact_id": "mdf-build-log",
+      "kind": "BUILD_LOG",
+      "uri": "https://artifacts.example.org/e2/mdf-build.log",
+      "media_type": "text/plain",
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "produced_by_job_id": "mdf-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:05:00Z"
+    },
+    {
+      "artifact_id": "mdf-test-log",
+      "kind": "TEST_LOG",
+      "uri": "https://artifacts.example.org/e2/mdf-test.log",
+      "media_type": "text/plain",
+      "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "produced_by_job_id": "mdf-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:05:30Z"
+    },
+    {
+      "artifact_id": "mdf-recheck-report",
+      "kind": "RECHECK_REPORT",
+      "uri": "https://artifacts.example.org/e2/mdf-recheck-report.json",
+      "media_type": "application/json",
+      "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "produced_by_job_id": "mdf-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:06:00Z"
+    }
+  ],
+  "findings": [],
+  "error": null
+}
