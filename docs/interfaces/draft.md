@@ -39,7 +39,7 @@ DRAFT 不得擅自切换到请求 Commit 之外的代码。
 
 | Artifact kind | 内容 | BuildChecker 的使用方式 |
 |---|---|---|
-| `DRAFT_ENVIRONMENT_MANIFEST` | 仓库 URL、完整 Commit、工作目录、配置 ID、构建/验证命令、迭代次数、两项退出码和成功结论 | 首先读取并核对交接条件。 |
+| `DRAFT_ENVIRONMENT_MANIFEST` | 仓库 URL、完整 Commit、工作目录、Dockerfile 路径、构建上下文、不可变镜像 URI、配置 ID、构建/验证命令、迭代次数、两项退出码和成功结论 | 首先读取并核对交接条件。 |
 | `CONTAINER_IMAGE` | OCI 镜像的不可变 digest | 拉取镜像作为构建和依赖分析环境，不能只使用可变 tag。 |
 | `BUILD_LOG` | 实际构建日志 | 异常排查和交接追溯。 |
 | `VALIDATION_LOG` | 最终验证日志 | 确认验证命令确实成功执行。 |
@@ -58,8 +58,11 @@ DRAFT 不得擅自切换到请求 Commit 之外的代码。
 ```json
 {
   "repository_url": "https://github.com/example-org/checkout-service.git",
-  "source_commit": "<40 位 Commit SHA>",
+  "source_commit": "0123456789abcdef0123456789abcdef01234567",
   "working_directory": ".",
+  "dockerfile_path": "Dockerfile",
+  "context_path": ".",
+  "image_uri": "oci://registry.example.edu/e2/checkout-service@sha256:5b703879df7f0cc99a5a91dc0759158fc4e2575805d5509cc21cb2030b8611dc",
   "configuration_id": "maven-jdk17-linux-amd64",
   "configuration_digest": "sha256:<配置摘要>",
   "build": { "command": "./mvnw --batch-mode -DskipTests package", "exit_code": 0 },
@@ -70,6 +73,8 @@ DRAFT 不得擅自切换到请求 Commit 之外的代码。
 ```
 
 ## 失败语义
+
+`draft.failed.json` 表示一次独立的失败请求，不与 `draft.request.json` 和 `draft.response.json` 构成同一次任务。因此它使用独立的 `trace_id` 和 Commit，其请求的 `dockerfile_path` 为 `docker/Dockerfile`。
 
 系统或执行异常必须使用 `status: "FAILED"` 和非空 `error`。`DOCKERFILE_NOT_FOUND` 表示请求 Commit 中没有指定 Dockerfile，是不可重试的输入/配置错误。失败 Job 可以保留 `BUILD_LOG` Artifact 追溯，但不得生成可消费的 `CONTAINER_IMAGE` 或环境清单。
 

@@ -1,0 +1,19 @@
+{
+  "case": "draft-missing-commit",
+  "description": "A DRAFT handoff without the source commit cannot be traced to an exact repository revision.",
+  "expected_rejection": true,
+  "handoff": {
+    "trace_id": "e2-negative-draft-commit-001",
+    "job_id": "draft-negative-missing-commit-001",
+    "status": "SUCCEEDED",
+    "working_directory": ".",
+    "dockerfile_path": "Dockerfile",
+    "context_path": ".",
+    "configuration_digest": "sha256:ed50c8428eb0b998e77dfd71e9f4b98a8ea6974c0b56d9b8ef2fa89d472f60d1",
+    "image_uri": "oci://registry.example.edu/e2/checkout-service@sha256:5b703879df7f0cc99a5a91dc0759158fc4e2575805d5509cc21cb2030b8611dc",
+    "build_exit_code": 0,
+    "validation_exit_code": 0,
+    "final_validation_passed": true
+  },
+  "consumer_rule": "BuildChecker must reject the handoff because source_commit is absent."
+}
