@@ -24,3 +24,6 @@ jobs:
 
       - name: Validate JSON contracts
         run: python scripts/validate.py
+
+      - name: Test contract validation gates
+        run: python -m unittest discover -s tests -v

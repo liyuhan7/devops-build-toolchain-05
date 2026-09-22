@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any, Iterable
 from urllib.parse import unquote
 
@@ -382,6 +383,7 @@ def validate() -> list[str]:
     errors.extend(validate_buildchecker_semantics())
     errors.extend(validate_draft_semantics())
     errors.extend(validate_echecker_semantics())
+    errors.extend(validate_mdfixer_semantics())
 
     if not errors:
         schema_count = sum(path.name.endswith(".schema.json") for path in json_files)
@@ -389,6 +391,7 @@ def validate() -> list[str]:
         print("PASS: DRAFT success response satisfies the BuildChecker handoff rules.")
         print("PASS: draft-missing-commit.json is correctly rejected.")
         print("PASS: draft-missing-image.json is correctly rejected.")
+        print("PASS: MDFixer provenance, repair gates, and three negative cases satisfy the contract.")
 
     return errors
 
@@ -597,6 +600,228 @@ def validate_echecker_semantics() -> list[str]:
         _is_configuration_mismatch_case,
     ))
     return errors
+
+def object_at(value, key):
+    child = value.get(key) if isinstance(value, dict) else None
+    return child if isinstance(child, dict) else {}
+
+
+def array_at(value, key):
+    child = value.get(key) if isinstance(value, dict) else None
+    return child if isinstance(child, list) else []
+
+
+def hex_value(value, length):
+    return isinstance(value, str) and re.fullmatch(r"[0-9a-f]{%d}" % length, value) is not None
+
+
+def safe_path(value):
+    return (isinstance(value, str) and bool(value) and not value.startswith("/")
+            and "\\" not in value and ":" not in value
+            and ".." not in PurePosixPath(value).parts)
+
+
+def artifacts(value, key):
+    return {a.get("kind"): a for a in array_at(value, key)
+            if isinstance(a, dict) and isinstance(a.get("kind"), str)}
+
+
+def check_request(request, upstream, report):
+    """Return stable rejection codes for a repair request and its upstream evidence."""
+    if not all(isinstance(v, dict) for v in (request, upstream, report)):
+        return ["INVALID_REQUEST"]
+    finding = object_at(request, "finding")
+    commit = object_at(request, "repository").get("commit")
+    config = object_at(request, "configuration").get("configuration_id")
+    if (request.get("job_type") != "MD_FIXER" or request.get("contract_version") != "1.0.0"
+            or not hex_value(commit, 40) or not isinstance(config, str) or not config
+            or not hex_value(finding.get("source_commit"), 40)
+            or not finding.get("finding_id") or not finding.get("configuration_id")):
+        return ["INVALID_REQUEST"]
+    if finding.get("category") != "MISSING" or request.get("finding_delta") != "introduced":
+        return ["FINDING_NOT_REPAIRABLE"]
+    if (finding.get("source_commit") != commit or finding.get("configuration_id") != config):
+        return ["PROVENANCE_MISMATCH"]
+    introduced = array_at(object_at(report, "delta"), "introduced")
+    if (upstream.get("status") != "SUCCEEDED" or upstream.get("error") is not None
+            or upstream.get("job_type") != "E_CHECKER"
+            or finding not in array_at(upstream, "findings")
+            or report.get("findings") != upstream.get("findings")
+            or {"current_finding_id": finding["finding_id"]} not in introduced):
+        return ["FINDING_NOT_REPAIRABLE"]
+    if (not request.get("trace_id") or request["trace_id"] != upstream.get("trace_id")
+            or report.get("trace_id") != request["trace_id"]
+            or report.get("source_commit") != commit
+            or report.get("configuration_id") != config
+            or report.get("produced_by_job_id") != upstream.get("job_id")):
+        return ["PROVENANCE_MISMATCH"]
+    inputs = artifacts(request, "input_artifacts")
+    if not {"INCREMENTAL_CHECK_REPORT", "DECLARED_DEPENDENCY_GRAPH"} <= inputs.keys():
+        return ["INVALID_REQUEST"]
+    if len(inputs) != len(array_at(request, "input_artifacts")):
+        return ["INVALID_REQUEST"]
+    for a in inputs.values():
+        if (a not in array_at(upstream, "output_artifacts") or a.get("source_commit") != commit
+                or a.get("configuration_digest") != config
+                or a.get("produced_by_job_id") != upstream.get("job_id")):
+            return ["PROVENANCE_MISMATCH"]
+    declaration = object_at(request, "declaration")
+    policy = object_at(request, "repair_policy")
+    if (not safe_path(declaration.get("path"))
+            or declaration.get("path") != object_at(finding, "location").get("path")
+            or declaration.get("target") != finding.get("target")
+            or declaration.get("path") not in array_at(policy, "allowed_paths")
+            or policy.get("strategy") != "ADD_MISSING_DEPENDENCY"
+            or policy.get("allow_source_changes") is not False
+            or type(policy.get("maximum_changed_files")) is not int
+            or policy["maximum_changed_files"] < 1):
+        return ["INVALID_REQUEST"]
+    validation = object_at(request, "validation")
+    for name in ("build_command", "test_command", "recheck_command"):
+        command = validation.get(name)
+        if not isinstance(command, list) or not command or not all(isinstance(x, str) and x for x in command):
+            return ["INVALID_REQUEST"]
+    if type(validation.get("timeout_seconds")) is not int or validation["timeout_seconds"] <= 0:
+        return ["INVALID_REQUEST"]
+    return []
+
+
+def check_result(request, response, manifest, report):
+    """Accept only a successful repair whose evidence agrees across all payloads."""
+    if not all(isinstance(v, dict) for v in (request, response, manifest, report)):
+        return ["INVALID_RESULT"]
+    commit = object_at(request, "repository").get("commit")
+    config = object_at(request, "configuration").get("configuration_id")
+    if (response.get("status") != "SUCCEEDED" or response.get("error") is not None
+            or response.get("job_type") != "MD_FIXER" or not response.get("job_id")
+            or not response.get("finished_at") or response.get("findings") != []):
+        return ["INVALID_RESULT"]
+    outputs = artifacts(response, "output_artifacts")
+    required = {"GIT_PATCH", "REPAIR_MANIFEST", "BUILD_LOG", "TEST_LOG", "RECHECK_REPORT"}
+    if not required <= outputs.keys() or len(outputs) != len(array_at(response, "output_artifacts")):
+        return ["INVALID_RESULT"]
+    if (artifacts(response, "input_artifacts") != artifacts(request, "input_artifacts")
+            or len(array_at(response, "input_artifacts")) != len(array_at(request, "input_artifacts"))):
+        return ["PROVENANCE_MISMATCH"]
+    for doc, job_key in ((response, "job_id"), (manifest, "job_id"), (report, "mdfixer_job_id")):
+        if (doc.get("trace_id") != request.get("trace_id")
+                or doc.get(job_key) != response["job_id"] or doc.get("contract_version") != "1.0.0"):
+            return ["PROVENANCE_MISMATCH"]
+    ids = []
+    for a in outputs.values():
+        ids.append(a.get("artifact_id"))
+        if (not a.get("artifact_id") or not a.get("uri") or not hex_value(a.get("sha256"), 64)
+                or a.get("source_commit") != commit or a.get("configuration_digest") != config
+                or a.get("produced_by_job_id") != response["job_id"]):
+            return ["PROVENANCE_MISMATCH"]
+    if len(set(ids)) != len(ids):
+        return ["INVALID_RESULT"]
+    patch = outputs["GIT_PATCH"]
+    snapshot = object_at(manifest, "workspace_snapshot")
+    rechecked = object_at(report, "workspace_snapshot")
+    if (manifest.get("source_commit") != commit or manifest.get("configuration_id") != config
+            or report.get("configuration_id") != config
+            or object_at(manifest, "patch_artifact") != {"artifact_id": patch["artifact_id"], "sha256": patch["sha256"]}
+            or snapshot.get("mode") != "PATCH_OVERLAY"
+            or rechecked.get("patch_artifact_id") != patch["artifact_id"]):
+        return ["PROVENANCE_MISMATCH"]
+    for s in (snapshot, rechecked):
+        digest = s.get("workspace_digest")
+        if (s.get("base_commit") != commit or s.get("patch_sha256") != patch["sha256"]
+                or s.get("commit_created") is not False or not isinstance(digest, str)
+                or not digest.startswith("sha256:") or not hex_value(digest[7:], 64)):
+            return ["PROVENANCE_MISMATCH"]
+    if snapshot["workspace_digest"] != rechecked["workspace_digest"]:
+        return ["PROVENANCE_MISMATCH"]
+    finding_id = object_at(request, "finding").get("finding_id")
+    policy = object_at(request, "repair_policy")
+    changed = array_at(manifest, "changed_files")
+    if (manifest.get("finding_id") != finding_id or manifest.get("strategy") != policy.get("strategy")
+            or not changed or len(changed) > policy.get("maximum_changed_files", 0)
+            or any(not isinstance(f, dict) or not safe_path(f.get("path"))
+                   or f.get("path") not in array_at(policy, "allowed_paths") for f in changed)):
+        return ["REPAIR_REJECTED"]
+    gates = object_at(manifest, "gates")
+    for name, code in (("patch_apply", "PATCH_APPLY_FAILED"), ("build", "VALIDATION_FAILED"),
+                       ("test", "VALIDATION_FAILED"), ("recheck", "REVALIDATION_FAILED")):
+        gate = object_at(gates, name)
+        if gate.get("status") != "PASSED" or type(gate.get("exit_code")) is not int or gate["exit_code"] != 0:
+            return [code]
+        command = gate.get("command")
+        if not isinstance(command, list) or not command or not all(isinstance(x, str) and x for x in command):
+            return [code]
+        if name in ("build", "test"):
+            if (command != object_at(request, "validation").get(name + "_command")
+                    or gate.get("log_artifact_id") != outputs[name.upper() + "_LOG"]["artifact_id"]):
+                return ["PROVENANCE_MISMATCH"]
+    if object_at(gates, "patch_apply")["command"][:3] != ["git", "apply", "--check"]:
+        return ["PATCH_APPLY_FAILED"]
+    command = object_at(gates, "recheck")["command"]
+    prefix = object_at(request, "validation").get("recheck_command")
+    expected_command = (prefix if isinstance(prefix, list) else []) + [
+        "--base-commit", commit, "--patch-sha256", patch["sha256"], "--configuration", config]
+    if (command != expected_command or command[:2] != ["echecker", "workspace-check"]
+            or object_at(gates, "recheck").get("report_artifact_id") != outputs["RECHECK_REPORT"]["artifact_id"]):
+        return ["PROVENANCE_MISMATCH"]
+    checker = object_at(report, "checker")
+    original = object_at(report, "original_finding")
+    remaining = report.get("remaining_findings")
+    if (checker.get("job_type") != "E_CHECKER" or checker.get("execution_mode") != "PATCHED_WORKSPACE"
+            or type(checker.get("exit_code")) is not int or checker["exit_code"] != 0
+            or original != {"finding_id": finding_id, "category": "MISSING", "result": "RESOLVED"}
+            or type(report.get("remaining_missing")) is not int or report["remaining_missing"] != 0
+            or not isinstance(remaining, list)
+            or any(not isinstance(f, dict) or f.get("category") != "REDUNDANT" for f in remaining)):
+        return ["REVALIDATION_FAILED"]
+    return []
+
+
+def validate_mdfixer_semantics() -> list[str]:
+    root = CONTRACTS_ROOT
+    try:
+        def read(path):
+            return json.loads((root / path).read_text(encoding="utf-8"))
+        request = read("mdfixer/repair.request.json")
+        response = read("mdfixer/repair.response.json")
+        manifest = read("mdfixer/repair.manifest.json")
+        report = read("mdfixer/recheck.report.json")
+        upstream = read("echecker/incremental-check.response.json")
+        evidence = read("mdfixer/validation/upstream-report.excerpt.json")
+        errors = check_request(request, upstream, evidence) + check_result(request, response, manifest, report)
+        rejected = read("mdfixer/repair.rejected.json")
+        if (rejected.get("status") != "FAILED" or not rejected.get("finished_at")
+                or rejected.get("job_type") != "MD_FIXER" or not rejected.get("job_id")
+                or rejected.get("trace_id") != request.get("trace_id")
+                or rejected.get("input_artifacts") != request.get("input_artifacts")
+                or rejected.get("findings") != []
+                or object_at(rejected, "error").get("code") != "REPAIR_REJECTED"
+                or object_at(rejected, "error").get("phase") != "PLAN"
+                or object_at(rejected, "error").get("retryable") is not False
+                or not object_at(object_at(rejected, "error"), "details").get("reason_code")
+                or "GIT_PATCH" in artifacts(rejected, "output_artifacts")):
+            errors.append("repair.rejected.json: invalid rejection result")
+        for filename, code in (("repair-redundant-finding.json", "FINDING_NOT_REPAIRABLE"),
+                               ("repair-commit-mismatch.json", "PROVENANCE_MISMATCH"),
+                               ("repair-validation-failed.json", "VALIDATION_FAILED")):
+            case = read("negative/" + filename)
+            if filename == "repair-validation-failed.json":
+                actual = check_result(request, response, case.get("manifest"), report)
+                repaired = json.loads(json.dumps(case.get("manifest")))
+                repaired["gates"]["test"]["exit_code"] = manifest["gates"]["test"]["exit_code"]
+                baseline = manifest
+            else:
+                actual = check_request(case.get("request"), upstream, evidence)
+                repaired = json.loads(json.dumps(case.get("request")))
+                field = "category" if filename == "repair-redundant-finding.json" else "source_commit"
+                repaired["finding"][field] = request["finding"][field]
+                baseline = request
+            if (case.get("expected_rejection") is not True or case.get("expected_error_code") != code
+                    or actual != [code] or repaired != baseline):
+                errors.append(f"{filename}: must fail only for the specified single-field mutation ({code})")
+        return ["MDFixer: " + e for e in errors]
+    except (OSError, UnicodeError, ValueError, TypeError, KeyError, AttributeError) as exc:
+        return [f"MDFixer: invalid or missing example: {exc}"]
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
