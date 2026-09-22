@@ -1,0 +1,74 @@
+{
+  "contract_version": "1.0.0",
+  "trace_id": "e2-example-001",
+  "job_id": "mdf-001",
+  "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+  "configuration_id": "make-debug-linux-v1",
+  "finding_id": "ec-finding-001",
+  "strategy": "ADD_MISSING_DEPENDENCY",
+  "patch_artifact": {
+    "artifact_id": "mdf-patch",
+    "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "workspace_snapshot": {
+    "mode": "PATCH_OVERLAY",
+    "base_commit": "fedcba9876543210fedcba9876543210fedcba98",
+    "patch_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "workspace_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+    "commit_created": false
+  },
+  "changed_files": [
+    {
+      "path": "Makefile",
+      "change_type": "MODIFIED"
+    }
+  ],
+  "gates": {
+    "patch_apply": {
+      "status": "PASSED",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "mdf-patch.diff"
+      ],
+      "exit_code": 0
+    },
+    "build": {
+      "status": "PASSED",
+      "command": [
+        "make",
+        "build/app"
+      ],
+      "exit_code": 0,
+      "log_artifact_id": "mdf-build-log"
+    },
+    "test": {
+      "status": "PASSED",
+      "command": [
+        "make",
+        "test"
+      ],
+      "exit_code": 0,
+      "log_artifact_id": "mdf-test-log"
+    },
+    "recheck": {
+      "status": "PASSED",
+      "command": [
+        "echecker",
+        "workspace-check",
+        "--workspace",
+        ".",
+        "--base-commit",
+        "fedcba9876543210fedcba9876543210fedcba98",
+        "--patch-sha256",
+        "1111111111111111111111111111111111111111111111111111111111111111",
+        "--configuration",
+        "make-debug-linux-v1"
+      ],
+      "exit_code": 0,
+      "report_artifact_id": "mdf-recheck-report"
+    }
+  },
+  "completed_at": "2026-09-22T12:06:00Z"
+}
