@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liyuhan7/devops-build-toolchain-05/contracts/common/job.schema.json",
+  "title": "AsynchronousJob",
+  "description": "Common asynchronous job envelope shared by DRAFT, BuildChecker, EChecker and MDFixer.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "trace_id",
+    "job_id",
+    "job_type",
+    "status",
+    "created_at",
+    "updated_at",
+    "input_artifacts",
+    "output_artifacts",
+    "findings",
+    "error"
+  ],
+  "properties": {
+    "contract_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "Correlation identifier shared by all jobs in one end-to-end toolchain run."
+    },
+    "job_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Server-generated identifier returned by POST with HTTP 202."
+    },
+    "job_type": {
+      "type": "string",
+      "enum": ["DRAFT", "BUILD_CHECKER", "E_CHECKER", "MD_FIXER"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["QUEUED", "RUNNING", "SUCCEEDED", "FAILED", "CANCELLED"]
+    },
+    "progress_percent": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "input_artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "artifact.schema.json"
+      }
+    },
+    "output_artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "artifact.schema.json"
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "finding.schema.json"
+      }
+    },
+    "error": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "error.schema.json"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "FAILED"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "error": {
+            "$ref": "error.schema.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": ["QUEUED", "RUNNING", "SUCCEEDED", "CANCELLED"]
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "error": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": ["SUCCEEDED", "FAILED", "CANCELLED"]
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["finished_at"],
+        "properties": {
+          "finished_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  ]
+}

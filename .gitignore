@@ -1,0 +1,28 @@
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Build and dependency outputs
+target/
+build/
+dist/
+node_modules/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Runtime and temporary files
+*.log
+*.tmp
+*.swp
+.cache/
+coverage/
+
+AGENTS.md
