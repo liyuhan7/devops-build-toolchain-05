@@ -29,7 +29,7 @@ EChecker 读取每个 URI 后先验证 SHA-256 和媒体类型，再验证内容
 1. 在隔离环境中检出当前 commit，核对 Git 祖先关系和实际变更路径，并验证当前 DRAFT 镜像。
 2. 从基线实际图和声明图计算受变更影响的目标闭包。对受影响目标执行 clean 与构建追踪，并重新解析声明；未受影响边只有在可以证明其目标、源文件和配置均未变化时才能复用。
 3. 生成**当前 commit 的完整目标范围**的实际图和声明图，并使用与 BuildChecker 相同的边定义比较。若无法证明复用安全，扩大重算范围；仍不能得到完整可信结果则 `FAILED`，不得把局部图标记为成功。
-4. 用 `category + target + dependency.ecosystem + dependency.name + dependency.scope` 组成稳定 Finding 身份键。比较基线与当前键集合，得到 `introduced`、`resolved` 和 `unchanged`。`finding_id` 是报告内引用 ID，不作为跨 commit 身份键；位置、消息和证据可以变化而不改变同一问题的身份。
+4. 将规范化后的 `category`、`target`、`dependency.ecosystem`、`dependency.name`、`dependency.scope` 按此顺序编码为五元素 JSON 数组，作为稳定 Finding 身份键；不得直接拼接字段文本。`scope` 缺失时第五项为 JSON `null`，存在时为其字符串值，例如 `["MISSING","build/app","make","include/config.h",null]`。消费者解析 JSON 后按数组项的值和类型逐项比较，不比较序列化文本，因此字段边界及缺失 scope 均无歧义，且缺失 scope 不等于字符串 `"null"`。比较基线与当前键集合，得到 `introduced`、`resolved` 和 `unchanged`。`finding_id` 是报告内引用 ID，不作为跨 commit 身份键；位置、消息和证据可以变化而不改变同一问题的身份。
 
 成功响应的 `output_artifacts` 各有一份：`ACTUAL_DEPENDENCY_GRAPH`、`DECLARED_DEPENDENCY_GRAPH`、`INCREMENTAL_CHECK_REPORT`、`BUILD_LOG`。图格式沿用 [BuildChecker 接口](buildchecker.md) 的 `targets` 和 `edges`，边方向为 `target` 依赖 `dependency`。输出 Artifact 的 `source_commit` 和内部图/报告的 `source_commit` 均为当前 commit，`configuration_digest` 为当前配置标识，`produced_by_job_id` 为 EChecker Job ID。下游按 `kind` 选取，不能按数组下标选取。
 
@@ -64,10 +64,25 @@ MDFixer 先核验 EChecker Job 为 `SUCCEEDED`，下载并校验 `INCREMENTAL_CH
 
 ## 6. 非法请求和执行失败
 
-解析和前置校验失败时不创建 Job，返回 `{ "error": <公共 Error> }`。主要情况包括：缺少基线产物或字段为 HTTP 400 `INVALID_REQUEST`；不支持的契约版本或构建系统为 HTTP 422；基线 Job 非成功、commit 不是祖先、基线/当前 commit 错配为 HTTP 422 `BASELINE_COMMIT_MISMATCH` 或 `COMMIT_MISMATCH`；配置、目标或完整配置内容不一致为 HTTP 422 `CONFIGURATION_MISMATCH`；变更路径不一致为 HTTP 422 `CHANGED_PATHS_MISMATCH`。未知基线 Job 返回 HTTP 404 `BASELINE_JOB_NOT_FOUND`。
+解析和前置校验失败时不创建 Job，返回 `{ "error": <公共 Error> }`。同一条件必须使用下表固定的 HTTP 状态和 `error.code`；先校验请求结构和版本，再校验基线身份、来源与配置，最后校验当前源码及变更路径。
+
+| HTTP / `error.code` | 触发条件 |
+|---|---|
+| 400 / `INVALID_REQUEST` | 非法 JSON、缺少必填字段或四份必需的 Artifact 引用、字段类型或路径格式错误。 |
+| 422 / `UNSUPPORTED_CONTRACT_VERSION` | `contract_version` 不是服务支持的版本。 |
+| 422 / `UNSUPPORTED_BUILD_SYSTEM` | `configuration.build_system` 不是本版支持的 `make`。 |
+| 404 / `BASELINE_JOB_NOT_FOUND` | `baseline.job_id` 对应的 Job 不存在。 |
+| 422 / `INVALID_BASELINE_RESULT` | 基线 Job 不是 `SUCCEEDED`，或缺少可用的实际图、声明图、完整报告。 |
+| 422 / `BASELINE_COMMIT_MISMATCH` | `base_commit`、`baseline.source_commit`、基线 Job/Artifact/内容中的 commit 任意一处不一致。 |
+| 422 / `BASE_NOT_ANCESTOR` | `base_commit` 与当前 commit 相同，或不是当前 commit 的祖先。 |
+| 422 / `COMMIT_MISMATCH` | 当前镜像或其上游 DRAFT Job 的源码 commit 与 `repository.commit` 不一致。 |
+| 422 / `CONFIGURATION_MISMATCH` | 基线与当前配置标识、完整配置、目标范围，或任一 Artifact 的配置来源不一致。 |
+| 422 / `TRACE_MISMATCH` | 请求、基线 Job 或上游 DRAFT Job 的 `trace_id` 不一致。 |
+| 422 / `INVALID_DRAFT_RESULT` | 当前 DRAFT Job 未同时通过构建和最终验证。 |
+| 422 / `CHANGED_PATHS_MISMATCH` | 提交的 `changed_paths` 与服务端 Git 比较结果不一致。 |
 
 已接受任务后才发现 URI 不可读、摘要不符、Git checkout 失败、追踪/解析失败或构建失败，`GET` 保持 HTTP 200，Job 为 `FAILED`，`error.phase` 指明 `INPUT`、`CHECKOUT`、`BUILD`、`TRACE`、`PARSE` 或 `PUBLISH`，`findings=[]`，不能输出可供 MDFixer 使用的增量报告。失败样例展示 `BASELINE_ARTIFACT_INTEGRITY_ERROR`；其他执行码包括 `ARTIFACT_UNAVAILABLE`、`CHECKOUT_FAILED`、`BUILD_FAILED`、`BUILD_TIMEOUT`、`TRACE_FAILED`、`DECLARED_GRAPH_PARSE_FAILED` 和 `INTERNAL_ERROR`。确定性输入或内容错误 `retryable=false`，只有确认的临时故障才为 true。
 
 ## 7. 本轮验证边界
 
-`python scripts/validate.py` 只验证 JSON 解析、Schema 基本元数据和本地 `$ref`；不能证明样例满足公共 Schema 或上述跨字段语义。生产方应另行用 Draft 2020-12 验证两份 Job，并核对基线/当前来源、delta 集合及 MDFixer 筛选。刘君杰的消费方 PR 负责持久化缺基线、commit 错配和配置错配的负例，扩展校验脚本并反向验证交接。本生产方 PR 使用 `Related to #8`，消费方最终 PR 才使用 `Closes #8`。
+`python scripts/validate.py` 验证全部 JSON 的可解析性、Schema 基本元数据与本地 `$ref`，还检查 BuildChecker 成功/失败样例和两份来源错配负例的部分跨文档语义；它目前不验证 EChecker 样例是否满足公共 Schema，也不验证 EChecker 的基线/当前来源、delta 集合或 MDFixer 筛选。生产方另用 Draft 2020-12 验证两份 EChecker Job，并核对这些交接条件。刘君杰的消费方 PR 负责持久化缺基线、commit 错配和配置错配的负例，扩展校验脚本并反向验证交接。本生产方 PR 使用 `Related to #8`，消费方最终 PR 才使用 `Closes #8`。
