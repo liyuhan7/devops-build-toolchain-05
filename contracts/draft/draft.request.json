@@ -1,25 +1,25 @@
 {
   "contract_version": "1.0.0",
-  "trace_id": "e2-demo-20260922-draft-buildchecker-001",
-  "repository_url": "https://github.com/example-org/checkout-service.git",
+  "trace_id": "e2-example-001",
+  "repository_url": "https://example.org/team/demo.git",
   "source_commit": "0123456789abcdef0123456789abcdef01234567",
   "working_directory": ".",
   "docker": {
     "dockerfile_path": "Dockerfile",
     "context_path": ".",
-    "image_repository": "registry.example.edu/e2/checkout-service"
+    "image_repository": "registry.example.org/e2/demo"
   },
   "build": {
-    "command": "./mvnw --batch-mode -DskipTests package",
-    "timeout_seconds": 900
+    "command": "make build/app",
+    "timeout_seconds": 600
   },
   "validation": {
-    "command": "./mvnw --batch-mode test",
-    "timeout_seconds": 1200
+    "command": "make test",
+    "timeout_seconds": 600
   },
   "iteration_limit": 3,
   "configuration": {
-    "configuration_id": "maven-jdk17-linux-amd64",
-    "configuration_digest": "sha256:ed50c8428eb0b998e77dfd71e9f4b98a8ea6974c0b56d9b8ef2fa89d472f60d1"
+    "configuration_id": "make-debug-linux-v1",
+    "configuration_digest": "make-debug-linux-v1"
   }
 }
