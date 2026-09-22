@@ -1,0 +1,69 @@
+{
+  "contract_version": "1.0.0",
+  "trace_id": "e2-example-001",
+  "job_type": "E_CHECKER",
+  "input_artifacts": [
+    {
+      "artifact_id": "bc-actual-graph",
+      "kind": "ACTUAL_DEPENDENCY_GRAPH",
+      "uri": "https://artifacts.example.org/e2/bc-actual-graph",
+      "media_type": "application/json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "produced_by_job_id": "bc-001",
+      "source_commit": "0123456789abcdef0123456789abcdef01234567",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:00:00Z"
+    },
+    {
+      "artifact_id": "bc-declared-graph",
+      "kind": "DECLARED_DEPENDENCY_GRAPH",
+      "uri": "https://artifacts.example.org/e2/bc-declared-graph",
+      "media_type": "application/json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "produced_by_job_id": "bc-001",
+      "source_commit": "0123456789abcdef0123456789abcdef01234567",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:00:00Z"
+    },
+    {
+      "artifact_id": "bc-report",
+      "kind": "FULL_CHECK_REPORT",
+      "uri": "https://artifacts.example.org/e2/bc-report",
+      "media_type": "application/json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "produced_by_job_id": "bc-001",
+      "source_commit": "0123456789abcdef0123456789abcdef01234567",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:00:00Z"
+    },
+    {
+      "artifact_id": "draft-current-image",
+      "kind": "CONTAINER_IMAGE",
+      "uri": "https://artifacts.example.org/e2/draft-current-image",
+      "media_type": "application/vnd.oci.image.manifest.v1+json",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "produced_by_job_id": "draft-002",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:02:00Z"
+    }
+  ],
+  "job_id": "ec-002",
+  "status": "FAILED",
+  "progress_percent": 15,
+  "created_at": "2026-09-22T12:02:00Z",
+  "updated_at": "2026-09-22T12:02:15Z",
+  "finished_at": "2026-09-22T12:02:15Z",
+  "output_artifacts": [],
+  "findings": [],
+  "error": {
+    "code": "BASELINE_ARTIFACT_INTEGRITY_ERROR",
+    "message": "baseline 实际依赖图的下载内容与 Artifact.sha256 不一致，未执行增量检测。",
+    "retryable": false,
+    "phase": "INPUT",
+    "details": {
+      "artifact_id": "bc-actual-graph",
+      "expected_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  }
+}

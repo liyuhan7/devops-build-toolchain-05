@@ -1,0 +1,154 @@
+{
+  "contract_version": "1.0.0",
+  "trace_id": "e2-example-001",
+  "job_type": "E_CHECKER",
+  "input_artifacts": [
+    {
+      "artifact_id": "bc-actual-graph",
+      "kind": "ACTUAL_DEPENDENCY_GRAPH",
+      "uri": "https://artifacts.example.org/e2/bc-actual-graph",
+      "media_type": "application/json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "produced_by_job_id": "bc-001",
+      "source_commit": "0123456789abcdef0123456789abcdef01234567",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:00:00Z"
+    },
+    {
+      "artifact_id": "bc-declared-graph",
+      "kind": "DECLARED_DEPENDENCY_GRAPH",
+      "uri": "https://artifacts.example.org/e2/bc-declared-graph",
+      "media_type": "application/json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "produced_by_job_id": "bc-001",
+      "source_commit": "0123456789abcdef0123456789abcdef01234567",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:00:00Z"
+    },
+    {
+      "artifact_id": "bc-report",
+      "kind": "FULL_CHECK_REPORT",
+      "uri": "https://artifacts.example.org/e2/bc-report",
+      "media_type": "application/json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "produced_by_job_id": "bc-001",
+      "source_commit": "0123456789abcdef0123456789abcdef01234567",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:00:00Z"
+    },
+    {
+      "artifact_id": "draft-current-image",
+      "kind": "CONTAINER_IMAGE",
+      "uri": "https://artifacts.example.org/e2/draft-current-image",
+      "media_type": "application/vnd.oci.image.manifest.v1+json",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "produced_by_job_id": "draft-002",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:02:00Z"
+    }
+  ],
+  "job_id": "ec-001",
+  "status": "SUCCEEDED",
+  "progress_percent": 100,
+  "created_at": "2026-09-22T12:02:00Z",
+  "updated_at": "2026-09-22T12:03:00Z",
+  "finished_at": "2026-09-22T12:03:00Z",
+  "output_artifacts": [
+    {
+      "artifact_id": "ec-actual-graph",
+      "kind": "ACTUAL_DEPENDENCY_GRAPH",
+      "uri": "https://artifacts.example.org/e2/ec-actual-graph",
+      "media_type": "application/json",
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "produced_by_job_id": "ec-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:03:00Z"
+    },
+    {
+      "artifact_id": "ec-declared-graph",
+      "kind": "DECLARED_DEPENDENCY_GRAPH",
+      "uri": "https://artifacts.example.org/e2/ec-declared-graph",
+      "media_type": "application/json",
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "produced_by_job_id": "ec-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:03:00Z"
+    },
+    {
+      "artifact_id": "ec-report",
+      "kind": "INCREMENTAL_CHECK_REPORT",
+      "uri": "https://artifacts.example.org/e2/ec-report",
+      "media_type": "application/json",
+      "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "produced_by_job_id": "ec-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:03:00Z"
+    },
+    {
+      "artifact_id": "ec-log",
+      "kind": "BUILD_LOG",
+      "uri": "https://artifacts.example.org/e2/ec-log",
+      "media_type": "text/plain",
+      "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "produced_by_job_id": "ec-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:03:00Z"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "ec-finding-001",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_id": "make-debug-linux-v1",
+      "target": "build/app",
+      "location": {
+        "path": "Makefile",
+        "line": 9,
+        "column": 1
+      },
+      "category": "MISSING",
+      "severity": "WARNING",
+      "message": "当前构建读取 include/feature.h，但目标未声明该前置依赖。",
+      "dependency": {
+        "ecosystem": "make",
+        "name": "include/feature.h",
+        "scope": "build"
+      },
+      "evidence": [
+        "artifact:ec-actual-graph#/edges/2",
+        "artifact:ec-declared-graph#/edges",
+        "artifact:ec-log#L20-L32"
+      ]
+    },
+    {
+      "finding_id": "ec-finding-002",
+      "source_commit": "fedcba9876543210fedcba9876543210fedcba98",
+      "configuration_id": "make-debug-linux-v1",
+      "target": "build/app",
+      "location": {
+        "path": "Makefile",
+        "line": 8,
+        "column": 1
+      },
+      "category": "REDUNDANT",
+      "severity": "WARNING",
+      "message": "当前配置的构建未观察到对已声明依赖 include/unused.h 的读取。",
+      "dependency": {
+        "ecosystem": "make",
+        "name": "include/unused.h",
+        "scope": "build"
+      },
+      "evidence": [
+        "artifact:ec-declared-graph#/edges/2",
+        "artifact:ec-actual-graph#/edges",
+        "artifact:ec-log#L20-L32"
+      ]
+    }
+  ],
+  "error": null
+}
