@@ -1,0 +1,43 @@
+{
+  "contract_version": "1.0.0",
+  "trace_id": "e2-example-001",
+  "job_type": "BUILD_CHECKER",
+  "repository": {
+    "url": "https://example.org/team/demo.git",
+    "commit": "0123456789abcdef0123456789abcdef01234567"
+  },
+  "configuration": {
+    "configuration_id": "make-debug-linux-v1",
+    "working_directory": ".",
+    "build_system": "make",
+    "targets": [
+      "build/app"
+    ],
+    "environment": {
+      "CC": "gcc",
+      "CFLAGS": "-O0 -g"
+    },
+    "clean_command": [
+      "make",
+      "clean"
+    ],
+    "build_command": [
+      "make",
+      "build/app"
+    ],
+    "timeout_seconds": 600
+  },
+  "input_artifacts": [
+    {
+      "artifact_id": "draft-image",
+      "kind": "CONTAINER_IMAGE",
+      "uri": "https://artifacts.example.org/e2/draft-image",
+      "media_type": "application/vnd.oci.image.manifest.v1+json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "produced_by_job_id": "draft-001",
+      "source_commit": "0123456789abcdef0123456789abcdef01234567",
+      "configuration_digest": "make-debug-linux-v1",
+      "created_at": "2026-09-22T12:00:00Z"
+    }
+  ]
+}
