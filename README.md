@@ -26,6 +26,13 @@ DRAFT
 - [AI 使用记录](AI_USAGE.md)：记录 AI 建议、成员决策和人工验证；
 - [Issue 模板](.github/ISSUE_TEMPLATE/e2-task.md) 和 [PR 模板](.github/pull_request_template.md)：创建任务和 PR 时自动使用。
 
+## E2 阶段证据
+
+- [端到端接口串联](evidence/e2/end-to-end-example.md)：DRAFT、BuildChecker、EChecker 和 MDFixer 的统一 trace 与 Artifact 交接；
+- [验证汇总](evidence/e2/validation-summary.md)：契约检查、回归测试和跨段验收结果；
+- [贡献记录](evidence/e2/contributions.md)：八名成员的 Issue、Commit SHA 回填表；
+- [未完成项与边界](evidence/e2/open-items.md)：合并前后操作和本阶段不实现的内容。
+
 ## 本地检查
 
 公共 JSON 契约使用标准库脚本检查 JSON 可解析性、Schema 元数据和本地 `$ref`：
@@ -34,7 +41,7 @@ DRAFT
 python scripts/validate.py
 ```
 
-GitHub Actions 会在每个 Pull Request 和推送到 `main` 时运行契约检查。具体工作流见 [contract-validation.yml](.github/workflows/contract-validation.yml)。
+GitHub Actions 会在每个 Pull Request 和推送到 `main` 时运行契约检查与标准库回归测试。具体工作流见 [contract-validation.yml](.github/workflows/contract-validation.yml)。
 
 ## 基本协作流程
 
@@ -42,8 +49,6 @@ GitHub Actions 会在每个 Pull Request 和推送到 `main` 时运行契约检�
 Issue -> Project 看板 -> 任务分支 -> Commit -> Pull Request
       -> 配对成员 Review -> 修改 -> Actions 通过 -> 合并
 ```
-
-Issue 和 PR 必须留下目标、交付产物、验收条件、验证结果和接口交接方式。中间 PR 使用 `Related to #编号`，完成 Issue 的最后一个 PR 使用 `Closes #编号`。
 
 ## 成员配对
 
@@ -54,4 +59,3 @@ Issue 和 PR 必须留下目标、交付产物、验收条件、验证结果和�
 | 管泽昊 | 刘君杰 | EChecker |
 | 黄骢驰 | 陆泓 | MDFixer |
 
-Issue 正文不重复记录内部任务分工；负责人通过 GitHub `Assignees` 设置，配对成员通过 PR `Reviewers` 设置。

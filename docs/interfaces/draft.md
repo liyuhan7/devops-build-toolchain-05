@@ -57,16 +57,16 @@ DRAFT 不得擅自切换到请求 Commit 之外的代码。
 
 ```json
 {
-  "repository_url": "https://github.com/example-org/checkout-service.git",
+  "repository_url": "https://example.org/team/demo.git",
   "source_commit": "0123456789abcdef0123456789abcdef01234567",
   "working_directory": ".",
   "dockerfile_path": "Dockerfile",
   "context_path": ".",
-  "image_uri": "oci://registry.example.edu/e2/checkout-service@sha256:5b703879df7f0cc99a5a91dc0759158fc4e2575805d5509cc21cb2030b8611dc",
-  "configuration_id": "maven-jdk17-linux-amd64",
-  "configuration_digest": "sha256:<配置摘要>",
-  "build": { "command": "./mvnw --batch-mode -DskipTests package", "exit_code": 0 },
-  "validation": { "command": "./mvnw --batch-mode test", "exit_code": 0 },
+  "image_uri": "oci://registry.example.org/e2/demo@sha256:5b703879df7f0cc99a5a91dc0759158fc4e2575805d5509cc21cb2030b8611dc",
+  "configuration_id": "make-debug-linux-v1",
+  "configuration_digest": "make-debug-linux-v1",
+  "build": { "command": "make build/app", "exit_code": 0 },
+  "validation": { "command": "make test", "exit_code": 0 },
   "iteration_count": 1,
   "final_validation_passed": true
 }

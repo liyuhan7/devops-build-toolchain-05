@@ -310,6 +310,117 @@ def validate_draft_semantics() -> list[str]:
     return errors
 
 
+def validate_end_to_end_semantics() -> list[str]:
+    """Check that the four successful examples form one traceable handoff chain."""
+    errors: list[str] = []
+
+    def read(relative_path: str) -> dict[str, Any]:
+        document = json.loads(
+            (CONTRACTS_ROOT / relative_path).read_text(encoding="utf-8")
+        )
+        if not isinstance(document, dict):
+            raise ValueError(f"{relative_path} root must be an object")
+        return document
+
+    def by_kind(document: dict[str, Any], field: str) -> dict[str, dict[str, Any]]:
+        values = document.get(field)
+        if not isinstance(values, list):
+            return {}
+        return {
+            value["kind"]: value
+            for value in values
+            if isinstance(value, dict) and isinstance(value.get("kind"), str)
+        }
+
+    try:
+        draft_request = read("draft/draft.request.json")
+        draft_response = read("draft/draft.response.json")
+        buildchecker_request = read("buildchecker/full-check.request.json")
+        buildchecker_response = read("buildchecker/full-check.response.json")
+        echecker_request = read("echecker/incremental-check.request.json")
+        echecker_response = read("echecker/incremental-check.response.json")
+        mdfixer_request = read("mdfixer/repair.request.json")
+        mdfixer_response = read("mdfixer/repair.response.json")
+    except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
+        return [f"E2 end-to-end: cannot load successful examples: {exc}"]
+
+    documents = (
+        draft_request,
+        draft_response,
+        buildchecker_request,
+        buildchecker_response,
+        echecker_request,
+        echecker_response,
+        mdfixer_request,
+        mdfixer_response,
+    )
+    trace_ids = {document.get("trace_id") for document in documents}
+    if len(trace_ids) != 1 or None in trace_ids:
+        errors.append("all successful E2 examples must share one trace_id")
+
+    configurations = {
+        draft_request.get("configuration", {}).get("configuration_id"),
+        draft_request.get("configuration", {}).get("configuration_digest"),
+        buildchecker_request.get("configuration", {}).get("configuration_id"),
+        echecker_request.get("configuration", {}).get("configuration_id"),
+        mdfixer_request.get("configuration", {}).get("configuration_id"),
+    }
+    if len(configurations) != 1 or None in configurations:
+        errors.append("all successful E2 examples must use one immutable configuration")
+
+    base_commits = {
+        draft_request.get("source_commit"),
+        buildchecker_request.get("repository", {}).get("commit"),
+        echecker_request.get("repository", {}).get("base_commit"),
+    }
+    if len(base_commits) != 1 or None in base_commits:
+        errors.append("DRAFT, BuildChecker, and EChecker baseline commits must match")
+    current_commits = {
+        echecker_request.get("repository", {}).get("commit"),
+        mdfixer_request.get("repository", {}).get("commit"),
+    }
+    if len(current_commits) != 1 or None in current_commits:
+        errors.append("EChecker current commit and MDFixer commit must match")
+
+    draft_outputs = by_kind(draft_response, "output_artifacts")
+    buildchecker_inputs = by_kind(buildchecker_request, "input_artifacts")
+    draft_image = draft_outputs.get("CONTAINER_IMAGE")
+    if draft_image is None or draft_image != buildchecker_inputs.get("CONTAINER_IMAGE"):
+        errors.append("BuildChecker must consume the exact CONTAINER_IMAGE produced by DRAFT")
+    if buildchecker_request.get("input_artifacts") != buildchecker_response.get("input_artifacts"):
+        errors.append("BuildChecker response must preserve its input artifacts")
+
+    buildchecker_outputs = by_kind(buildchecker_response, "output_artifacts")
+    echecker_inputs = by_kind(echecker_request, "input_artifacts")
+    for kind in ("ACTUAL_DEPENDENCY_GRAPH", "DECLARED_DEPENDENCY_GRAPH", "FULL_CHECK_REPORT"):
+        if buildchecker_outputs.get(kind) != echecker_inputs.get(kind):
+            errors.append(f"EChecker must consume the exact {kind} produced by BuildChecker")
+
+    echecker_outputs = by_kind(echecker_response, "output_artifacts")
+    mdfixer_inputs = by_kind(mdfixer_request, "input_artifacts")
+    for kind in ("DECLARED_DEPENDENCY_GRAPH", "INCREMENTAL_CHECK_REPORT"):
+        if echecker_outputs.get(kind) != mdfixer_inputs.get(kind):
+            errors.append(f"MDFixer must consume the exact {kind} produced by EChecker")
+
+    finding = mdfixer_request.get("finding")
+    echecker_findings = echecker_response.get("findings")
+    if not isinstance(finding, dict) or not isinstance(echecker_findings, list):
+        errors.append("MDFixer finding and EChecker findings must be present")
+    elif finding not in echecker_findings:
+        errors.append("MDFixer must consume an unchanged Finding from the EChecker response")
+
+    for name, response in (
+        ("DRAFT", draft_response),
+        ("BuildChecker", buildchecker_response),
+        ("EChecker", echecker_response),
+        ("MDFixer", mdfixer_response),
+    ):
+        if response.get("status") != "SUCCEEDED" or response.get("error") is not None:
+            errors.append(f"{name} successful chain response must have SUCCEEDED and null error")
+
+    return [f"E2 end-to-end: {error}" for error in errors]
+
+
 def validate() -> list[str]:
     errors: list[str] = []
     schema_ids: dict[str, Path] = {}
@@ -384,6 +495,7 @@ def validate() -> list[str]:
     errors.extend(validate_draft_semantics())
     errors.extend(validate_echecker_semantics())
     errors.extend(validate_mdfixer_semantics())
+    errors.extend(validate_end_to_end_semantics())
 
     if not errors:
         schema_count = sum(path.name.endswith(".schema.json") for path in json_files)
@@ -392,6 +504,7 @@ def validate() -> list[str]:
         print("PASS: draft-missing-commit.json is correctly rejected.")
         print("PASS: draft-missing-image.json is correctly rejected.")
         print("PASS: MDFixer provenance, repair gates, and three negative cases satisfy the contract.")
+        print("PASS: DRAFT, BuildChecker, EChecker, and MDFixer form one traceable handoff chain.")
 
     return errors
 

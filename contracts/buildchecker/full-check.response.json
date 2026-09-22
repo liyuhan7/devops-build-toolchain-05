@@ -12,9 +12,10 @@
     {
       "artifact_id": "draft-image",
       "kind": "CONTAINER_IMAGE",
-      "uri": "https://artifacts.example.org/e2/draft-image",
+      "uri": "oci://registry.example.org/e2/demo@sha256:5b703879df7f0cc99a5a91dc0759158fc4e2575805d5509cc21cb2030b8611dc",
       "media_type": "application/vnd.oci.image.manifest.v1+json",
-      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "sha256": "5b703879df7f0cc99a5a91dc0759158fc4e2575805d5509cc21cb2030b8611dc",
+      "size_bytes": 5834,
       "produced_by_job_id": "draft-001",
       "source_commit": "0123456789abcdef0123456789abcdef01234567",
       "configuration_digest": "make-debug-linux-v1",
