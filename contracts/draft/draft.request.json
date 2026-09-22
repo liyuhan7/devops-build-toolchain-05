@@ -1,0 +1,25 @@
+{
+  "contract_version": "1.0.0",
+  "trace_id": "e2-demo-20260922-draft-buildchecker-001",
+  "repository_url": "https://github.com/example-org/checkout-service.git",
+  "source_commit": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+  "working_directory": ".",
+  "docker": {
+    "dockerfile_path": "Dockerfile",
+    "context_path": ".",
+    "image_repository": "registry.example.edu/e2/checkout-service"
+  },
+  "build": {
+    "command": "./mvnw --batch-mode -DskipTests package",
+    "timeout_seconds": 900
+  },
+  "validation": {
+    "command": "./mvnw --batch-mode test",
+    "timeout_seconds": 1200
+  },
+  "iteration_limit": 3,
+  "configuration": {
+    "configuration_id": "maven-jdk17-linux-amd64",
+    "configuration_digest": "sha256:ed50c8428eb0b998e77dfd71e9f4b98a8ea6974c0b56d9b8ef2fa89d472f60d1"
+  }
+}
