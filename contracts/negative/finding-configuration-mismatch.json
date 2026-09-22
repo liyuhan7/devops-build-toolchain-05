@@ -1,0 +1,30 @@
+{
+  "case": "finding-configuration-mismatch",
+  "description": "A finding produced with a different immutable configuration must be rejected by consumers.",
+  "expected_rejection": true,
+  "request": {
+    "contract_version": "1.0.0",
+    "trace_id": "e2-negative-configuration-001",
+    "job_type": "BUILD_CHECKER",
+    "repository": {
+      "url": "https://example.org/team/demo.git",
+      "commit": "0123456789abcdef0123456789abcdef01234567"
+    },
+    "configuration": {
+      "configuration_id": "make-debug-linux-v1"
+    }
+  },
+  "finding": {
+    "finding_id": "bc-invalid-configuration-001",
+    "source_commit": "0123456789abcdef0123456789abcdef01234567",
+    "configuration_id": "make-release-linux-v2",
+    "target": "build/app",
+    "location": {"path": "Makefile", "line": 8},
+    "category": "MISSING",
+    "severity": "WARNING",
+    "message": "Finding intentionally comes from another configuration.",
+    "dependency": {"ecosystem": "make", "name": "include/config.h"},
+    "evidence": ["artifact:bc-actual-graph#/edges/0"]
+  },
+  "consumer_rule": "Reject before EChecker or MDFixer consumes the finding."
+}
