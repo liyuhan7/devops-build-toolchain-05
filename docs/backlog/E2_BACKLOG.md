@@ -1,0 +1,424 @@
+# E2 Backlog：需求与接口契约
+
+> 仓库：`devops-build-toolchain-05`  
+> Milestone：`E2 需求与接口契约`  
+> 建议保存位置：`docs/backlog/E2.md`  
+> 总量：3 个阶段、6 个 Issue、10 个计划 PR。
+
+## 1. 简化后的执行方式
+
+```text
+阶段一：准备 E2 协作基础
+  E2-01
+
+阶段二：四对成员并行完成四段接口
+  E2-02 DRAFT -> BuildChecker
+  E2-03 BuildChecker -> 下游
+  E2-04 EChecker -> MDFixer
+  E2-05 MDFixer -> 重新验证
+
+阶段三：串联检查并结束 E2
+  E2-06
+```
+
+每个配对 Issue 包含两个 PR：
+
+1. 生产方提交接口契约 PR，消费方 Review。
+2. 消费方提交交接验证 PR，生产方反向 Review。
+
+
+## 2. Backlog 总览
+
+| ID | Issue | Owner | 配对成员/Reviewer | 计划 PR |
+|---|---|---|---|---:|
+| E2-01 | 建立 E2 协作基础与公共约定 | 李宇瀚 | 陆泓 | 1 |
+| E2-02 | 设计 DRAFT 到 BuildChecker 接口 | 李新昊 | 李宇瀚 | 2 |
+| E2-03 | 设计 BuildChecker 全量检测接口 | 孙鲲华 | 刘洋 | 2 |
+| E2-04 | 设计 EChecker 增量检测接口 | 管泽昊 | 刘君杰 | 2 |
+| E2-05 | 设计 MDFixer 修复与重检接口 | 陆泓 | 黄骢驰 | 2 |
+| E2-06 | 完成四段接口串联与 E2 收尾 | 李宇瀚 | 全员 | 1 |
+
+## 3. Issue 创建与 PR 关联规则
+
+### 3.1 Issue 怎么提
+
+进入仓库：
+
+```text
+Issues -> New issue -> 选择 E2 Task 模板
+```
+
+按照下表创建 6 个 Issue。`E2-01` 等是 Backlog 编号，不是 GitHub 自动生成的 `#编号`；创建后，把 GitHub 实际分配的编号回填到本文件。
+
+| Backlog ID | GitHub Issue 标题 | Assignee | Milestone |
+|---|---|---|---|
+| E2-01 | `[E2][Common] 建立协作基础与公共接口约定` | 李宇瀚 | E2 需求与接口契约 |
+| E2-02 | `[E2][DRAFT] 设计 DRAFT 到 BuildChecker 接口` | 李新昊 | E2 需求与接口契约 |
+| E2-03 | `[E2][BuildChecker] 设计全量检测与报告接口` | 孙鲲华 | E2 需求与接口契约 |
+| E2-04 | `[E2][EChecker] 设计增量检测与修复交接接口` | 管泽昊 | E2 需求与接口契约 |
+| E2-05 | `[E2][MDFixer] 设计修复与重新验证接口` | 陆泓 | E2 需求与接口契约 |
+| E2-06 | `[E2][Integration] 串联四段接口并完成阶段收尾` | 李宇瀚 | E2 需求与接口契约 |
+
+Issue 正文统一使用：
+
+```md
+## 目标
+
+一句话说明要完成的接口或交接。
+
+## 交付产物
+
+- [ ] 产物 1
+- [ ] 产物 2
+
+## 验收条件
+
+- [ ] 交付文件完整
+- [ ] 配对成员 Review 通过
+- [ ] GitHub Actions 通过
+
+## 依赖
+
+无，或填写 `Blocked by #Issue编号`。
+```
+
+配对接口 Issue 的“交付产物”中写两个 PR 的产物；E2-01、E2-06 只写一个 PR 的产物。
+
+人员分工不写入 Issue 正文：负责人使用 GitHub 的 `Assignees` 设置，审核人在创建 PR 后通过 `Reviewers` 设置。
+
+### 3.2 两个 PR 如何关联同一个 Issue
+
+GitHub 创建 Issue 后会得到实际编号，例如 E2-02 可能是 `#5`。两个 PR 的描述分别填写：
+
+生产方契约 PR：
+
+```md
+## Related
+
+Related to #5
+```
+
+`Related to` 只表示相关，不会在第一个 PR 合并时关闭 Issue。
+
+消费方验证 PR：
+
+```md
+## Related
+
+Closes #5
+```
+
+第二个 PR 是该 Issue 的最终验收；它合入 `main` 后，GitHub 自动关闭 Issue。
+
+### 3.3 六个 Issue 的关联方式
+
+| Backlog ID | PR 1 描述 | PR 2 描述 | 关闭时机 |
+|---|---|---|---|
+| E2-01 | `Closes #实际编号` | 无 | 基础 PR 合并时 |
+| E2-02 | `Related to #实际编号` | `Closes #实际编号` | DRAFT 验证 PR 合并时 |
+| E2-03 | `Related to #实际编号` | `Closes #实际编号` | BuildChecker 验证 PR 合并时 |
+| E2-04 | `Related to #实际编号` | `Closes #实际编号` | EChecker 验证 PR 合并时 |
+| E2-05 | `Related to #实际编号` | `Closes #实际编号` | MDFixer 验证 PR 合并时 |
+| E2-06 | `Closes #实际编号` | 无 | E2 收尾 PR 合并时 |
+
+不要把 Backlog ID 写成 `Closes E2-02`。GitHub 只能根据实际 Issue 编号自动关闭，例如：
+
+```text
+Closes #5
+```
+
+## 4. Issue 和 PR 详情
+
+### E2-01 建立 E2 协作基础与公共约定
+
+**GitHub Issue 标题：** `[E2][Common] 建立协作基础与公共接口约定`  
+**Owner：** 李宇瀚  
+**Reviewer：** 陆泓  
+**Labels：** `stage:E2`、`group:shared`、`area:common`  
+**Branch：** `chore/e2-foundation`  
+**PR：** `chore: establish E2 collaboration and common contracts`
+**PR 关联：** `Closes #E2-01的实际GitHub编号`
+
+#### PR 交付产物
+
+```text
+.github/ISSUE_TEMPLATE/e2-task.md
+.github/pull_request_template.md
+.github/workflows/contract-validation.yml
+.gitignore
+CONTRIBUTING.md
+AI_USAGE.md
+docs/backlog/E2.md
+docs/adr/0001-e2-interface-decisions.md
+contracts/common/job.schema.json
+contracts/common/artifact.schema.json
+contracts/common/finding.schema.json
+contracts/common/error.schema.json
+scripts/validate.py
+```
+
+#### 公共约定至少说明
+
+- 四类任务使用统一异步 Job。
+- `POST` 创建任务，返回 HTTP 202 和服务端生成的 `job_id`。
+- `GET /v1/jobs/{job_id}` 查询状态和产物引用。
+- Job 状态包括 `QUEUED`、`RUNNING`、`SUCCEEDED` 和失败终态。
+- 大文件通过 Artifact URI 交接。
+- Artifact 记录 commit、configuration 和生产任务。
+- `MISSING`、`REDUNDANT` 是 Finding，不是系统错误。
+- 系统执行异常写入 `job.error`。
+
+#### 验收条件
+
+- 模板能够支持后续四个配对 Issue。
+- 四对成员都在 Issue 评论中确认公共字段。
+- 初始校验脚本至少能检查 JSON 是否可解析。
+- E2-01 合入 `main` 后触发首次 GitHub Actions，并成功运行。
+- 首次成功后，将该检查配置为后续 PR 的合并门禁。
+- 陆泓提出具体 Review 意见，李宇瀚修改后再合并。
+
+---
+
+### E2-02 设计 DRAFT 到 BuildChecker 接口
+
+**GitHub Issue 标题：** `[E2][DRAFT] 设计 DRAFT 到 BuildChecker 接口`  
+**Owner：** 李新昊  
+**配对成员：** 李宇瀚  
+**Labels：** `stage:E2`、`area:DRAFT`、`area:BuildChecker`  
+**依赖：** E2-01
+
+#### PR 1：生产方契约
+
+**作者：** 李新昊  
+**Reviewer：** 李宇瀚  
+**Branch：** `feat/draft-contract`  
+**PR 标题：** `feat: define DRAFT environment contract`
+**PR 关联：** `Related to #E2-02的实际GitHub编号`
+
+交付产物：
+
+```text
+contracts/draft/draft.request.json
+contracts/draft/draft.response.json
+contracts/draft/draft.failed.json
+docs/interfaces/draft.md
+```
+
+必须覆盖：仓库 URL、完整 Commit SHA、构建与验证命令、迭代限制、Dockerfile、镜像、日志和最终验证结果。
+
+#### PR 2：消费方交接验证
+
+**作者：** 李宇瀚  
+**Reviewer：** 李新昊  
+**Branch：** `test/draft-buildchecker-handoff`  
+**PR 标题：** `test: validate DRAFT to BuildChecker handoff`
+**PR 关联：** `Closes #E2-02的实际GitHub编号`
+
+交付产物：
+
+```text
+contracts/negative/draft-missing-commit.json
+contracts/negative/draft-missing-image.json
+docs/validation/draft-buildchecker.md
+scripts/validate.py（补充 DRAFT 检查）
+```
+
+验收条件：BuildChecker 能读取镜像、commit、工作目录和构建配置；缺关键输入时被拒绝；DRAFT 必须同时构建和验证成功。
+
+---
+
+### E2-03 设计 BuildChecker 全量检测接口
+
+**GitHub Issue 标题：** `[E2][BuildChecker] 设计全量检测与报告接口`  
+**Owner：** 孙鲲华  
+**配对成员：** 刘洋  
+**Labels：** `stage:E2`、`area:BuildChecker`  
+**依赖：** E2-01
+
+#### PR 1：生产方契约
+
+**作者：** 孙鲲华  
+**Reviewer：** 刘洋  
+**Branch：** `feat/buildchecker-contract`  
+**PR 标题：** `feat: define BuildChecker full-check contract`
+**PR 关联：** `Related to #E2-03的实际GitHub编号`
+
+交付产物：
+
+```text
+contracts/buildchecker/full-check.request.json
+contracts/buildchecker/full-check.response.json
+contracts/buildchecker/full-check.failed.json
+docs/interfaces/buildchecker.md
+```
+
+必须覆盖：仓库与配置、clean build、实际图、声明图、`MISSING`/`REDUNDANT`、位置证据和执行失败。
+
+#### PR 2：消费方交接验证
+
+**作者：** 刘洋  
+**Reviewer：** 孙鲲华  
+**Branch：** `test/buildchecker-report-handoff`  
+**PR 标题：** `test: validate BuildChecker report handoff`
+**PR 关联：** `Closes #E2-03的实际GitHub编号`
+
+交付产物：
+
+```text
+contracts/negative/finding-commit-mismatch.json
+contracts/negative/finding-configuration-mismatch.json
+docs/validation/buildchecker-consumers.md
+scripts/validate.py（补充 BuildChecker 检查）
+```
+
+验收条件：Finding 的 commit/configuration 一致；正常发现不进入 `job.error`；MDFixer 只能选择 `MISSING`。
+
+---
+
+### E2-04 设计 EChecker 增量检测接口
+
+**GitHub Issue 标题：** `[E2][EChecker] 设计增量检测与修复交接接口`  
+**Owner：** 管泽昊  
+**配对成员：** 刘君杰  
+**Labels：** `stage:E2`、`area:EChecker`  
+**依赖：** E2-01，以及 E2-03 的 BuildChecker 输出约定
+
+#### PR 1：生产方契约
+
+**作者：** 管泽昊  
+**Reviewer：** 刘君杰  
+**Branch：** `feat/echecker-contract`  
+**PR 标题：** `feat: define EChecker incremental-check contract`
+**PR 关联：** `Related to #E2-04的实际GitHub编号`
+
+交付产物：
+
+```text
+contracts/echecker/incremental-check.request.json
+contracts/echecker/incremental-check.response.json
+contracts/echecker/incremental-check.failed.json
+docs/interfaces/echecker.md
+```
+
+必须覆盖：`base_commit`、当前 commit、baseline 图和配置、当前 Finding、introduced/resolved/unchanged、更新后的图。
+
+#### PR 2：消费方交接验证
+
+**作者：** 刘君杰  
+**Reviewer：** 管泽昊  
+**Branch：** `test/echecker-mdfixer-handoff`  
+**PR 标题：** `test: validate EChecker to MDFixer handoff`
+**PR 关联：** `Closes #E2-04的实际GitHub编号`
+
+交付产物：
+
+```text
+contracts/negative/incremental-missing-baseline.json
+contracts/negative/incremental-commit-mismatch.json
+contracts/negative/incremental-configuration-mismatch.json
+docs/validation/echecker-mdfixer.md
+scripts/validate.py（补充 EChecker 检查）
+```
+
+验收条件：baseline commit 和配置匹配；三类非法输入被拒绝；新增 `MISSING` 可交给 MDFixer，resolved Finding 不再修复。
+
+---
+
+### E2-05 设计 MDFixer 修复与重检接口
+
+**GitHub Issue 标题：** `[E2][MDFixer] 设计修复与重新验证接口`  
+**Owner：** 陆泓  
+**配对成员：** 黄骢驰  
+**Labels：** `stage:E2`、`area:MDFixer`  
+**依赖：** E2-01、E2-03、E2-04 的 Finding 约定
+
+#### PR 1：生产方契约
+
+**作者：** 陆泓  
+**Reviewer：** 黄骢驰  
+**Branch：** `feat/mdfixer-contract`  
+**PR 标题：** `feat: define MDFixer repair contract`
+**PR 关联：** `Related to #E2-05的实际GitHub编号`
+
+交付产物：
+
+```text
+contracts/mdfixer/repair.request.json
+contracts/mdfixer/repair.response.json
+contracts/mdfixer/repair.rejected.json
+docs/interfaces/mdfixer.md
+```
+
+必须覆盖：仓库和 commit、`MISSING` 报告、声明文件位置、构建/测试/重检命令、Git Patch、修复策略和拒绝原因。
+
+#### PR 2：消费方重新验证
+
+**作者：** 黄骢驰  
+**Reviewer：** 陆泓  
+**Branch：** `test/mdfixer-revalidation`  
+**PR 标题：** `test: validate MDFixer repair gates`
+**PR 关联：** `Closes #E2-05的实际GitHub编号`
+
+交付产物：
+
+```text
+contracts/negative/repair-redundant-finding.json
+contracts/negative/repair-commit-mismatch.json
+contracts/negative/repair-validation-failed.json
+docs/validation/mdfixer-revalidation.md
+scripts/validate.py（补充 MDFixer 检查）
+```
+
+验收条件：只接受 `MISSING`；报告 commit 一致；Patch 必须通过构建、测试和重检；`remaining_missing == 0`。
+
+---
+
+### E2-06 完成四段接口串联与 E2 收尾
+
+**GitHub Issue 标题：** `[E2][Integration] 串联四段接口并完成阶段收尾`  
+**Owner：** 李宇瀚  
+**Reviewers：** 其余七名成员  
+**Labels：** `stage:E2`、`area:integration`、`group:shared`  
+**依赖：** E2-01 至 E2-05  
+**Branch：** `docs/e2-closeout`  
+**PR：** `docs: complete E2 interface evidence`
+**PR 关联：** `Closes #E2-06的实际GitHub编号`
+
+#### PR 交付产物
+
+```text
+evidence/e2/end-to-end-example.md
+evidence/e2/validation-summary.md
+evidence/e2/contributions.md
+evidence/e2/open-items.md
+AI_USAGE.md（汇总本阶段记录）
+README.md（增加 E2 入口）
+```
+
+#### 串联检查
+
+```text
+DRAFT 响应
+  -> BuildChecker 请求和响应
+  -> EChecker 请求和响应
+  -> MDFixer 请求和响应
+  -> 构建、测试、重检结果
+```
+
+只检查接口样例能否正确衔接，不要求部署真实 API。
+
+#### 验收条件
+
+- 四段接口使用一致的 Job、Artifact、Finding 和 Error 定义。
+- 使用同一个 `trace_id` 展示完整样例链。
+- `scripts/validate.py` 全部通过，GitHub Actions 成功。
+- `contributions.md` 列出八人的 Issue、PR、Review 和 Commit SHA。
+- 未完成项和原因写入 `open-items.md`。
+- 七名成员在最终 PR 中确认自己负责的部分。
+- 合并后创建 Tag `e2-contract-v1.0.0` 和 E2 Release。
+
+## 5. 出现问题时怎么处理
+
+- PR Review 中发现的小问题：直接在原 PR 修改，不另建 Issue。
+- 影响接口含义、需要跨组讨论的问题：在原配对 Issue 中讨论并记录决定。
+- PR 合并后才发现的独立缺陷：新建 `[E2][Bug]` Issue 和 `fix/*` PR。
