@@ -1,4 +1,4 @@
-"""Validate repository JSON contracts without third-party dependencies."""
+"""使用 Python 标准库校验仓库中的 JSON 契约。"""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ import json
 import sys
 from pathlib import Path
 from typing import Any, Iterable
+from urllib.parse import unquote
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -25,10 +26,64 @@ def iter_references(value: Any) -> Iterable[str]:
             yield from iter_references(child)
 
 
+def decode_pointer_token(token: str) -> str:
+    decoded: list[str] = []
+    index = 0
+    while index < len(token):
+        if token[index] != "~":
+            decoded.append(token[index])
+            index += 1
+            continue
+        if index + 1 >= len(token) or token[index + 1] not in {"0", "1"}:
+            raise ValueError(f"invalid JSON Pointer escape in token {token!r}")
+        decoded.append("~" if token[index + 1] == "0" else "/")
+        index += 2
+    return "".join(decoded)
+
+
+def contains_anchor(value: Any, anchor: str) -> bool:
+    if isinstance(value, dict):
+        if value.get("$anchor") == anchor or value.get("$dynamicAnchor") == anchor:
+            return True
+        return any(contains_anchor(child, anchor) for child in value.values())
+    if isinstance(value, list):
+        return any(contains_anchor(child, anchor) for child in value)
+    return False
+
+
+def resolve_fragment(document: Any, fragment: str) -> None:
+    fragment = unquote(fragment)
+    if not fragment:
+        return
+    if not fragment.startswith("/"):
+        if not contains_anchor(document, fragment):
+            raise ValueError(f"anchor {fragment!r} does not exist")
+        return
+
+    current = document
+    for raw_token in fragment[1:].split("/"):
+        token = decode_pointer_token(raw_token)
+        if isinstance(current, dict):
+            if token not in current:
+                raise ValueError(f"object key {token!r} does not exist")
+            current = current[token]
+            continue
+        if isinstance(current, list):
+            if not token.isdigit() or (len(token) > 1 and token.startswith("0")):
+                raise ValueError(f"invalid array index {token!r}")
+            index = int(token)
+            if index >= len(current):
+                raise ValueError(f"array index {index} is out of range")
+            current = current[index]
+            continue
+        raise ValueError(f"cannot descend through scalar at token {token!r}")
+
+
 def validate() -> list[str]:
     errors: list[str] = []
     schema_ids: dict[str, Path] = {}
     json_files = sorted(CONTRACTS_ROOT.rglob("*.json"))
+    documents: dict[Path, Any] = {}
 
     if not json_files:
         return ["No JSON contracts found under contracts/."]
@@ -36,10 +91,15 @@ def validate() -> list[str]:
     for path in json_files:
         relative_path = path.relative_to(REPOSITORY_ROOT)
         try:
-            document = json.loads(path.read_text(encoding="utf-8"))
+            documents[path.resolve()] = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
             errors.append(f"{relative_path}: cannot parse JSON: {exc}")
+
+    for path in json_files:
+        document = documents.get(path.resolve())
+        if document is None:
             continue
+        relative_path = path.relative_to(REPOSITORY_ROOT)
 
         if path.name.endswith(".schema.json"):
             if not isinstance(document, dict):
@@ -64,12 +124,30 @@ def validate() -> list[str]:
                     schema_ids[schema_id] = path
 
         for reference in iter_references(document):
-            target = reference.split("#", 1)[0]
-            if not target or target.startswith(("https://", "http://")):
+            target, separator, fragment = reference.partition("#")
+            if target.startswith(("https://", "http://")):
                 continue
-            target_path = (path.parent / target).resolve()
+            target_path = (
+                path.resolve()
+                if not target
+                else (path.parent / unquote(target)).resolve()
+            )
             if not target_path.is_file():
                 errors.append(f"{relative_path}: unresolved local $ref: {reference}")
+                continue
+            target_document = documents.get(target_path)
+            if target_document is None:
+                errors.append(
+                    f"{relative_path}: local $ref target is not valid JSON: {reference}"
+                )
+                continue
+            if separator:
+                try:
+                    resolve_fragment(target_document, fragment)
+                except ValueError as exc:
+                    errors.append(
+                        f"{relative_path}: unresolved local $ref {reference}: {exc}"
+                    )
 
     if not errors:
         schema_count = sum(path.name.endswith(".schema.json") for path in json_files)

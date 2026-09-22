@@ -5,11 +5,54 @@
   "description": "A dependency-analysis result. MISSING and REDUNDANT are findings, not job execution errors.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["finding_id", "category", "severity", "message", "dependency"],
+  "required": [
+    "finding_id",
+    "source_commit",
+    "configuration_id",
+    "target",
+    "location",
+    "category",
+    "severity",
+    "message",
+    "dependency",
+    "evidence"
+  ],
   "properties": {
     "finding_id": {
       "type": "string",
       "minLength": 1
+    },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{7,40}$"
+    },
+    "configuration_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Module, image, project, or other analysis target."
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "column": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
     },
     "category": {
       "type": "string",
@@ -48,6 +91,7 @@
     },
     "evidence": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "string",
         "minLength": 1

@@ -21,6 +21,8 @@ GET  /v1/jobs/{job_id}
 
 `POST` 接受服务专属请求，返回 HTTP `202 Accepted` 和服务端生成的 `job_id`。客户端通过 `GET` 查询任务状态和产物引用。
 
+同一次端到端工具链运行中的四类 Job 必须使用相同的 `trace_id`，以便从 DRAFT 一直追踪到 MDFixer 和最终重检。
+
 公共状态为：
 
 ```text
@@ -46,7 +48,7 @@ Artifact 必须记录：
 
 ### 3. Finding 与 Error 分离
 
-`MISSING` 和 `REDUNDANT` 是依赖分析结果，写入 `job.findings`。发现这些问题并不表示工具执行失败，Job 仍可以是 `SUCCEEDED`。
+`MISSING` 和 `REDUNDANT` 是依赖分析结果，写入 `job.findings`。每个 Finding 必须携带 `source_commit`、`configuration_id`、`target`、`location` 和 `evidence`，使消费方能够验证结果来源。发现这些问题并不表示工具执行失败，Job 仍可以是 `SUCCEEDED`。
 
 解析失败、运行环境不可用或内部异常等执行问题写入 `job.error`，并将 Job 状态设为 `FAILED`。MDFixer 只接受经过上游验证的 `MISSING` Finding，不把 `REDUNDANT` 自动转换为修复请求。
 

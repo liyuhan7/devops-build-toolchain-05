@@ -34,7 +34,7 @@ DRAFT
 python scripts/validate.py
 ```
 
-GitHub Actions 会在每个 Pull Request 和推送到 `main` 时运行同一检查。具体工作流见 [contract-validation.yml](.github/workflows/contract-validation.yml)。
+GitHub Actions 会在每个 Pull Request 和推送到 `main` 时运行契约检查。具体工作流见 [contract-validation.yml](.github/workflows/contract-validation.yml)。
 
 ## 基本协作流程
 
