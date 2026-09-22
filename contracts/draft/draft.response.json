@@ -18,7 +18,7 @@
       "sha256": "33e0d0762ca1fa2d5d3d75b3e1188da7c639a0b3f9aef0ebddfca6c94a93d5a1",
       "size_bytes": 1832,
       "produced_by_job_id": "draft-01j8h9ks2ydqmv8p3btygh3e0k",
-      "source_commit": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+      "source_commit": "0123456789abcdef0123456789abcdef01234567",
       "configuration_digest": "sha256:ed50c8428eb0b998e77dfd71e9f4b98a8ea6974c0b56d9b8ef2fa89d472f60d1",
       "created_at": "2026-09-22T09:08:41Z"
     },
@@ -30,7 +30,7 @@
       "sha256": "5b703879df7f0cc99a5a91dc0759158fc4e2575805d5509cc21cb2030b8611dc",
       "size_bytes": 5834,
       "produced_by_job_id": "draft-01j8h9ks2ydqmv8p3btygh3e0k",
-      "source_commit": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+      "source_commit": "0123456789abcdef0123456789abcdef01234567",
       "configuration_digest": "sha256:ed50c8428eb0b998e77dfd71e9f4b98a8ea6974c0b56d9b8ef2fa89d472f60d1",
       "created_at": "2026-09-22T09:08:40Z"
     },
@@ -42,7 +42,7 @@
       "sha256": "a4cded58340b7ca6b3a12c3622ac434ab97f5ae1fb5266064fc30a5a505c040b",
       "size_bytes": 41728,
       "produced_by_job_id": "draft-01j8h9ks2ydqmv8p3btygh3e0k",
-      "source_commit": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+      "source_commit": "0123456789abcdef0123456789abcdef01234567",
       "configuration_digest": "sha256:ed50c8428eb0b998e77dfd71e9f4b98a8ea6974c0b56d9b8ef2fa89d472f60d1",
       "created_at": "2026-09-22T09:08:18Z"
     },
@@ -54,7 +54,7 @@
       "sha256": "b0522ba89cc791c49f7856760132493f6ecc8b019a0c74f4d4688df2685e1bb5",
       "size_bytes": 12736,
       "produced_by_job_id": "draft-01j8h9ks2ydqmv8p3btygh3e0k",
-      "source_commit": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+      "source_commit": "0123456789abcdef0123456789abcdef01234567",
       "configuration_digest": "sha256:ed50c8428eb0b998e77dfd71e9f4b98a8ea6974c0b56d9b8ef2fa89d472f60d1",
       "created_at": "2026-09-22T09:08:39Z"
     }
