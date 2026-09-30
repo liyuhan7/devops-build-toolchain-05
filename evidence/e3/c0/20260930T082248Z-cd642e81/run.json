@@ -1,0 +1,63 @@
+{
+  "case_id": "fzy-c0-options",
+  "provenance": "ACTUAL_RUN",
+  "run_id": "20260930T082248Z-cd642e81",
+  "operator": "HuangCongchi-CodexAssisted",
+  "started_at": "2026-09-30T08:22:48.555268+00:00",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "architecture": "x86_64",
+  "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
+  "experiment_commit": "5c2bc894659a4e32652262f45907352b993ad1e7",
+  "configuration_id": "fzy-c0-options-linux-v1",
+  "source_tree_sha256": "a1620cbc7deeca5a6d1fa1c28f50b600761411b26ebb4e3678c9f26199c58d84",
+  "source_digest_algorithm": "sha256-sorted-posix-path-lf-v1",
+  "environment_reference": "wsl:Ubuntu-22.04",
+  "status": "PASSED",
+  "checks": [
+    {
+      "check": "使用 Linux 环境",
+      "passed": true
+    },
+    {
+      "check": "生成 fzy 可执行文件",
+      "passed": true
+    },
+    {
+      "check": "选定对象没有自动依赖文件",
+      "passed": true
+    },
+    {
+      "check": "编译器项目依赖与 C0 人工图一致",
+      "passed": true
+    },
+    {
+      "check": "Make 声明与编译器项目依赖一致",
+      "passed": true
+    },
+    {
+      "check": "功能案例 0 输出符合人工预期",
+      "passed": true
+    },
+    {
+      "check": "功能案例 1 输出符合人工预期",
+      "passed": true
+    },
+    {
+      "check": "功能案例 2 输出符合人工预期",
+      "passed": true
+    },
+    {
+      "check": "版本宏符合配置",
+      "passed": true
+    },
+    {
+      "check": "仅更新头文件后普通 make 重新编译选定对象",
+      "passed": true
+    },
+    {
+      "check": "头文件重编译后功能仍正确",
+      "passed": true
+    }
+  ],
+  "finished_at": "2026-09-30T08:23:07.392624+00:00"
+}

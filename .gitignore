@@ -20,6 +20,8 @@ __pycache__/
 
 # Runtime and temporary files
 *.log
+!evidence/e3/**/*.stdout.log
+!evidence/e3/**/*.stderr.log
 *.tmp
 *.swp
 .cache/

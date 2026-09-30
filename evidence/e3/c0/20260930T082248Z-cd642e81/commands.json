@@ -1,0 +1,266 @@
+[
+  {
+    "label": "environment-os",
+    "argv": [
+      "cat",
+      "/etc/os-release"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-09-30T08:22:49.779272+00:00",
+    "finished_at": "2026-09-30T08:22:49.799243+00:00",
+    "exit_code": 0,
+    "stdout": "environment-os.stdout.log",
+    "stderr": "environment-os.stderr.log"
+  },
+  {
+    "label": "environment-gcc",
+    "argv": [
+      "gcc",
+      "--version"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-09-30T08:22:49.810213+00:00",
+    "finished_at": "2026-09-30T08:22:49.832117+00:00",
+    "exit_code": 0,
+    "stdout": "environment-gcc.stdout.log",
+    "stderr": "environment-gcc.stderr.log"
+  },
+  {
+    "label": "environment-make",
+    "argv": [
+      "make",
+      "--version"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-09-30T08:22:49.841169+00:00",
+    "finished_at": "2026-09-30T08:22:49.860945+00:00",
+    "exit_code": 0,
+    "stdout": "environment-make.stdout.log",
+    "stderr": "environment-make.stderr.log"
+  },
+  {
+    "label": "environment-python",
+    "argv": [
+      "/usr/bin/python3",
+      "--version"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-09-30T08:22:49.876038+00:00",
+    "finished_at": "2026-09-30T08:22:49.905025+00:00",
+    "exit_code": 0,
+    "stdout": "environment-python.stdout.log",
+    "stderr": "environment-python.stderr.log"
+  },
+  {
+    "label": "environment-git",
+    "argv": [
+      "git",
+      "--version"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-09-30T08:22:49.919500+00:00",
+    "finished_at": "2026-09-30T08:22:49.948917+00:00",
+    "exit_code": 0,
+    "stdout": "environment-git.stdout.log",
+    "stderr": "environment-git.stderr.log"
+  },
+  {
+    "label": "upstream-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/upstream",
+    "stdin": null,
+    "started_at": "2026-09-30T08:22:55.534954+00:00",
+    "finished_at": "2026-09-30T08:22:57.983916+00:00",
+    "exit_code": 0,
+    "stdout": "upstream-build.stdout.log",
+    "stderr": "upstream-build.stderr.log"
+  },
+  {
+    "label": "upstream-tests",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "check"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/upstream",
+    "stdin": null,
+    "started_at": "2026-09-30T08:22:57.992050+00:00",
+    "finished_at": "2026-09-30T08:23:00.570129+00:00",
+    "exit_code": 0,
+    "stdout": "upstream-tests.stdout.log",
+    "stderr": "upstream-tests.stderr.log"
+  },
+  {
+    "label": "c0-command",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "-n",
+      "-B",
+      "src/options.o"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T08:23:00.572627+00:00",
+    "finished_at": "2026-09-30T08:23:00.614048+00:00",
+    "exit_code": 0,
+    "stdout": "c0-command.stdout.log",
+    "stderr": "c0-command.stderr.log"
+  },
+  {
+    "label": "c0-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T08:23:00.630551+00:00",
+    "finished_at": "2026-09-30T08:23:02.319714+00:00",
+    "exit_code": 0,
+    "stdout": "c0-build.stdout.log",
+    "stderr": "c0-build.stderr.log"
+  },
+  {
+    "label": "c0-tests",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "check"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T08:23:02.326535+00:00",
+    "finished_at": "2026-09-30T08:23:04.847741+00:00",
+    "exit_code": 0,
+    "stdout": "c0-tests.stdout.log",
+    "stderr": "c0-tests.stderr.log"
+  },
+  {
+    "label": "c0-project-dependencies",
+    "argv": [
+      "gcc",
+      "-MM",
+      "src/options.c"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T08:23:04.883518+00:00",
+    "finished_at": "2026-09-30T08:23:04.915463+00:00",
+    "exit_code": 0,
+    "stdout": "c0-project-dependencies.stdout.log",
+    "stderr": "c0-project-dependencies.stderr.log"
+  },
+  {
+    "label": "c0-make-database",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "-pn",
+      "src/options.o"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T08:23:04.918176+00:00",
+    "finished_at": "2026-09-30T08:23:04.952498+00:00",
+    "exit_code": 0,
+    "stdout": "c0-make-database.stdout.log",
+    "stderr": "c0-make-database.stderr.log"
+  },
+  {
+    "label": "c0-functional-0",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/c0",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-09-30T08:23:04.955468+00:00",
+    "finished_at": "2026-09-30T08:23:04.967759+00:00",
+    "exit_code": 0,
+    "stdout": "c0-functional-0.stdout.log",
+    "stderr": "c0-functional-0.stderr.log"
+  },
+  {
+    "label": "c0-functional-1",
+    "argv": [
+      "./fzy",
+      "-e",
+      "banana"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/c0",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-09-30T08:23:04.970585+00:00",
+    "finished_at": "2026-09-30T08:23:04.981325+00:00",
+    "exit_code": 0,
+    "stdout": "c0-functional-1.stdout.log",
+    "stderr": "c0-functional-1.stderr.log"
+  },
+  {
+    "label": "c0-functional-2",
+    "argv": [
+      "./fzy",
+      "-e",
+      "xyz"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/c0",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-09-30T08:23:04.984104+00:00",
+    "finished_at": "2026-09-30T08:23:05.000549+00:00",
+    "exit_code": 0,
+    "stdout": "c0-functional-2.stdout.log",
+    "stderr": "c0-functional-2.stderr.log"
+  },
+  {
+    "label": "c0-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T08:23:05.003083+00:00",
+    "finished_at": "2026-09-30T08:23:05.013773+00:00",
+    "exit_code": 0,
+    "stdout": "c0-version.stdout.log",
+    "stderr": "c0-version.stderr.log"
+  },
+  {
+    "label": "c0-header-rebuild",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T08:23:05.022734+00:00",
+    "finished_at": "2026-09-30T08:23:07.316950+00:00",
+    "exit_code": 0,
+    "stdout": "c0-header-rebuild.stdout.log",
+    "stderr": "c0-header-rebuild.stderr.log"
+  },
+  {
+    "label": "c0-after-header",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20260930T082248Z-cd642e81/c0",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-09-30T08:23:07.338098+00:00",
+    "finished_at": "2026-09-30T08:23:07.369982+00:00",
+    "exit_code": 0,
+    "stdout": "c0-after-header.stdout.log",
+    "stderr": "c0-after-header.stderr.log"
+  }
+]

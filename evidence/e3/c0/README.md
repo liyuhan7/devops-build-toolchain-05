@@ -31,9 +31,11 @@ C0 提交：`0769e815259ab2cae12a21be43256c05906215e0`。该运行发生在提�
 - GitHub Actions 已通过，由李宇瀚于 2026-09-30 确认；检查记录见 [PR #18 Checks](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18/checks)。具体运行和对应提交以 Checks 页面为准。
 - 后续推送需确认对应新提交的检查结果，不能沿用之前的通过状态作为新提交的验证证据。
 
-## 待完成
+## 独立复跑与合并状态
 
-- 黄骢驰按 README 独立复跑并 Review。
-- Review 批准且相关检查通过后，普通合并保留 C0 真实历史，记录合并 SHA 并确认 Issue #17 关闭。
+- 黄骢驰已完成一次 Codex 辅助的独立环境复跑，证据见 [`20260930T082248Z-cd642e81`](20260930T082248Z-cd642e81/run.json)。复跑针对提交 `5c2bc894659a4e32652262f45907352b993ad1e7`，使用 WSL2 Ubuntu 22.04；18 条命令退出码均为 0，11 项 C0 行为检查全部通过，原始 fzy 与 C0 各通过 32 项测试、102 个断言。
+- 固定 Ubuntu 24.04 Docker 镜像因 Docker Hub OAuth token 网络超时未能重新构建；该失败发生在拉取基础镜像元数据阶段，尚未运行项目构建。已有提交前 Ubuntu 24.04 运行记录继续保留，但不能替代本次提交的固定环境复验。
+- 独立复跑执行流程已完成，C0 已满足合并前验证条件。Reviewer 本人的批准记录、最终合并状态和 merge SHA 以 [PR #18](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18) 为准；Agent 执行记录不作为成员批准。
+- 合并使用普通 merge 保留 C0 真实历史；阶段收尾时从 PR 回填真实 merge SHA，并确认 Issue #17 状态。
 
 C1/C2 和四工具的真实输出由后续任务交付。

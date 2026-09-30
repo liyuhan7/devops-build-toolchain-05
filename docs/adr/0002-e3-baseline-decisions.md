@@ -1,6 +1,6 @@
 # ADR-0002：E3 测试项目和 C0 范围
 
-日期：2026-09-30。状态：已实施并提交，[PR #18](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18) 已创建，GitHub Actions 已通过（负责人确认），待组内独立复跑、Review 与合并。
+日期：2026-09-30。状态：已实施并完成合并前验证。[PR #18](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18) 的 GitHub Actions 已通过（负责人确认）；针对提交 `5c2bc894659a4e32652262f45907352b993ad1e7` 的独立 Linux 复跑已完成并通过。最终 Review、合并状态和 merge SHA 以 PR 记录为准。
 
 ## 背景
 
