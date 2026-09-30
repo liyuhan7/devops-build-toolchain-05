@@ -7,6 +7,7 @@
 ## E3 协作入口
 
 - [E3 分工与执行计划](docs/backlog/E3.md)：按课件任务安排 A、B 组内部协作。
+- [E3 任务与组内交接](docs/guides/E3任务与组内交接说明.md)：项目选型、环境准备、成员执行步骤和交付标准。
 - [测试项目与复跑说明](fixtures/e3/README.md)：固定 fzy 上游版本、Linux 环境与执行命令。
 - [C0 基线](fixtures/e3/echecker/README.md)：选定对象的正确声明、人工预期与后续版本交接。
 - [设计决策](docs/adr/0002-e3-baseline-decisions.md)：自动依赖控制、环境和验证范围。

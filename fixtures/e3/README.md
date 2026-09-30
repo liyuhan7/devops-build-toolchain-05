@@ -44,7 +44,7 @@ docker run --rm --network none --workdir /repo --mount "type=bind,src=$((Get-Loc
 
 ## C0 提交后
 
-源码当前尚未由用户提交，因此 `echecker/commits.json` 的 C0 SHA 为 null。用户完成包含 C0 文件的提交后，将其完整 SHA 回填为 `commit_sha`，状态改为 `COMMITTED`，另作证据提交。不要把第二个证据提交的 SHA 冒充初始 C0，也不要为了回填 SHA 修改 C0 源码。
+C0 提交为 `0769e815259ab2cae12a21be43256c05906215e0`，版本映射见 `echecker/commits.json`。后续文档和证据提交不改变初始 C0 的版本标识。
 
 复跑已提交版本时，可增加 `--revision <当前实际检出的完整SHA>`，该参数是运行版本标签，脚本不验证工作区是否干净；操作者应核对 checkout 和 diff，源码摘要用于补充核验。PR 的合并 SHA 与 C0 SHA 分别记录。
 

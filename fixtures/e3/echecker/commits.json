@@ -2,8 +2,8 @@
   "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
   "versions": {
     "C0": {
-      "commit_sha": null,
-      "status": "AWAITING_USER_COMMIT",
+      "commit_sha": "0769e815259ab2cae12a21be43256c05906215e0",
+      "status": "COMMITTED",
       "project_path": "fixtures/e3/echecker/project",
       "configuration_id": "fzy-c0-options-linux-v1",
       "description": "src/options.o 的项目依赖声明完整，显式依赖不由 options.d 补全"

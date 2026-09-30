@@ -6,6 +6,10 @@
 
 运行目录：[20260930T050826Z-5526eb2f](20260930T050826Z-5526eb2f/run.json)。配置 `fzy-c0-options-linux-v1`，源码摘要 `a1620cbc7deeca5a6d1fa1c28f50b600761411b26ebb4e3678c9f26199c58d84`。
 
+C0 提交：`0769e815259ab2cae12a21be43256c05906215e0`。该运行发生在提交前，运行记录中的 experiment_commit 为 null，以源码摘要定位当次输入。
+
+关联任务：[#17](https://github.com/liyuhan7/devops-build-toolchain-05/issues/17)。
+
 环境：Ubuntu 24.04，Linux x86_64，GCC 13.3.0，GNU Make 4.3，Python 3.12.3，Git 2.43.0。基础镜像摘要记录在 Dockerfile；本次构建镜像 ID：`sha256:0c9f2dbab150b926f6ebb44d60abf0601f1fe90e7b12c96db456233011110746`。
 
 | 检查 | 实际结果 | 证据 |
@@ -23,9 +27,8 @@
 
 ## 待完成
 
-- 用户提交 C0，并回填 `fixtures/e3/echecker/commits.json` 的完整 SHA；当前为 null，不伪造 Git 历史。
-- 用户填写实际 Issue/PR 编号，推送任务分支。
+- 推送任务分支，创建关联 #17 的 PR，并记录 PR 链接。
 - 黄骢驰按 README 独立复跑并 Review。
 - GitHub Actions 通过：当前仅完成本地执行，不声称远端检查已经运行。
 
-操作步骤见 [提交指导](../../../docs/guides/E3-01提交指导.md)。运行的源文件没有自动创建 Git Commit，C1/C2 和真实四工具输出均未制作。
+C1/C2 和四工具的真实输出由后续任务交付。
