@@ -1,0 +1,20 @@
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -34,6 +34,10 @@ fzy: $(OBJECTS)
+ %.o: %.c config.h
+ 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+ 
++# 对选定目标使用完整显式依赖，避免自动依赖掩盖后续故障注入。
++src/options.o: src/options.c src/options.h config.h
++	$(CC) $(CPPFLAGS) $(filter-out -MD -MMD -MP,$(CFLAGS)) -c -o $@ $<
++
+ config.h: src/config.def.h
+ 	cp src/config.def.h config.h
+ 
+@@ -56,4 +60,4 @@ veryclean: clean
+ 
+ .PHONY: test check all clean veryclean install fmt acceptance
+ 
+--include $(OBJECTS:.o=.d)
++-include $(filter-out src/options.d,$(OBJECTS:.o=.d))

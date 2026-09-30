@@ -1,0 +1,37 @@
+name: E3 C0 Baseline
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-c0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check baseline materials
+        run: python scripts/e3/check_baselines.py
+      - name: Build isolated baseline environment
+        run: docker build -t devops-e3-c0 -f scripts/e3/Dockerfile.baseline scripts/e3
+      - name: Verify C0 build and behavior
+        run: >-
+          docker run --rm --network none
+          -e E3_ENVIRONMENT_REFERENCE=devops-e3-c0
+          --mount type=bind,src=${{ github.workspace }},dst=/repo
+          devops-e3-c0 python3 scripts/e3/run_c0.py --operator GitHubActions
+          --revision "${{ github.sha }}"
+      - name: Upload actual run evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e3-c0-evidence
+          path: evidence/e3/c0/
+          if-no-files-found: warn

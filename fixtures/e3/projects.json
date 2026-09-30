@@ -1,0 +1,23 @@
+{
+  "fzy": {
+    "repository_url": "https://github.com/jhawthorn/fzy",
+    "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
+    "archive_url": "https://codeload.github.com/jhawthorn/fzy/zip/34b88869d022e861da4846c4463aea3ddfb3ff30",
+    "archive_sha256": "75a03955f23c4051eeeab472782081789c540606eb136ad54b0ce04d8c15727e",
+    "source_path": "fixtures/e3/fzy",
+    "source_tree_sha256": "e515424bad62061647f8bffde4d2904c18ce490bf24bd8ec342b05484ccfb151",
+    "license_path": "fixtures/e3/fzy/LICENSE",
+    "c0_path": "fixtures/e3/echecker/project",
+    "c0_source_tree_sha256": "a1620cbc7deeca5a6d1fa1c28f50b600761411b26ebb4e3678c9f26199c58d84",
+    "configuration_id": "fzy-c0-options-linux-v1",
+    "intended_environment": "Ubuntu 24.04 Linux; gcc; GNU Make; Python 3",
+    "upstream_snapshot_changes": []
+  },
+  "libco": {
+    "repository_url": "https://github.com/Tencent/libco",
+    "purpose": "后续四工具端到端集成候选，不属于本次 C0 运行范围",
+    "upstream_commit": null,
+    "status": "NOT_YET_VERIFIED",
+    "open_items": ["固定论文对应版本", "核验该版本是否没有 Dockerfile", "确定可正常退出的功能测试"]
+  }
+}
