@@ -1,0 +1,41 @@
+# C0 实际验证记录
+
+日期：2026-09-30。任务负责人李宇瀚；运行由 Codex 辅助执行，日志的 operator 标签使用负责人姓名，不代表已经完成成员独立复跑。
+
+## 实验环境与输入
+
+运行目录：[20260930T050826Z-5526eb2f](20260930T050826Z-5526eb2f/run.json)。配置 `fzy-c0-options-linux-v1`，源码摘要 `a1620cbc7deeca5a6d1fa1c28f50b600761411b26ebb4e3678c9f26199c58d84`。
+
+C0 提交：`0769e815259ab2cae12a21be43256c05906215e0`。该运行发生在提交前，运行记录中的 experiment_commit 为 null，以源码摘要定位当次输入。
+
+关联任务：[#17](https://github.com/liyuhan7/devops-build-toolchain-05/issues/17)。协作 PR：[#18](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18)。
+
+环境：Ubuntu 24.04，Linux x86_64，GCC 13.3.0，GNU Make 4.3，Python 3.12.3，Git 2.43.0。基础镜像摘要记录在 Dockerfile；本次构建镜像 ID：`sha256:0c9f2dbab150b926f6ebb44d60abf0601f1fe90e7b12c96db456233011110746`。
+
+| 检查 | 实际结果 | 证据 |
+|---|---|---|
+| 原始 fzy 构建 | 退出码 0，生成可执行文件 | commands.json |
+| 原始 fzy 测试 | 32 测试、102 断言，全部通过 | observations.md |
+| C0 构建 | 退出码 0，生成可执行文件 | commands.json、run.json |
+| C0 上游测试 | 32 测试、102 断言，全部通过 | observations.md |
+| 三个无交互功能案例 | apple、banana、无匹配，输出及退出码符合人工预期 | run.json |
+| 依赖对照 | gcc -MM 项目依赖与 Make 显式依赖、人工图一致 | run.json |
+| 自动依赖控制 | src/options.d 不存在，选定对象的编译参数无 -MD | run.json |
+| 仅更新头文件时间戳 | 普通 make 重新编译 src/options.o，之后功能仍正确 | run.json、observations.md |
+
+由于其他对象也读取 options.h，头文件时间戳更新还可能触发它们重编译。这不是 RD 结论，本案例只断言选定对象必须重编译。
+
+## 协作与自动检查
+
+- PR #18 已创建，关联 Issue #17。
+- GitHub Actions 已通过，由李宇瀚于 2026-09-30 确认；检查记录见 [PR #18 Checks](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18/checks)。具体运行和对应提交以 Checks 页面为准。
+- 后续推送需确认对应新提交的检查结果，不能沿用之前的通过状态作为新提交的验证证据。
+
+## 独立复跑与合并状态
+
+- 黄骢驰已完成一次 Codex 辅助的独立环境复跑，证据见 [`20260930T082248Z-cd642e81`](20260930T082248Z-cd642e81/run.json)。复跑针对提交 `5c2bc894659a4e32652262f45907352b993ad1e7`，使用 WSL2 Ubuntu 22.04；18 条命令退出码均为 0，11 项 C0 行为检查全部通过，原始 fzy 与 C0 各通过 32 项测试、102 个断言。
+- 固定 Ubuntu 24.04 Docker 镜像因 Docker Hub OAuth token 网络超时未能重新构建；该失败发生在拉取基础镜像元数据阶段，尚未运行项目构建。已有提交前 Ubuntu 24.04 运行记录继续保留，但不能替代本次提交的固定环境复验。
+- 独立复跑执行流程已完成，C0 已满足合并前验证条件。Reviewer 本人的批准记录、最终合并状态和 merge SHA 以 [PR #18](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18) 为准；Agent 执行记录不作为成员批准。
+- 合并使用普通 merge 保留 C0 真实历史；阶段收尾时从 PR 回填真实 merge SHA，并确认 Issue #17 状态。
+
+C1/C2 和四工具的真实输出由后续任务交付。

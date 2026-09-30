@@ -1,0 +1,230 @@
+[
+  {
+    "label": "environment-os",
+    "argv": [
+      "cat",
+      "/etc/os-release"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:27.206678+00:00",
+    "finished_at": "2026-09-30T05:08:27.226878+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "environment-gcc",
+    "argv": [
+      "gcc",
+      "--version"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:27.233194+00:00",
+    "finished_at": "2026-09-30T05:08:27.247158+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "environment-make",
+    "argv": [
+      "make",
+      "--version"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:27.253733+00:00",
+    "finished_at": "2026-09-30T05:08:27.269332+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "environment-python",
+    "argv": [
+      "/usr/bin/python3",
+      "--version"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:27.275376+00:00",
+    "finished_at": "2026-09-30T05:08:27.291263+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "environment-git",
+    "argv": [
+      "git",
+      "--version"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:27.297367+00:00",
+    "finished_at": "2026-09-30T05:08:27.312900+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "upstream-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/upstream",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:32.066843+00:00",
+    "finished_at": "2026-09-30T05:08:34.067582+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "upstream-tests",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "check"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/upstream",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:34.075320+00:00",
+    "finished_at": "2026-09-30T05:08:37.552721+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "c0-command",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "-n",
+      "-B",
+      "src/options.o"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:37.558702+00:00",
+    "finished_at": "2026-09-30T05:08:37.601090+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "c0-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:37.606866+00:00",
+    "finished_at": "2026-09-30T05:08:39.733909+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "c0-tests",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "check"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:39.749088+00:00",
+    "finished_at": "2026-09-30T05:08:43.038122+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "c0-project-dependencies",
+    "argv": [
+      "gcc",
+      "-MM",
+      "src/options.c"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:43.050703+00:00",
+    "finished_at": "2026-09-30T05:08:43.084415+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "c0-make-database",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "-pn",
+      "src/options.o"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:43.089930+00:00",
+    "finished_at": "2026-09-30T05:08:43.181577+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "c0-functional-0",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/c0",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-09-30T05:08:43.190038+00:00",
+    "finished_at": "2026-09-30T05:08:43.212574+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "c0-functional-1",
+    "argv": [
+      "./fzy",
+      "-e",
+      "banana"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/c0",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-09-30T05:08:43.219828+00:00",
+    "finished_at": "2026-09-30T05:08:43.245452+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "c0-functional-2",
+    "argv": [
+      "./fzy",
+      "-e",
+      "xyz"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/c0",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-09-30T05:08:43.253374+00:00",
+    "finished_at": "2026-09-30T05:08:43.280028+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "c0-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:43.287403+00:00",
+    "finished_at": "2026-09-30T05:08:43.314096+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "c0-header-rebuild",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/c0",
+    "stdin": null,
+    "started_at": "2026-09-30T05:08:43.339247+00:00",
+    "finished_at": "2026-09-30T05:08:45.236622+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "c0-after-header",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/repo/work/e3/20260930T050826Z-5526eb2f/c0",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-09-30T05:08:45.253075+00:00",
+    "finished_at": "2026-09-30T05:08:45.292363+00:00",
+    "exit_code": 0
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "case_id": "fzy-c0-options",
+  "provenance": "TEAM_ORACLE",
+  "configuration_id": "fzy-c0-options-linux-v1",
+  "scope": {
+    "target": "src/options.o",
+    "files": ["src/options.c", "src/options.h", "config.h"],
+    "excluded": ["系统头文件", "其他对象目标的 MD/RD", "Make 构建器自身读取", "编译器及链接器内部文件"]
+  },
+  "expected_graph": {
+    "src/options.o": ["src/options.c", "src/options.h", "config.h"],
+    "config.h": ["src/config.def.h"]
+  },
+  "findings": [],
+  "functional_cases": [
+    {"query": "apple", "stdin": "apple\nbanana\n", "stdout": "apple\n", "exit_code": 0},
+    {"query": "banana", "stdin": "apple\nbanana\n", "stdout": "banana\n", "exit_code": 0},
+    {"query": "xyz", "stdin": "apple\nbanana\n", "stdout": "", "exit_code": 0}
+  ],
+  "version_token": "1.1",
+  "header_change_expectation": "仅更新 src/options.h 时间戳后，普通 make 必须重新编译 src/options.o，功能断言仍通过"
+}

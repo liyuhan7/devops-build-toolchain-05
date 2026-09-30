@@ -20,9 +20,12 @@ __pycache__/
 
 # Runtime and temporary files
 *.log
+!evidence/e3/**/*.stdout.log
+!evidence/e3/**/*.stderr.log
 *.tmp
 *.swp
 .cache/
 coverage/
 
-AGENTS.md
+# E3 实验只提交选定的文本证据，不提交运行副本和编译产物。
+/work/e3/

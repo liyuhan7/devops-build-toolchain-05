@@ -2,7 +2,20 @@
 
 2026 DevOps 课程教学实验 05 组项目协作仓库。
 
-本仓库承载整个项目的需求、接口契约、协作记录和后续实现。当前工作阶段是 **E2：需求与接口契约**
+本仓库承载整个项目的需求、接口契约、协作记录和后续实现。当前工作阶段是 **E3：并行测试基线**，E2 契约与协作证据继续保留。
+
+## E3 协作入口
+
+- [E3 分工与执行计划](docs/backlog/E3.md)：按课件任务安排 A、B 组内部协作。
+- [E3 任务与组内交接](docs/guides/E3任务与组内交接说明.md)：项目选型、环境准备、成员执行步骤和交付标准。
+- [测试项目与复跑说明](fixtures/e3/README.md)：固定 fzy 上游版本、Linux 环境与执行命令。
+- [C0 基线](fixtures/e3/echecker/README.md)：选定对象的正确声明、人工预期与后续版本交接。
+- [设计决策](docs/adr/0002-e3-baseline-decisions.md)：自动依赖控制、环境和验证范围。
+- [C0 验证记录](evidence/e3/c0/README.md)：实际运行、独立复跑结果和后续操作。
+
+材料检查：`python scripts/e3/check_baselines.py`。Linux 实际构建与行为验证：`python3 scripts/e3/run_c0.py --operator 姓名`。容器方式见项目复跑说明。
+
+E3-01：Issue [#17](https://github.com/liyuhan7/devops-build-toolchain-05/issues/17)，PR [#18](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18)。GitHub Actions 已通过（负责人确认）；针对提交 `5c2bc894659a4e32652262f45907352b993ad1e7` 的独立 Linux 复跑已完成并通过，C0 已满足合并前验证条件。最终 Review、合并状态及对应提交见 [PR #18](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18) 和 [Checks](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18/checks)。
 
 ## E2 工具链
 
@@ -50,7 +63,7 @@ Issue -> Project 看板 -> 任务分支 -> Commit -> Pull Request
       -> 配对成员 Review -> 修改 -> Actions 通过 -> 合并
 ```
 
-## 成员配对
+## E2 历史成员配对
 
 | A 组 | B 组 | 当前配对关注点 |
 |---|---|---|
