@@ -1,6 +1,6 @@
 # ADR-0002：E3 测试项目和 C0 范围
 
-日期：2026-09-30。状态：已实施并提交，待组内 Review。
+日期：2026-09-30。状态：已实施并提交，[PR #18](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18) 已创建，GitHub Actions 已通过（负责人确认），待组内独立复跑、Review 与合并。
 
 ## 背景
 

@@ -8,7 +8,7 @@
 
 C0 提交：`0769e815259ab2cae12a21be43256c05906215e0`。该运行发生在提交前，运行记录中的 experiment_commit 为 null，以源码摘要定位当次输入。
 
-关联任务：[#17](https://github.com/liyuhan7/devops-build-toolchain-05/issues/17)。
+关联任务：[#17](https://github.com/liyuhan7/devops-build-toolchain-05/issues/17)。协作 PR：[#18](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18)。
 
 环境：Ubuntu 24.04，Linux x86_64，GCC 13.3.0，GNU Make 4.3，Python 3.12.3，Git 2.43.0。基础镜像摘要记录在 Dockerfile；本次构建镜像 ID：`sha256:0c9f2dbab150b926f6ebb44d60abf0601f1fe90e7b12c96db456233011110746`。
 
@@ -25,10 +25,15 @@ C0 提交：`0769e815259ab2cae12a21be43256c05906215e0`。该运行发生在提�
 
 由于其他对象也读取 options.h，头文件时间戳更新还可能触发它们重编译。这不是 RD 结论，本案例只断言选定对象必须重编译。
 
+## 协作与自动检查
+
+- PR #18 已创建，关联 Issue #17。
+- GitHub Actions 已通过，由李宇瀚于 2026-09-30 确认；检查记录见 [PR #18 Checks](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18/checks)。具体运行和对应提交以 Checks 页面为准。
+- 后续推送需确认对应新提交的检查结果，不能沿用之前的通过状态作为新提交的验证证据。
+
 ## 待完成
 
-- 推送任务分支，创建关联 #17 的 PR，并记录 PR 链接。
 - 黄骢驰按 README 独立复跑并 Review。
-- GitHub Actions 通过：当前仅完成本地执行，不声称远端检查已经运行。
+- Review 批准且相关检查通过后，普通合并保留 C0 真实历史，记录合并 SHA 并确认 Issue #17 关闭。
 
 C1/C2 和四工具的真实输出由后续任务交付。
