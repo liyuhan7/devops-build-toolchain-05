@@ -1,0 +1,92 @@
+{
+  "case_id": "fzy-draft-build-and-function",
+  "provenance": "TEAM_ORACLE",
+  "configuration_id": "fzy-upstream-linux-v1",
+  "purpose": "为 DRAFT 定义原始 fzy 的构建成功条件与无终端交互的功能验证判据",
+  "project": {
+    "repository_url": "https://github.com/jhawthorn/fzy",
+    "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
+    "source_path": "fixtures/e3/fzy",
+    "license_path": "fixtures/e3/fzy/LICENSE",
+    "working_directory": ".",
+    "build_system": "Make"
+  },
+  "environment": {
+    "required": ["Linux", "gcc", "libc 开发头文件", "GNU Make", "Git"],
+    "optional": ["Python 3（仅用于用例清单与人工预期的一致性自检）"],
+    "recorded_example": "Ubuntu 24.04.3 LTS x86_64，gcc 13.3.0，GNU Make 4.3，Git 2.43.0，Python 3.12.3"
+  },
+  "build": {
+    "command": "make CC=gcc",
+    "timeout_seconds": 600,
+    "expected_exit_code": 0,
+    "expected_artifact": "fzy",
+    "require_artifact_executable": true
+  },
+  "validation": {
+    "command": "make CC=gcc check",
+    "timeout_seconds": 600,
+    "expected_exit_code": 0,
+    "expected_stdout_contains": ["32 tests", "102 assertions", "Pass: 32, fail: 0, skip: 0."],
+    "note": "ticks 与耗时随机器变化，不纳入断言"
+  },
+  "version_assertion": {
+    "argv": ["--version"],
+    "expected_exit_code": 0,
+    "expected_stdout_contains": "1.1",
+    "basis": "VERSION 宏由 Makefile 传入，构建配置变化会改变该标记"
+  },
+  "functional_cases": [
+    {
+      "case_id": "match-apple",
+      "argv": ["-e", "apple"],
+      "stdin": "cases/match-apple/stdin",
+      "expected_stdout": "cases/match-apple/expected_stdout",
+      "expected_exit_code": 0,
+      "basis": "-e 走 show_matches 路径，从标准输入读取候选行并输出按分数排序的匹配结果；两行输入中只有 apple 命中"
+    },
+    {
+      "case_id": "match-banana",
+      "argv": ["-e", "banana"],
+      "stdin": "cases/match-banana/stdin",
+      "expected_stdout": "cases/match-banana/expected_stdout",
+      "expected_exit_code": 0,
+      "basis": "与上一个用例共用输入、更换查询词，用于确认输出确实随查询词变化而不是固定文本"
+    },
+    {
+      "case_id": "no-match-empty",
+      "argv": ["-e", "zzz"],
+      "stdin": "cases/no-match-empty/stdin",
+      "expected_stdout": "cases/no-match-empty/expected_stdout",
+      "expected_exit_code": 0,
+      "basis": "无匹配时 show_matches 路径不输出任何行，且退出码仍为 0；因此功能验证必须比对标准输出内容，不能只检查退出码"
+    },
+    {
+      "case_id": "multi-match-sorted",
+      "argv": ["-e", "app"],
+      "stdin": "cases/multi-match-sorted/stdin",
+      "expected_stdout": "cases/multi-match-sorted/expected_stdout",
+      "expected_exit_code": 0,
+      "basis": "apple 与 application 同时命中，输出顺序按匹配分数降序；banana 不命中，用于同时覆盖多结果与排序"
+    },
+    {
+      "case_id": "invalid-lines-usage",
+      "argv": ["-l", "1", "-e", "app"],
+      "stdin": "cases/invalid-lines-usage/stdin",
+      "expected_stdout": "cases/invalid-lines-usage/expected_stdout",
+      "expected_exit_code": 1,
+      "expected_stderr_contains": "cases/invalid-lines-usage/expected_stderr_contains",
+      "basis": "--lines 取值下限为 3，传入 1 时 fzy 输出用法错误并以非零码退出；该用例给出非零退出码的预期，用于确认验证脚本能发现失败而不是恒为通过"
+    }
+  ],
+  "failure_boundary": {
+    "no_match_is_success": "无匹配属于正常行为，退出码 0、标准输出为空；不得把空输出当作构建或验证失败",
+    "usage_error_is_expected": "invalid-lines-usage 用例预期非零退出码，脚本按预期比对，不把该用例的失败计为基线失败",
+    "not_functional_verification": ["仅检查 fzy 文件存在", "仅运行 --help 或 --version", "仅统计 make 的退出码而不运行功能用例"]
+  },
+  "out_of_scope": [
+    "make acceptance：需要 Ruby 与 Bundler，本环境未安装，不作为 DRAFT 成功条件",
+    "需要终端交互的选择流程：容器与无交互环境无法复现",
+    "libco 的构建与功能判据：属于后续集成候选，未纳入本次运行矩阵"
+  ]
+}
