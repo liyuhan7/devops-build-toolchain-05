@@ -1,0 +1,8 @@
+cp src/config.def.h config.h
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/fzy.o src/fzy.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/match.o src/match.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/tty.o src/tty.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/choices.o src/choices.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/options.o src/options.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/tty_interface.o src/tty_interface.c
+gcc -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla  -o fzy src/fzy.o src/match.o src/tty.o src/choices.o src/options.o src/tty_interface.o -lpthread
