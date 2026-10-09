@@ -1,0 +1,14 @@
+[
+  {"label": "patch-check", "argv": ["git", "apply", "--check", "--ignore-whitespace", "fixtures/e3/mdfixer/target/fault.patch"], "exit_code": 0, "stdout": "patch-check.stdout.log", "stderr": "patch-check.stderr.log"},
+  {"label": "patch-apply", "argv": ["git", "apply", "--ignore-whitespace", "fixtures/e3/mdfixer/target/fault.patch"], "exit_code": 0, "stdout": "patch-apply.stdout.log", "stderr": "patch-apply.stderr.log"},
+  {"label": "initial-build", "argv": ["make", "CC=gcc"], "exit_code": 0, "stdout": "initial-build.stdout.log", "stderr": "initial-build.stderr.log"},
+  {"label": "initial-version", "argv": ["./fzy", "--version"], "exit_code": 0, "stdout": "initial-version.stdout.log", "stderr": "initial-version.stderr.log"},
+  {"label": "initial-check", "argv": ["make", "CC=gcc", "check"], "exit_code": 0, "stdout": "initial-check.stdout.log", "stderr": "initial-check.stderr.log"},
+  {"label": "initial-functional", "argv": ["./fzy", "-e", "apple"], "stdin": "apple\nbanana\n", "exit_code": 0, "stdout": "initial-functional.stdout.log", "stderr": "initial-functional.stderr.log"},
+  {"label": "incremental-build", "argv": ["make", "CC=gcc"], "exit_code": 0, "stdout": "incremental-build.stdout.log", "stderr": "incremental-build.stderr.log"},
+  {"label": "incremental-version", "argv": ["./fzy", "--version"], "exit_code": 0, "stdout": "incremental-version.stdout.log", "stderr": "incremental-version.stderr.log"},
+  {"label": "clean", "argv": ["make", "veryclean"], "exit_code": 0, "stdout": "clean.stdout.log", "stderr": "clean.stderr.log"},
+  {"label": "clean-build", "argv": ["make", "CC=gcc"], "exit_code": 0, "stdout": "clean-build.stdout.log", "stderr": "clean-build.stderr.log"},
+  {"label": "clean-version", "argv": ["./fzy", "--version"], "exit_code": 0, "stdout": "clean-version.stdout.log", "stderr": "clean-version.stderr.log"},
+  {"label": "clean-functional", "argv": ["./fzy", "-e", "apple"], "stdin": "apple\nbanana\n", "exit_code": 0, "stdout": "clean-functional.stdout.log", "stderr": "clean-functional.stderr.log"}
+]
