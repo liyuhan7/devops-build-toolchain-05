@@ -63,6 +63,8 @@ bash scripts/e3/verify_fzy.sh --operator 你的姓名
 
 常用参数：`--revision <完整SHA>` 标注已提交版本，`--output <目录>` 指定证据目录，`--source <目录>` 指定源码快照。
 
+`--output` 支持绝对或相对路径，目录必须尚不存在，以免覆盖已有运行证据。参数缺少取值时以退出码 2 拒绝执行。
+
 脚本把源码复制到被忽略的 `work/e3/<run-id>/` 后构建，不修改受版本控制的源文件；证据写入 `evidence/e3/draft/<run-id>/`，包含 `run.json`、`commands.json`、`*.stdout.log`、`*.stderr.log` 和 `observations.md`，并输出 `EVIDENCE_DIR` 与 `STATUS`。脚本主体为纯 bash，便于在精简容器中运行；只有在具备 Python 3 时才会额外执行用例清单与人工预期的一致性自检。
 
 已提交版本可用环境变量 `E3_ENVIRONMENT_REFERENCE` 记录容器镜像标识，该值会写入 `run.json`。

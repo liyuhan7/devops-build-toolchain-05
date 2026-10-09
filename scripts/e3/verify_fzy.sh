@@ -24,10 +24,19 @@ TXT
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --operator) OPERATOR="$2"; shift 2 ;;
-    --source) SOURCE="$2"; shift 2 ;;
-    --output) OUTPUT="$2"; shift 2 ;;
-    --revision) REVISION="$2"; shift 2 ;;
+    --operator|--source|--output|--revision)
+      if [ $# -lt 2 ] || [[ "$2" == --* ]]; then
+        printf '参数 %s 缺少取值\n' "$1" >&2
+        exit 2
+      fi
+      case "$1" in
+        --operator) OPERATOR="$2" ;;
+        --source) SOURCE="$2" ;;
+        --output) OUTPUT="$2" ;;
+        --revision) REVISION="$2" ;;
+      esac
+      shift 2
+      ;;
     -h|--help) usage; exit 0 ;;
     *) printf '未知参数：%s\n' "$1" >&2; usage; exit 2 ;;
   esac
@@ -52,12 +61,26 @@ OUT=${OUTPUT:-$ROOT/evidence/e3/draft/$RUN_ID}
 WORK=$ROOT/work/e3/$RUN_ID/fzy
 CASES=$ROOT/fixtures/e3/draft/cases
 CASES_JSON=$ROOT/fixtures/e3/draft/cases.json
-mkdir -p "$OUT"
+# 每次运行使用新目录，防止覆盖既有证据；转换为绝对路径以支持相对 --output。
+if [ -e "$OUT" ]; then
+  printf '证据目录已存在，请指定新目录：%s\n' "$OUT" >&2
+  exit 2
+fi
+mkdir -p "$OUT" || exit 2
+OUT=$(cd "$OUT" && pwd) || exit 2
 
 now() { date -u +%Y-%m-%dT%H:%M:%SZ; }
 
-# JSON 字符串转义：仓库路径与用例标识不含特殊字符，只需处理反斜杠与引号。
-json_escape() { printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'; }
+# 操作者及路径中的常用控制字符也需要转义。
+json_escape() {
+  local value=$1
+  value=${value//\\/\\\\}
+  value=${value//\"/\\\"}
+  value=${value//$'\n'/\\n}
+  value=${value//$'\r'/\\r}
+  value=${value//$'\t'/\\t}
+  printf '%s' "$value"
+}
 
 COMMANDS=""
 CHECKS=""
@@ -83,7 +106,7 @@ add_command() { # 标签 工作目录 开始 结束 退出码 标准输入文件
   local stdin_json=null
   [ -n "$stdin" ] && stdin_json="\"$(json_escape "$stdin")\""
   local entry
-  entry="    {\"label\": \"$(json_escape "$label")\", \"argv\": [$args], \"cwd\": \"$cwd\","
+  entry="    {\"label\": \"$(json_escape "$label")\", \"argv\": [$args], \"cwd\": \"$(json_escape "$cwd")\","
   entry="$entry \"stdin\": $stdin_json, \"started_at\": \"$started\", \"finished_at\": \"$finished\","
   entry="$entry \"exit_code\": $rc, \"stdout\": \"$label.stdout.log\", \"stderr\": \"$label.stderr.log\"}"
   if [ -z "$COMMANDS" ]; then COMMANDS="$entry"; else COMMANDS="$COMMANDS,
@@ -209,7 +232,8 @@ else
 
   # 每个用例目录包含 argv、stdin、expected_stdout、expected_exit_code；
   # expected_stderr_contains 仅在需要断言错误输出时出现。
-  for case_dir in $(find "$CASES" -mindepth 1 -maxdepth 1 -type d | sort); do
+  for case_dir in "$CASES"/*; do
+    [ -d "$case_dir" ] || continue
     case_id=$(basename "$case_dir")
     mapfile -t argv < "$case_dir/argv"
     execute "functional-$case_id" "$WORK" "$case_dir/stdin" ./fzy "${argv[@]}"

@@ -6,9 +6,9 @@
 
 运行目录：[20261009T051451Z-4f7f3891](20261009T051451Z-4f7f3891/run.json)。配置 `fzy-upstream-linux-v1`，上游快照 `34b88869d022e861da4846c4463aea3ddfb3ff30`。
 
-人工预期：[fixtures/e3/draft/cases.json](../../fixtures/e3/draft/cases.json)（`TEAM_ORACLE`）。本记录来源 `ACTUAL_RUN`。该运行发生在提交前，`run.json` 的 `experiment_commit` 为 null，以源码快照与上游 SHA 定位当次输入。
+人工预期：[fixtures/e3/draft/cases.json](../../../fixtures/e3/draft/cases.json)（`TEAM_ORACLE`）。本记录来源 `ACTUAL_RUN`。该运行发生在提交前，`run.json` 的 `experiment_commit` 为 null，以源码快照与上游 SHA 定位当次输入。
 
-关联任务：E3-04，GitHub Issue 编号待回填。分支 `test/e3-draft-input`，尚未推送或创建 PR。
+关联任务：E3-04。2026-10-09 查询远端全部 Issue，尚无对应 DRAFT 基线 Issue，真实编号待仓库协调人创建后回填。分支 `test/e3-draft-input`，PR 链接将在创建后补充。
 
 环境：WSL2 Ubuntu 24.04.3 LTS，Linux 5.15.167.4-microsoft-standard-WSL2，x86_64，gcc 13.3.0，GNU Make 4.3，Git 2.43.0，Python 3.12.3。本次未使用容器。
 
@@ -47,4 +47,4 @@ cp /tmp/backup fixtures/e3/draft/cases/match-apple/expected_stdout
 - `make acceptance` 需要 Ruby 与 Bundler，本机未安装，未运行，也不作为成功条件。
 - 容器构建失败与参考成功环境由后续任务交付，本次未使用 Docker。
 - 独立复跑由组内其他成员完成，本记录不代替成员复跑或 Review 批准。
-- 分支尚未推送，Issue 与 PR 编号待回填；Actions 结果以实际推送后的运行为准。
+- Issue 编号待回填；Actions 结果以 PR 对应提交的实际运行为准。本 PR 是 E3-04 的输入部分，不关闭整个任务。
