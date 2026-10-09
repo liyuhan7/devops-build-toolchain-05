@@ -8,7 +8,7 @@
 
 人工预期：[fixtures/e3/draft/cases.json](../../../fixtures/e3/draft/cases.json)（`TEAM_ORACLE`）。本记录来源 `ACTUAL_RUN`。该运行发生在提交前，`run.json` 的 `experiment_commit` 为 null，以源码快照与上游 SHA 定位当次输入。
 
-关联任务：E3-04。2026-10-09 查询远端全部 Issue，尚无对应 DRAFT 基线 Issue，真实编号待仓库协调人创建后回填。分支 `test/e3-draft-input`，PR 链接将在创建后补充。
+关联任务：E3-04。2026-10-09 查询远端全部 Issue，尚无对应 DRAFT 基线 Issue，真实编号待仓库协调人创建后回填。分支 `test/e3-draft-input`，已推送并创建 [PR #21](https://github.com/liyuhan7/devops-build-toolchain-05/pull/21)，指定刘君杰（Liuyiiing）为 Reviewer；尚未合并。
 
 环境：WSL2 Ubuntu 24.04.3 LTS，Linux 5.15.167.4-microsoft-standard-WSL2，x86_64，gcc 13.3.0，GNU Make 4.3，Git 2.43.0，Python 3.12.3。本次未使用容器。
 
