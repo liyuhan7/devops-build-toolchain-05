@@ -48,3 +48,9 @@ cp /tmp/backup fixtures/e3/draft/cases/match-apple/expected_stdout
 - 容器构建失败与参考成功环境由后续任务交付，本次未使用 Docker。
 - 独立复跑由组内其他成员完成，本记录不代替成员复跑或 Review 批准。
 - Issue 编号待回填；Actions 结果以 PR 对应提交的实际运行为准。本 PR 是 E3-04 的输入部分，不关闭整个任务。
+
+## Codex 辅助复跑
+
+修正后复跑：[20261009T061915Z-d1e0ac8e](20261009T061915Z-d1e0ac8e/run.json)，输入提交 29dc66256ec12cdfd72f2fb06d7338c707319f59。使用同一固定上游快照，在 WSL Linux 中构建并执行全部功能用例，21 项检查通过、12 条命令已记录。该记录由 Codex 辅助执行，不代表刘君杰的独立 Review。
+
+E2 契约检查（29 JSON / 4 Schema）、18 项回归测试、C0 材料检查均通过。另在检查副本确认相对输出目录可用、已有证据目录和缺少参数值被拒绝，改错 match-apple 的预期 stdout 会准确判 FAILED，随后恢复原预期。
