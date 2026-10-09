@@ -1,0 +1,15 @@
+deps/theft/theft.c: In function ‘report_on_failure’:
+deps/theft/theft.c:483:49: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 4 has type ‘long unsigned int’ [-Wformat=]
+  483 |     fprintf(t->out, "    Trial %u, Seed 0x%016llx\n", ti->trial,
+      |                                           ~~~~~~^
+      |                                                 |
+      |                                                 long long unsigned int
+      |                                           %016lx
+  484 |         (uint64_t)ti->seed);
+      |         ~~~~~~~~~~~~~~~~~~                       
+      |         |
+      |         long unsigned int
+test/test_choices.c: In function ‘test_choices_large_input’:
+test/test_choices.c:142:17: warning: ignoring return value of ‘asprintf’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  142 |                 asprintf(&strings[i], "%i", i);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

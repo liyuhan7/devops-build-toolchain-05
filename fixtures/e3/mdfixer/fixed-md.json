@@ -1,0 +1,40 @@
+{
+  "case_id": "fzy-mdfixer-options-marker",
+  "provenance": "TEAM_ORACLE",
+  "source_commit": "0769e815259ab2cae12a21be43256c05906215e0",
+  "configuration_id": "fzy-c0-options-linux-v1",
+  "patch": {
+    "path": "target/fault.patch",
+    "sha256": "1f9c120acdb45d7466d695569eb87637b814d68a77467694490fd9387115e362"
+  },
+  "finding": {
+    "finding_id": "mdf-fzy-options-marker-001",
+    "source_commit": "0769e815259ab2cae12a21be43256c05906215e0",
+    "configuration_id": "fzy-c0-options-linux-v1",
+    "target": "src/options.o",
+    "location": {
+      "path": "Makefile",
+      "line": 38,
+      "column": 1
+    },
+    "category": "MISSING",
+    "severity": "WARNING",
+    "message": "src/options.o 编译实际读取 src/e3_mdfixer_marker.h，但 Makefile 目标规则未声明该前置依赖。",
+    "dependency": {
+      "ecosystem": "make",
+      "name": "src/e3_mdfixer_marker.h",
+      "scope": "build"
+    },
+    "evidence": [
+      "fixtures/e3/mdfixer/oracle.md#依赖关系",
+      "fixtures/e3/mdfixer/oracle.md#可观察依据",
+      "fixtures/e3/mdfixer/target/fault.patch",
+      "C0:fixtures/e3/echecker/commits.json#/versions/C0"
+    ]
+  },
+  "expected_behavior": {
+    "before_header_change": {"version_marker": "MDFIXER_MARKER=one", "exit_code": 0},
+    "incremental_after_header_change": {"version_marker": "MDFIXER_MARKER=one", "rebuild": false, "exit_code": 0},
+    "clean_after_header_change": {"version_marker": "MDFIXER_MARKER=two", "rebuild": true, "exit_code": 0}
+  }
+}

@@ -1,0 +1,4 @@
+src/match.c: In function ‘strcasechr’:
+src/match.c:16:16: warning: return discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+   16 |         return strpbrk(s, accept);
+      |                ^~~~~~~
