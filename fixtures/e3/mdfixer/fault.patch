@@ -1,0 +1,25 @@
+diff --git a/src/options.c b/src/options.c
+--- a/src/options.c
++++ b/src/options.c
+@@ -5,6 +5,7 @@
+ #include <string.h>
+ 
+ #include "options.h"
++#include "e3_mdfixer_marker.h"
+ 
+ #include "../config.h"
+ 
+@@ -63,6 +64,6 @@ void options_parse(options_t *options, int argc, char *argv[]) {
+ 	while ((c = getopt_long(argc, argv, "vhs0e:q:l:t:p:j:i", longopts, NULL)) != -1) {
+ 		switch (c) {
+ 			case 'v':
+-				printf("%s " VERSION " © 2014-2025 John Hawthorn\n", argv[0]);
++				printf("%s " VERSION " " MDFIXER_MARKER " © 2014-2025 John Hawthorn\n", argv[0]);
+ 				exit(EXIT_SUCCESS);
+ 			case 's':
+diff --git a/src/e3_mdfixer_marker.h b/src/e3_mdfixer_marker.h
+new file mode 100644
+--- /dev/null
++++ b/src/e3_mdfixer_marker.h
+@@ -0,0 +1 @@
++#define MDFIXER_MARKER "MDFIXER_MARKER=one"

@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -35,7 +35,7 @@
+ 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+ 
+ # 对选定目标使用完整显式依赖，避免自动依赖掩盖后续故障注入。
+-src/options.o: src/options.c src/options.h config.h
++src/options.o: src/options.c src/options.h config.h src/e3_mdfixer_marker.h
+ 	$(CC) $(CPPFLAGS) $(filter-out -MD -MMD -MP,$(CFLAGS)) -c -o $@ $<
+ 
+ config.h: src/config.def.h

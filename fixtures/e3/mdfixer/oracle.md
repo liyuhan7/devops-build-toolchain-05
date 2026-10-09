@@ -13,7 +13,7 @@ config.h
 src/e3_mdfixer_marker.h
 ```
 
-故障 Patch 中的 `Makefile` 规则只声明：
+应用 `fault.patch` 后，`Makefile` 规则仍只声明：
 
 ```make
 src/options.o: src/options.c src/options.h config.h
@@ -25,7 +25,7 @@ src/options.o: src/options.c src/options.h config.h
 src/options.o -> src/e3_mdfixer_marker.h
 ```
 
-类别为 `MISSING`，位置为 `Makefile` 中 `src/options.o` 规则，目标为 `src/options.o`。固定报告的 `source_commit` 指向 C0 基准 Commit；故障 Makefile 和新增头文件由 `target/fault.patch` 叠加产生。
+类别为 `MISSING`，位置为 `Makefile` 中 `src/options.o` 规则，目标为 `src/options.o`。固定报告的 `source_commit` 指向 C0 基准 Commit；故障源码与新增头文件由 `fault.patch` 叠加产生，Makefile 保持 C0 的显式规则不变。
 
 ## 可观察依据
 
