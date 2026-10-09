@@ -1,0 +1,21 @@
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft.o deps/theft/theft.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft_bloom.o deps/theft/theft_bloom.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft_mt.o deps/theft/theft_mt.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft_hash.o deps/theft/theft_hash.c
+gcc -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla  -Isrc -o test/fzytest test/fzytest.c test/test_properties.c test/test_choices.c test/test_match.c src/match.o src/choices.o src/options.o deps/theft/theft.o deps/theft/theft_bloom.o deps/theft/theft_mt.o deps/theft/theft_hash.o -lpthread
+./test/fzytest
+
+* Suite match_suite:
+........................
+24 tests - 24 passed, 0 failed, 0 skipped (54 ticks, 0.000 sec)
+
+* Suite choices_suite:
+......
+6 tests - 6 passed, 0 failed, 0 skipped (17218 ticks, 0.017 sec)
+
+* Suite properties_suite:
+..
+2 tests - 2 passed, 0 failed, 0 skipped (268260 ticks, 0.268 sec)
+
+Total: 32 tests (285570 ticks, 0.286 sec), 102 assertions
+Pass: 32, fail: 0, skip: 0.

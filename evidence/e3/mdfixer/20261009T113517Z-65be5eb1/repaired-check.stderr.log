@@ -1,0 +1,4 @@
+test/test_choices.c: In function ‘test_choices_large_input’:
+test/test_choices.c:142:17: warning: ignoring return value of ‘asprintf’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  142 |                 asprintf(&strings[i], "%i", i);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

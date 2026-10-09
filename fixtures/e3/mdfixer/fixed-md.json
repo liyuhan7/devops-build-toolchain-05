@@ -4,8 +4,8 @@
   "source_commit": "0769e815259ab2cae12a21be43256c05906215e0",
   "configuration_id": "fzy-c0-options-linux-v1",
   "patch": {
-    "path": "target/fault.patch",
-    "sha256": "1f9c120acdb45d7466d695569eb87637b814d68a77467694490fd9387115e362"
+    "path": "fault.patch",
+    "sha256": "633e72544dfbbd5592fd7ab04e1787ccb8f08d885ff1deb8e6eb3964c7c44cd0"
   },
   "finding": {
     "finding_id": "mdf-fzy-options-marker-001",
@@ -28,7 +28,7 @@
     "evidence": [
       "fixtures/e3/mdfixer/oracle.md#依赖关系",
       "fixtures/e3/mdfixer/oracle.md#可观察依据",
-      "fixtures/e3/mdfixer/target/fault.patch",
+      "fixtures/e3/mdfixer/fault.patch",
       "C0:fixtures/e3/echecker/commits.json#/versions/C0"
     ]
   },

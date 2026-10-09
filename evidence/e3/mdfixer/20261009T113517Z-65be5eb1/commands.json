@@ -1,0 +1,346 @@
+[
+  {
+    "label": "environment-os",
+    "argv": [
+      "uname",
+      "-a"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:19+00:00",
+    "finished_at": "2026-10-09T11:35:19+00:00",
+    "exit_code": 0,
+    "stdout": "environment-os.stdout.log",
+    "stderr": "environment-os.stderr.log"
+  },
+  {
+    "label": "environment-gcc",
+    "argv": [
+      "gcc",
+      "--version"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:19+00:00",
+    "finished_at": "2026-10-09T11:35:19+00:00",
+    "exit_code": 0,
+    "stdout": "environment-gcc.stdout.log",
+    "stderr": "environment-gcc.stderr.log"
+  },
+  {
+    "label": "environment-make",
+    "argv": [
+      "make",
+      "--version"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:19+00:00",
+    "finished_at": "2026-10-09T11:35:19+00:00",
+    "exit_code": 0,
+    "stdout": "environment-make.stdout.log",
+    "stderr": "environment-make.stderr.log"
+  },
+  {
+    "label": "environment-git",
+    "argv": [
+      "git",
+      "--version"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:19+00:00",
+    "finished_at": "2026-10-09T11:35:19+00:00",
+    "exit_code": 0,
+    "stdout": "environment-git.stdout.log",
+    "stderr": "environment-git.stderr.log"
+  },
+  {
+    "label": "fault-check",
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "--verbose",
+      "--directory=work/e3/20261009T113517Z-65be5eb1/project",
+      "--ignore-whitespace",
+      "/mnt/d/Codes/DevOps/devops-build-toolchain-05/fixtures/e3/mdfixer/fault.patch"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:19+00:00",
+    "finished_at": "2026-10-09T11:35:19+00:00",
+    "exit_code": 0,
+    "stdout": "fault-check.stdout.log",
+    "stderr": "fault-check.stderr.log"
+  },
+  {
+    "label": "fault-apply",
+    "argv": [
+      "git",
+      "apply",
+      "--verbose",
+      "--directory=work/e3/20261009T113517Z-65be5eb1/project",
+      "--ignore-whitespace",
+      "/mnt/d/Codes/DevOps/devops-build-toolchain-05/fixtures/e3/mdfixer/fault.patch"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:19+00:00",
+    "finished_at": "2026-10-09T11:35:19+00:00",
+    "exit_code": 0,
+    "stdout": "fault-apply.stdout.log",
+    "stderr": "fault-apply.stderr.log"
+  },
+  {
+    "label": "before-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:20+00:00",
+    "finished_at": "2026-10-09T11:35:22+00:00",
+    "exit_code": 0,
+    "stdout": "before-build.stdout.log",
+    "stderr": "before-build.stderr.log"
+  },
+  {
+    "label": "before-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:22+00:00",
+    "finished_at": "2026-10-09T11:35:22+00:00",
+    "exit_code": 0,
+    "stdout": "before-version.stdout.log",
+    "stderr": "before-version.stderr.log"
+  },
+  {
+    "label": "before-check",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "check"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:22+00:00",
+    "finished_at": "2026-10-09T11:35:25+00:00",
+    "exit_code": 0,
+    "stdout": "before-check.stdout.log",
+    "stderr": "before-check.stderr.log"
+  },
+  {
+    "label": "before-functional",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-10-09T11:35:25+00:00",
+    "finished_at": "2026-10-09T11:35:25+00:00",
+    "exit_code": 0,
+    "stdout": "before-functional.stdout.log",
+    "stderr": "before-functional.stderr.log"
+  },
+  {
+    "label": "before-incremental",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:26+00:00",
+    "finished_at": "2026-10-09T11:35:26+00:00",
+    "exit_code": 0,
+    "stdout": "before-incremental.stdout.log",
+    "stderr": "before-incremental.stderr.log"
+  },
+  {
+    "label": "before-stale-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:26+00:00",
+    "finished_at": "2026-10-09T11:35:26+00:00",
+    "exit_code": 0,
+    "stdout": "before-stale-version.stdout.log",
+    "stderr": "before-stale-version.stderr.log"
+  },
+  {
+    "label": "reference-check",
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "--verbose",
+      "--directory=work/e3/20261009T113517Z-65be5eb1/project",
+      "--ignore-whitespace",
+      "/mnt/d/Codes/DevOps/devops-build-toolchain-05/fixtures/e3/mdfixer/reference.patch"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:26+00:00",
+    "finished_at": "2026-10-09T11:35:26+00:00",
+    "exit_code": 0,
+    "stdout": "reference-check.stdout.log",
+    "stderr": "reference-check.stderr.log"
+  },
+  {
+    "label": "reference-apply",
+    "argv": [
+      "git",
+      "apply",
+      "--verbose",
+      "--directory=work/e3/20261009T113517Z-65be5eb1/project",
+      "--ignore-whitespace",
+      "/mnt/d/Codes/DevOps/devops-build-toolchain-05/fixtures/e3/mdfixer/reference.patch"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:26+00:00",
+    "finished_at": "2026-10-09T11:35:26+00:00",
+    "exit_code": 0,
+    "stdout": "reference-apply.stdout.log",
+    "stderr": "reference-apply.stderr.log"
+  },
+  {
+    "label": "repaired-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:27+00:00",
+    "finished_at": "2026-10-09T11:35:28+00:00",
+    "exit_code": 0,
+    "stdout": "repaired-build.stdout.log",
+    "stderr": "repaired-build.stderr.log"
+  },
+  {
+    "label": "repaired-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:28+00:00",
+    "finished_at": "2026-10-09T11:35:28+00:00",
+    "exit_code": 0,
+    "stdout": "repaired-version.stdout.log",
+    "stderr": "repaired-version.stderr.log"
+  },
+  {
+    "label": "repaired-check",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "check"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:28+00:00",
+    "finished_at": "2026-10-09T11:35:30+00:00",
+    "exit_code": 0,
+    "stdout": "repaired-check.stdout.log",
+    "stderr": "repaired-check.stderr.log"
+  },
+  {
+    "label": "repaired-functional",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-10-09T11:35:30+00:00",
+    "finished_at": "2026-10-09T11:35:30+00:00",
+    "exit_code": 0,
+    "stdout": "repaired-functional.stdout.log",
+    "stderr": "repaired-functional.stderr.log"
+  },
+  {
+    "label": "repaired-incremental",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:31+00:00",
+    "finished_at": "2026-10-09T11:35:32+00:00",
+    "exit_code": 0,
+    "stdout": "repaired-incremental.stdout.log",
+    "stderr": "repaired-incremental.stderr.log"
+  },
+  {
+    "label": "repaired-incremental-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:32+00:00",
+    "finished_at": "2026-10-09T11:35:32+00:00",
+    "exit_code": 0,
+    "stdout": "repaired-incremental-version.stdout.log",
+    "stderr": "repaired-incremental-version.stderr.log"
+  },
+  {
+    "label": "repaired-clean",
+    "argv": [
+      "make",
+      "veryclean"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:32+00:00",
+    "finished_at": "2026-10-09T11:35:32+00:00",
+    "exit_code": 0,
+    "stdout": "repaired-clean.stdout.log",
+    "stderr": "repaired-clean.stderr.log"
+  },
+  {
+    "label": "repaired-clean-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:32+00:00",
+    "finished_at": "2026-10-09T11:35:34+00:00",
+    "exit_code": 0,
+    "stdout": "repaired-clean-build.stdout.log",
+    "stderr": "repaired-clean-build.stderr.log"
+  },
+  {
+    "label": "repaired-clean-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/mnt/d/Codes/DevOps/devops-build-toolchain-05/work/e3/20261009T113517Z-65be5eb1/project",
+    "stdin": null,
+    "started_at": "2026-10-09T11:35:34+00:00",
+    "finished_at": "2026-10-09T11:35:34+00:00",
+    "exit_code": 0,
+    "stdout": "repaired-clean-version.stdout.log",
+    "stderr": "repaired-clean-version.stderr.log"
+  }
+]
