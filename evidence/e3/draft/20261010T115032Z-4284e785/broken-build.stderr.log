@@ -1,0 +1,18 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.broken
+#1 transferring dockerfile: 310B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3
+#2 ERROR: failed to do request: Head "https://registry-1.docker.io/v2/library/ubuntu/manifests/sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3": context deadline exceeded
+------
+ > [internal] load metadata for docker.io/library/ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3:
+------
+Dockerfile.broken:1
+--------------------
+   1 | >>> FROM ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3
+   2 |     
+   3 |     WORKDIR /repo/fixtures/e3/fzy
+--------------------
+ERROR: failed to build: failed to solve: DeadlineExceeded: ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3: failed to resolve source metadata for docker.io/library/ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3: failed to do request: Head "https://registry-1.docker.io/v2/library/ubuntu/manifests/sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3": context deadline exceeded

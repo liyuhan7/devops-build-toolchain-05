@@ -128,6 +128,7 @@ docker run --rm --network none --workdir /repo \
   bash scripts/e3/verify_fzy.sh --operator 你的姓名
 ```
 
+可使用 `scripts/e3/run_draft_container.sh --operator 姓名` 一次执行上述命令并生成完整证据。
 失败构建日志、成功镜像信息和容器验证结果的来源均为 `ACTUAL_RUN`，保存到
 `evidence/e3/draft/<run-id>/`。证据至少包含 `run.json`、`commands.json`、
 `observations.md`、两个 Docker build 的 stdout/stderr、退出码和容器功能验证日志。
@@ -136,6 +137,6 @@ docker run --rm --network none --workdir /repo \
 ## 未完成项
 
 - `make acceptance` 因缺少 Ruby 与 Bundler 未运行，不作为成功条件。
-- 容器构建失败与参考成功证据由 E3-04 PR2 交付。
+- 容器构建失败与参考成功证据由 E3-04 PR2 的运行脚本生成并提交。
 - 配置标识 `fzy-upstream-linux-v1` 仅在 `cases.json` 中使用；是否登记进 `fixtures/e3/projects.json` 由该文件的负责人确认。
 - `scripts/e3/check_baselines.py` 目前只检查 C0 材料，未包含本目录；扩展该共享脚本需与负责人确认范围。

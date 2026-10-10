@@ -29,36 +29,61 @@ OUT=${OUTPUT:-$ROOT/evidence/e3/draft/$RUN_ID}
 [ ! -e "$OUT" ] || { printf '证据目录已存在：%s\n' "$OUT" >&2; exit 2; }
 mkdir -p "$OUT" || exit 2
 OUT=$(cd "$OUT" && pwd) || exit 2
+RECORDS="$OUT/commands.records.jsonl"
+: > "$RECORDS"
 
 run_capture() {
-  local label=$1
-  shift
-  set +e
-  "$@" >"$OUT/$label.stdout.log" 2>"$OUT/$label.stderr.log"
-  local rc=$?
-  set -e
+  local label=$1 cwd=$2
+  shift 2
+  local started finished rc
+  started=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+  (
+    cd "$cwd" || exit 127
+    "$@"
+  ) >"$OUT/$label.stdout.log" 2>"$OUT/$label.stderr.log"
+  rc=$?
+  finished=$(date -u +%Y-%m-%dT%H:%M:%SZ)
   printf '%s\n' "$rc" >"$OUT/$label.exit"
+  python3 - "$RECORDS" "$label" "$cwd" "$started" "$finished" "$rc" "$OUT/$label.stdout.log" "$OUT/$label.stderr.log" "$@" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+records, label, cwd, started, finished, rc, stdout, stderr, *argv = sys.argv[1:]
+entry = {
+    "label": label,
+    "argv": argv,
+    "cwd": cwd,
+    "environment": {},
+    "started_at": started,
+    "finished_at": finished,
+    "exit_code": int(rc),
+    "stdout": Path(stdout).name,
+    "stderr": Path(stderr).name,
+}
+with open(records, "a", encoding="utf-8") as stream:
+    stream.write(json.dumps(entry, ensure_ascii=False) + "\n")
+PY
   return "$rc"
 }
 
 set -e
 BROKEN_TAG=devops-e3-draft-broken:ubuntu24.04
 REFERENCE_TAG=devops-e3-draft-reference:ubuntu24.04
-run_capture broken-build docker build --progress=plain -f "$ROOT/fixtures/e3/draft/Dockerfile.broken" -t "$BROKEN_TAG" "$ROOT" || true
-run_capture reference-build docker build --progress=plain -f "$ROOT/fixtures/e3/draft/Dockerfile.reference" -t "$REFERENCE_TAG" "$ROOT" || true
-run_capture reference-inspect docker image inspect "$REFERENCE_TAG" || true
-run_capture base-inspect docker image inspect ubuntu:24.04 || true
-run_capture container-validation docker run --rm --network none --workdir /repo "$REFERENCE_TAG" bash scripts/e3/verify_fzy.sh --operator "$OPERATOR" || true
+run_capture broken-build "$ROOT" docker build --progress=plain -f fixtures/e3/draft/Dockerfile.broken -t "$BROKEN_TAG" . || true
+run_capture reference-build "$ROOT" docker build --progress=plain -f fixtures/e3/draft/Dockerfile.reference -t "$REFERENCE_TAG" . || true
+run_capture reference-inspect "$ROOT" docker image inspect "$REFERENCE_TAG" || true
+run_capture base-inspect "$ROOT" docker image inspect ubuntu:24.04 || true
+run_capture container-validation "$ROOT" docker run --rm --network none --workdir /repo "$REFERENCE_TAG" bash scripts/e3/verify_fzy.sh --operator "$OPERATOR" || true
 
-cat >"$OUT/commands.json" <<JSON
-[
-  {"label":"broken-build","exit_code":$(cat "$OUT/broken-build.exit"),"stdout":"broken-build.stdout.log","stderr":"broken-build.stderr.log"},
-  {"label":"reference-build","exit_code":$(cat "$OUT/reference-build.exit"),"stdout":"reference-build.stdout.log","stderr":"reference-build.stderr.log"},
-  {"label":"reference-inspect","exit_code":$(cat "$OUT/reference-inspect.exit"),"stdout":"reference-inspect.stdout.log","stderr":"reference-inspect.stderr.log"},
-  {"label":"base-inspect","exit_code":$(cat "$OUT/base-inspect.exit"),"stdout":"base-inspect.stdout.log","stderr":"base-inspect.stderr.log"},
-  {"label":"container-validation","exit_code":$(cat "$OUT/container-validation.exit"),"stdout":"container-validation.stdout.log","stderr":"container-validation.stderr.log"}
-]
-JSON
+python3 - "$RECORDS" "$OUT/commands.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+records = [json.loads(line) for line in Path(sys.argv[1]).read_text(encoding="utf-8").splitlines() if line]
+Path(sys.argv[2]).write_text(json.dumps(records, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+PY
 
 broken_rc=$(cat "$OUT/broken-build.exit")
 reference_rc=$(cat "$OUT/reference-build.exit")
@@ -68,21 +93,36 @@ if [ "$reference_rc" -eq 0 ] && [ "$validation_rc" -eq 0 ]; then reference_statu
 
 final_status=FAILED
 [ "$broken_status" = PASSED ] && [ "$reference_status" = PASSED ] && final_status=PASSED
-cat >"$OUT/run.json" <<JSON
-{
-  "case_id": "fzy-draft-container",
-  "provenance": "ACTUAL_RUN",
-  "run_id": "$RUN_ID",
-  "operator": "$OPERATOR",
-  "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
-  "configuration_id": "fzy-upstream-linux-v1",
-  "base_image": "ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3",
-  "broken_build": {"status":"$broken_status","exit_code":$broken_rc},
-  "reference_build": {"status":"$reference_status","exit_code":$reference_rc},
-  "container_validation": {"exit_code":$validation_rc},
-  "status": "$final_status"
+python3 - "$OUT/reference-inspect.stdout.log" "$OUT/base-inspect.stdout.log" "$OUT/run.json" "$RUN_ID" "$OPERATOR" "$broken_status" "$broken_rc" "$reference_status" "$reference_rc" "$validation_rc" "$final_status" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+reference_log, base_log, output, run_id, operator, broken_status, broken_rc, reference_status, reference_rc, validation_rc, final_status = sys.argv[1:]
+
+def identity(path):
+    try:
+        item = json.loads(Path(path).read_text(encoding="utf-8"))[0]
+        return {"id": item.get("Id"), "repo_digests": item.get("RepoDigests", [])}
+    except (FileNotFoundError, IndexError, json.JSONDecodeError):
+        return {"id": None, "repo_digests": []}
+
+data = {
+    "case_id": "fzy-draft-container",
+    "provenance": "ACTUAL_RUN",
+    "run_id": run_id,
+    "operator": operator,
+    "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
+    "configuration_id": "fzy-upstream-linux-v1",
+    "base_image": "ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3",
+    "images": {"reference": identity(reference_log), "base": identity(base_log)},
+    "broken_build": {"status": broken_status, "exit_code": int(broken_rc)},
+    "reference_build": {"status": reference_status, "exit_code": int(reference_rc)},
+    "container_validation": {"exit_code": int(validation_rc)},
+    "status": final_status,
 }
-JSON
+Path(output).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+PY
 
 cat >"$OUT/observations.md" <<EOF
 # DRAFT 容器基线运行观察
@@ -100,4 +140,5 @@ cat >"$OUT/observations.md" <<EOF
 - 参考容器功能验证退出码：$validation_rc。
 - 镜像摘要见 \`reference-inspect.stdout.log\` 和 \`base-inspect.stdout.log\`。
 - 完整命令和日志见 \`commands.json\` 及对应 stdout/stderr 文件。
+- 如果基础镜像检查失败，必须将该次运行标记为失败，不能把镜像拉取或网络错误解释为预期的工具缺失。
 EOF
