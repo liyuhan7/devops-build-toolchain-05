@@ -93,9 +93,50 @@ bash scripts/e3/verify_fzy.sh --operator 你的姓名
 - 参考候选安装必要工具链后，用同一源码、同一构建命令和同一功能用例复跑，确认退出码 0、可执行文件生成、功能断言通过。
 - 参考 Dockerfile 为人工准备，不属于 DRAFT 的自动生成结果。
 
+## 容器基线（E3-04 PR2）
+
+本节固定 DRAFT 的失败候选与参考成功环境。两个 Dockerfile 使用同一份
+`fixtures/e3/fzy/` 原始快照、同一上游 Commit 和同一构建命令；差异只在构建环境是否提供 C 工具链。
+
+| 文件 | 预期 | 构建阶段 | 验证方式 |
+|---|---|---|---|
+| `Dockerfile.broken` | 非零退出 | Ubuntu 24.04 中不安装 `make`，`RUN make CC=gcc` 应报告工具缺失 | 保存 Docker build 的退出码和 stderr，确认不是网络或镜像拉取错误 |
+| `Dockerfile.reference` | 零退出 | 安装 `build-essential`、Git 和 Python，在同一源码上执行 `make CC=gcc`、`make CC=gcc check` | 容器启动后运行 `bash scripts/e3/verify_fzy.sh --operator 姓名` |
+
+基础镜像固定为 `ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3`。
+该摘要来自公共实验环境；每次实际运行仍需把 `docker image inspect` 的镜像 ID 和 RepoDigest 写入运行证据。
+
+从仓库根目录执行失败候选。该命令预期返回非零，非零结果只有在日志明确显示缺少 `make` 或编译器时才算通过：
+
+```sh
+docker build -f fixtures/e3/draft/Dockerfile.broken -t devops-e3-draft-broken:ubuntu24.04 .
+```
+
+参考镜像应成功完成项目构建和测试：
+
+```sh
+docker build -f fixtures/e3/draft/Dockerfile.reference -t devops-e3-draft-reference:ubuntu24.04 .
+docker image inspect devops-e3-draft-reference:ubuntu24.04 --format '{{.Id}} {{.RepoDigests}}'
+docker image inspect ubuntu:24.04 --format '{{.Id}} {{.RepoDigests}}'
+```
+
+构建完成后关闭网络，复用本目录的全部功能用例并写入新的证据目录：
+
+```sh
+docker run --rm --network none --workdir /repo \
+  devops-e3-draft-reference:ubuntu24.04 \
+  bash scripts/e3/verify_fzy.sh --operator 你的姓名
+```
+
+可使用 `scripts/e3/run_draft_container.sh --operator 姓名` 一次执行上述命令并生成完整证据。
+失败构建日志、成功镜像信息和容器验证结果的来源均为 `ACTUAL_RUN`，保存到
+`evidence/e3/draft/<run-id>/`。证据至少包含 `run.json`、`commands.json`、
+`observations.md`、两个 Docker build 的 stdout/stderr、退出码和容器功能验证日志。
+预期失败不能由网络不可用、基础镜像拉取失败或源码路径错误造成。
+
 ## 未完成项
 
 - `make acceptance` 因缺少 Ruby 与 Bundler 未运行，不作为成功条件。
-- 容器构建失败与参考成功证据由后续任务交付。
+- 容器构建失败与参考成功证据由 E3-04 PR2 的运行脚本生成并提交。
 - 配置标识 `fzy-upstream-linux-v1` 仅在 `cases.json` 中使用；是否登记进 `fixtures/e3/projects.json` 由该文件的负责人确认。
 - `scripts/e3/check_baselines.py` 目前只检查 C0 材料，未包含本目录；扩展该共享脚本需与负责人确认范围。
