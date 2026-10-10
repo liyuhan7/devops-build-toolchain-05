@@ -1,0 +1,2 @@
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/options.o src/options.c
+gcc -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla  -o fzy src/fzy.o src/match.o src/tty.o src/choices.o src/options.o src/tty_interface.o -lpthread
