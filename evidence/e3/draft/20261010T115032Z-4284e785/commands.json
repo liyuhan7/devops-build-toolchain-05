@@ -1,0 +1,98 @@
+[
+  {
+    "label": "broken-build",
+    "argv": [
+      "docker",
+      "build",
+      "--progress=plain",
+      "-f",
+      "fixtures/e3/draft/Dockerfile.broken",
+      "-t",
+      "devops-e3-draft-broken:ubuntu24.04",
+      "."
+    ],
+    "cwd": "/Users/liuyang/Desktop/DevOps/2/devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-10T11:50:32Z",
+    "finished_at": "2026-10-10T11:52:34Z",
+    "exit_code": 1,
+    "stdout": "broken-build.stdout.log",
+    "stderr": "broken-build.stderr.log"
+  },
+  {
+    "label": "reference-build",
+    "argv": [
+      "docker",
+      "build",
+      "--progress=plain",
+      "-f",
+      "fixtures/e3/draft/Dockerfile.reference",
+      "-t",
+      "devops-e3-draft-reference:ubuntu24.04",
+      "."
+    ],
+    "cwd": "/Users/liuyang/Desktop/DevOps/2/devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-10T11:52:34Z",
+    "finished_at": "2026-10-10T11:54:34Z",
+    "exit_code": 1,
+    "stdout": "reference-build.stdout.log",
+    "stderr": "reference-build.stderr.log"
+  },
+  {
+    "label": "reference-inspect",
+    "argv": [
+      "docker",
+      "image",
+      "inspect",
+      "devops-e3-draft-reference:ubuntu24.04"
+    ],
+    "cwd": "/Users/liuyang/Desktop/DevOps/2/devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-10T11:54:34Z",
+    "finished_at": "2026-10-10T11:54:34Z",
+    "exit_code": 1,
+    "stdout": "reference-inspect.stdout.log",
+    "stderr": "reference-inspect.stderr.log"
+  },
+  {
+    "label": "base-inspect",
+    "argv": [
+      "docker",
+      "image",
+      "inspect",
+      "ubuntu:24.04"
+    ],
+    "cwd": "/Users/liuyang/Desktop/DevOps/2/devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-10T11:54:34Z",
+    "finished_at": "2026-10-10T11:54:34Z",
+    "exit_code": 1,
+    "stdout": "base-inspect.stdout.log",
+    "stderr": "base-inspect.stderr.log"
+  },
+  {
+    "label": "container-validation",
+    "argv": [
+      "docker",
+      "run",
+      "--rm",
+      "--network",
+      "none",
+      "--workdir",
+      "/repo",
+      "devops-e3-draft-reference:ubuntu24.04",
+      "bash",
+      "scripts/e3/verify_fzy.sh",
+      "--operator",
+      "刘洋"
+    ],
+    "cwd": "/Users/liuyang/Desktop/DevOps/2/devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-10T11:54:34Z",
+    "finished_at": "2026-10-10T11:55:34Z",
+    "exit_code": 125,
+    "stdout": "container-validation.stdout.log",
+    "stderr": "container-validation.stderr.log"
+  }
+]

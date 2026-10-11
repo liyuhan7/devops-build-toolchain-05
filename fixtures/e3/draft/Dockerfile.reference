@@ -1,0 +1,22 @@
+FROM ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       build-essential \
+       ca-certificates \
+       git \
+       python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /repo
+COPY fixtures/e3/fzy/ /repo/fixtures/e3/fzy/
+COPY fixtures/e3/draft/ /repo/fixtures/e3/draft/
+COPY scripts/e3/verify_fzy.sh /repo/scripts/e3/verify_fzy.sh
+
+WORKDIR /repo/fixtures/e3/fzy
+RUN make CC=gcc
+RUN make CC=gcc check
+
+WORKDIR /repo
