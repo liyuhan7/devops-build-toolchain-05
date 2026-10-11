@@ -14,6 +14,7 @@ import uuid
 
 
 ROOT = Path(__file__).resolve().parents[2]
+C0_PATCH = ROOT / "fixtures/e3/echecker/c0.patch"
 
 
 def write_json(path, value):
@@ -30,6 +31,31 @@ def source_digest(directory):
     return digest.hexdigest()
 
 
+def reconstruct_c0(upstream, patch, destination, command=None):
+    """从固定上游与 C0 Patch 重建 C0，避免当前实验目录推进后污染基线。"""
+    shutil.copytree(upstream, destination)
+
+    if command is None:
+        def command(_label, argv, cwd):
+            subprocess.run(argv, cwd=cwd, check=True, capture_output=True, text=True)
+
+    try:
+        command("c0-git-init", ["git", "init", "-q"], destination)
+        command(
+            "c0-patch-check",
+            ["git", "apply", "--check", "--ignore-whitespace", str(patch)],
+            destination,
+        )
+        command(
+            "c0-patch-apply",
+            ["git", "apply", "--ignore-whitespace", str(patch)],
+            destination,
+        )
+    finally:
+        if (destination / ".git").exists():
+            shutil.rmtree(destination / ".git")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--operator", required=True)
@@ -38,6 +64,8 @@ def main():
     if args.revision and (len(args.revision) != 40 or any(c not in "0123456789abcdef" for c in args.revision)):
         parser.error("revision 必须是 40 位小写 Git SHA")
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:8]
+    projects = json.loads((ROOT / "fixtures/e3/projects.json").read_text(encoding="utf-8"))
+    c0_source_digest = projects["fzy"]["c0_source_tree_sha256"]
     evidence = ROOT / "evidence/e3/c0" / run_id
     evidence.mkdir(parents=True)
     commands = []
@@ -48,7 +76,7 @@ def main():
         "platform": platform.platform(), "architecture": platform.machine(),
         "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
         "experiment_commit": args.revision, "configuration_id": "fzy-c0-options-linux-v1",
-        "source_tree_sha256": source_digest(ROOT / "fixtures/e3/echecker/project"),
+        "source_tree_sha256": c0_source_digest,
         "source_digest_algorithm": "sha256-sorted-posix-path-lf-v1",
         "environment_reference": os.environ.get("E3_ENVIRONMENT_REFERENCE"),
         "status": "RUNNING"
@@ -89,7 +117,8 @@ def main():
         project = work / "c0"
         upstream.parent.mkdir(parents=True)
         shutil.copytree(ROOT / "fixtures/e3/fzy", upstream)
-        shutil.copytree(ROOT / "fixtures/e3/echecker/project", project)
+        reconstruct_c0(ROOT / "fixtures/e3/fzy", C0_PATCH, project, execute)
+        require(source_digest(project) == c0_source_digest, "从固定上游与 Patch 重建 C0")
         execute("upstream-build", ["make", "CC=gcc"], upstream)
         execute("upstream-tests", ["make", "CC=gcc", "check"], upstream)
         execute("c0-command", ["make", "CC=gcc", "-n", "-B", "src/options.o"], project)
