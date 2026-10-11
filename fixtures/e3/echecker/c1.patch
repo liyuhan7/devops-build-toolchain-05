@@ -1,0 +1,33 @@
+diff --git a/src/e3_c1_marker.h b/src/e3_c1_marker.h
+new file mode 100644
+index 0000000..6042f84
+--- /dev/null
++++ b/src/e3_c1_marker.h
+@@ -0,0 +1,6 @@
++#ifndef E3_C1_MARKER_H
++#define E3_C1_MARKER_H
++
++#define E3_C1_MARKER "E3_C1_MARKER=one"
++
++#endif
+diff --git a/src/options.c b/src/options.c
+index 485fc98..ab36e08 100644
+--- a/src/options.c
++++ b/src/options.c
+@@ -4,6 +4,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#include "e3_c1_marker.h"
+ #include "options.h"
+ 
+ #include "../config.h"
+@@ -63,7 +64,7 @@ void options_parse(options_t *options, int argc, char *argv[]) {
+ 	while ((c = getopt_long(argc, argv, "vhs0e:q:l:t:p:j:i", longopts, NULL)) != -1) {
+ 		switch (c) {
+ 			case 'v':
+-				printf("%s " VERSION " © 2014-2025 John Hawthorn\n", argv[0]);
++				printf("%s " VERSION " " E3_C1_MARKER " © 2014-2025 John Hawthorn\n", argv[0]);
+ 				exit(EXIT_SUCCESS);
+ 			case 's':
+ 				options->show_scores = 1;
