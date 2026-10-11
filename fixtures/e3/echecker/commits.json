@@ -5,10 +5,18 @@
       "commit_sha": "0769e815259ab2cae12a21be43256c05906215e0",
       "status": "COMMITTED",
       "project_path": "fixtures/e3/echecker/project",
+      "source_tree_sha256": "a1620cbc7deeca5a6d1fa1c28f50b600761411b26ebb4e3678c9f26199c58d84",
       "configuration_id": "fzy-c0-options-linux-v1",
       "description": "src/options.o 的项目依赖声明完整，显式依赖不由 options.d 补全"
     },
-    "C1": {"commit_sha": null, "status": "NOT_STARTED"},
+    "C1": {
+      "commit_sha": "563f9c5b797aff1174f726f029e67cd352400a24",
+      "status": "COMMITTED",
+      "project_path": "fixtures/e3/echecker/project",
+      "source_tree_sha256": "f5a4830aa9fff976390f350df3bb047c0eb1c494ffd52649639774d5a92509d8",
+      "configuration_id": "fzy-c0-options-linux-v1",
+      "description": "新增并使用 src/e3_c1_marker.h，但 src/options.o 的 Make 依赖保持 C0 声明"
+    },
     "C2": {"commit_sha": null, "status": "NOT_STARTED"}
   }
 }

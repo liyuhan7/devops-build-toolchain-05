@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "e3_c1_marker.h"
 #include "options.h"
 
 #include "../config.h"
@@ -63,7 +64,7 @@ void options_parse(options_t *options, int argc, char *argv[]) {
 	while ((c = getopt_long(argc, argv, "vhs0e:q:l:t:p:j:i", longopts, NULL)) != -1) {
 		switch (c) {
 			case 'v':
-				printf("%s " VERSION " © 2014-2025 John Hawthorn\n", argv[0]);
+				printf("%s " VERSION " " E3_C1_MARKER " © 2014-2025 John Hawthorn\n", argv[0]);
 				exit(EXIT_SUCCESS);
 			case 's':
 				options->show_scores = 1;

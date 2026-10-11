@@ -1,0 +1,1 @@
+rm -f fzy test/fzytest src/*.o src/*.d deps/*/*.o

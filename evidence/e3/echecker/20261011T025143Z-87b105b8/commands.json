@@ -1,0 +1,181 @@
+[
+  {
+    "label": "environment-os",
+    "argv": [
+      "cat",
+      "/etc/os-release"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-11T02:51:43.339763+00:00",
+    "finished_at": "2026-10-11T02:51:43.346667+00:00",
+    "exit_code": 0,
+    "stdout": "environment-os.stdout.log",
+    "stderr": "environment-os.stderr.log"
+  },
+  {
+    "label": "environment-gcc",
+    "argv": [
+      "gcc",
+      "--version"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-11T02:51:43.349673+00:00",
+    "finished_at": "2026-10-11T02:51:43.359324+00:00",
+    "exit_code": 0,
+    "stdout": "environment-gcc.stdout.log",
+    "stderr": "environment-gcc.stderr.log"
+  },
+  {
+    "label": "environment-make",
+    "argv": [
+      "make",
+      "--version"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-11T02:51:43.366856+00:00",
+    "finished_at": "2026-10-11T02:51:43.374576+00:00",
+    "exit_code": 0,
+    "stdout": "environment-make.stdout.log",
+    "stderr": "environment-make.stderr.log"
+  },
+  {
+    "label": "environment-python",
+    "argv": [
+      "/usr/bin/python3",
+      "--version"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-11T02:51:43.379423+00:00",
+    "finished_at": "2026-10-11T02:51:43.386806+00:00",
+    "exit_code": 0,
+    "stdout": "environment-python.stdout.log",
+    "stderr": "environment-python.stderr.log"
+  },
+  {
+    "label": "environment-git",
+    "argv": [
+      "git",
+      "--version"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-11T02:51:43.398990+00:00",
+    "finished_at": "2026-10-11T02:51:43.414333+00:00",
+    "exit_code": 0,
+    "stdout": "environment-git.stdout.log",
+    "stderr": "environment-git.stderr.log"
+  },
+  {
+    "label": "c0-git-init",
+    "argv": [
+      "git",
+      "init",
+      "-q"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025143Z-87b105b8/c0",
+    "stdin": null,
+    "started_at": "2026-10-11T02:51:50.944435+00:00",
+    "finished_at": "2026-10-11T02:51:51.401133+00:00",
+    "exit_code": 0,
+    "stdout": "c0-git-init.stdout.log",
+    "stderr": "c0-git-init.stderr.log"
+  },
+  {
+    "label": "c0-patch-check",
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/fixtures/e3/echecker/c0.patch"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025143Z-87b105b8/c0",
+    "stdin": null,
+    "started_at": "2026-10-11T02:51:51.407173+00:00",
+    "finished_at": "2026-10-11T02:51:51.506941+00:00",
+    "exit_code": 0,
+    "stdout": "c0-patch-check.stdout.log",
+    "stderr": "c0-patch-check.stderr.log"
+  },
+  {
+    "label": "c0-patch-apply",
+    "argv": [
+      "git",
+      "apply",
+      "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/fixtures/e3/echecker/c0.patch"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025143Z-87b105b8/c0",
+    "stdin": null,
+    "started_at": "2026-10-11T02:51:51.514003+00:00",
+    "finished_at": "2026-10-11T02:51:51.565698+00:00",
+    "exit_code": 0,
+    "stdout": "c0-patch-apply.stdout.log",
+    "stderr": "c0-patch-apply.stderr.log"
+  },
+  {
+    "label": "c1-git-init",
+    "argv": [
+      "git",
+      "init",
+      "-q"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025143Z-87b105b8/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:51:56.309404+00:00",
+    "finished_at": "2026-10-11T02:51:56.727816+00:00",
+    "exit_code": 0,
+    "stdout": "c1-git-init.stdout.log",
+    "stderr": "c1-git-init.stderr.log"
+  },
+  {
+    "label": "c1-patch-check",
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "--ignore-whitespace",
+      "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/fixtures/e3/echecker/c1.patch"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025143Z-87b105b8/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:51:56.732873+00:00",
+    "finished_at": "2026-10-11T02:51:56.807683+00:00",
+    "exit_code": 0,
+    "stdout": "c1-patch-check.stdout.log",
+    "stderr": "c1-patch-check.stderr.log"
+  },
+  {
+    "label": "c1-patch-apply",
+    "argv": [
+      "git",
+      "apply",
+      "--ignore-whitespace",
+      "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/fixtures/e3/echecker/c1.patch"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025143Z-87b105b8/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:51:56.817940+00:00",
+    "finished_at": "2026-10-11T02:51:57.048587+00:00",
+    "exit_code": 0,
+    "stdout": "c1-patch-apply.stdout.log",
+    "stderr": "c1-patch-apply.stderr.log"
+  },
+  {
+    "label": "c1-actual-dependencies",
+    "argv": [
+      "gcc",
+      "-MM",
+      "src/options.c"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025143Z-87b105b8/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:51:59.027818+00:00",
+    "finished_at": "2026-10-11T02:51:59.137118+00:00",
+    "exit_code": 1,
+    "stdout": "c1-actual-dependencies.stdout.log",
+    "stderr": "c1-actual-dependencies.stderr.log"
+  }
+]

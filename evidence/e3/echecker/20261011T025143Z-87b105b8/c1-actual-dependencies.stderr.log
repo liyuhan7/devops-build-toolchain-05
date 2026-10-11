@@ -1,0 +1,4 @@
+src/options.c:10:10: fatal error: ../config.h: No such file or directory
+   10 | #include "../config.h"
+      |          ^~~~~~~~~~~~~
+compilation terminated.

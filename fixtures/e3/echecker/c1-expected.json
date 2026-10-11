@@ -1,0 +1,39 @@
+{
+  "case_id": "fzy-c1-options-include",
+  "provenance": "TEAM_ORACLE",
+  "base_commit": "0769e815259ab2cae12a21be43256c05906215e0",
+  "source_commit": "563f9c5b797aff1174f726f029e67cd352400a24",
+  "configuration_id": "fzy-c0-options-linux-v1",
+  "scope": {
+    "target": "src/options.o",
+    "actual_project_inputs": ["src/options.c", "src/e3_c1_marker.h", "src/options.h", "config.h"],
+    "declared_inputs": ["src/options.c", "src/options.h", "config.h"]
+  },
+  "findings": [
+    {
+      "finding_id": "ec-c1-options-marker-001",
+      "source_commit": "563f9c5b797aff1174f726f029e67cd352400a24",
+      "configuration_id": "fzy-c0-options-linux-v1",
+      "target": "src/options.o",
+      "location": {"path": "Makefile", "line": 38, "column": 1},
+      "category": "MISSING",
+      "severity": "WARNING",
+      "message": "C1 中 src/options.o 实际读取 src/e3_c1_marker.h，但 Makefile 未声明该前置依赖。",
+      "dependency": {"ecosystem": "make", "name": "src/e3_c1_marker.h", "scope": "build"},
+      "evidence": [
+        "fixtures/e3/echecker/oracle.md#c1-新增缺失依赖",
+        "fixtures/e3/echecker/c1.patch"
+      ]
+    }
+  ],
+  "delta": {
+    "introduced": ["ec-c1-options-marker-001"],
+    "resolved": [],
+    "unchanged": []
+  },
+  "expected_behavior": {
+    "initial_version_marker": "E3_C1_MARKER=one",
+    "incremental_after_header_change": {"version_marker": "E3_C1_MARKER=one", "rebuild": false},
+    "clean_after_header_change": {"version_marker": "E3_C1_MARKER=two", "rebuild": true}
+  }
+}
