@@ -1,0 +1,4 @@
+Unable to find image 'devops-e3-draft-reference:ubuntu24.04' locally
+docker: Error response from daemon: failed to resolve reference "docker.io/library/devops-e3-draft-reference:ubuntu24.04": failed to do request: Head "https://registry-1.docker.io/v2/library/devops-e3-draft-reference/manifests/ubuntu24.04": context deadline exceeded
+
+Run 'docker run --help' for more information

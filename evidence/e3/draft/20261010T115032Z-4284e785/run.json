@@ -1,0 +1,31 @@
+{
+  "case_id": "fzy-draft-container",
+  "provenance": "ACTUAL_RUN",
+  "run_id": "20261010T115032Z-4284e785",
+  "operator": "刘洋",
+  "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
+  "configuration_id": "fzy-upstream-linux-v1",
+  "base_image": "ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3",
+  "images": {
+    "reference": {
+      "id": null,
+      "repo_digests": []
+    },
+    "base": {
+      "id": null,
+      "repo_digests": []
+    }
+  },
+  "broken_build": {
+    "status": "FAILED",
+    "exit_code": 1
+  },
+  "reference_build": {
+    "status": "FAILED",
+    "exit_code": 1
+  },
+  "container_validation": {
+    "exit_code": 125
+  },
+  "status": "FAILED"
+}
