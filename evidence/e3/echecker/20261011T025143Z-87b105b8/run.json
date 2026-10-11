@@ -1,0 +1,27 @@
+{
+  "case_id": "fzy-c1-options-include",
+  "provenance": "ACTUAL_RUN",
+  "run_id": "20261011T025143Z-87b105b8",
+  "operator": "管泽昊",
+  "started_at": "2026-10-11T02:51:43.335440+00:00",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "architecture": "x86_64",
+  "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
+  "base_commit": "0769e815259ab2cae12a21be43256c05906215e0",
+  "experiment_commit": "563f9c5b797aff1174f726f029e67cd352400a24",
+  "configuration_id": "fzy-c0-options-linux-v1",
+  "target": "src/options.o",
+  "status": "FAILED",
+  "failure": "c1-actual-dependencies 失败：退出码 1",
+  "checks": [
+    {
+      "check": "使用 Linux 环境",
+      "passed": true
+    },
+    {
+      "check": "C0 加 C1 Patch 与签入的 C1 项目一致",
+      "passed": true
+    }
+  ],
+  "finished_at": "2026-10-11T02:51:59.153281+00:00"
+}

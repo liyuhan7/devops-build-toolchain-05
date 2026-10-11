@@ -19,7 +19,8 @@ from run_c0 import source_digest
 
 ROOT = Path(__file__).resolve().parents[2]
 CASE = ROOT / "fixtures/e3/mdfixer"
-BASE = ROOT / "fixtures/e3/echecker/project"
+UPSTREAM = ROOT / "fixtures/e3/fzy"
+C0_PATCH = ROOT / "fixtures/e3/echecker/c0.patch"
 
 
 def now():
@@ -32,7 +33,7 @@ def digest(path):
 
 def workspace_digest(directory):
     """只计入固定 C0 文件与故障头文件，排除编译产物。"""
-    paths = [path.relative_to(BASE) for path in BASE.rglob("*") if path.is_file()]
+    paths = [path.relative_to(UPSTREAM) for path in UPSTREAM.rglob("*") if path.is_file()]
     paths.append(Path("src/e3_mdfixer_marker.h"))
     result = hashlib.sha256()
     for relative in sorted(paths, key=lambda item: item.as_posix()):
@@ -58,8 +59,8 @@ def main():
 
     oracle = json.loads((CASE / "fixed-md.json").read_text(encoding="utf-8"))
     projects = json.loads((ROOT / "fixtures/e3/projects.json").read_text(encoding="utf-8"))
-    if source_digest(BASE) != projects["fzy"]["c0_source_tree_sha256"]:
-        parser.error("C0 源码摘要与固定项目清单不一致")
+    if source_digest(UPSTREAM) != projects["fzy"]["source_tree_sha256"]:
+        parser.error("上游源码摘要与固定项目清单不一致")
     fault = CASE / oracle["patch"]["path"]
     reference = CASE / "reference.patch"
     if digest(fault) != oracle["patch"]["sha256"]:
@@ -67,7 +68,19 @@ def main():
 
     output.mkdir(parents=True)
     work.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(BASE, work)
+    shutil.copytree(UPSTREAM, work)
+    subprocess.run(["git", "init", "-q"], cwd=work, check=True)
+    c0_result = subprocess.run(
+        ["git", "apply", "--ignore-whitespace", str(C0_PATCH)],
+        cwd=work,
+        capture_output=True,
+        text=True,
+    )
+    if c0_result.returncode:
+        parser.error("无法从上游源码重建 C0：" + c0_result.stderr.strip())
+    shutil.rmtree(work / ".git")
+    if source_digest(work) != projects["fzy"]["c0_source_tree_sha256"]:
+        parser.error("重建的 C0 源码摘要与固定项目清单不一致")
     commands = []
     checks = []
     run = {

@@ -7,8 +7,10 @@
     "source_path": "fixtures/e3/fzy",
     "source_tree_sha256": "e515424bad62061647f8bffde4d2904c18ce490bf24bd8ec342b05484ccfb151",
     "license_path": "fixtures/e3/fzy/LICENSE",
-    "c0_path": "fixtures/e3/echecker/project",
+    "echecker_project_path": "fixtures/e3/echecker/project",
     "c0_source_tree_sha256": "a1620cbc7deeca5a6d1fa1c28f50b600761411b26ebb4e3678c9f26199c58d84",
+    "current_experiment_version": "C1",
+    "current_source_tree_sha256": "f5a4830aa9fff976390f350df3bb047c0eb1c494ffd52649639774d5a92509d8",
     "configuration_id": "fzy-c0-options-linux-v1",
     "intended_environment": "Ubuntu 24.04 Linux; gcc; GNU Make; Python 3",
     "upstream_snapshot_changes": []

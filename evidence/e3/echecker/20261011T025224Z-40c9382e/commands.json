@@ -1,0 +1,401 @@
+[
+  {
+    "label": "environment-os",
+    "argv": [
+      "cat",
+      "/etc/os-release"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:24.501859+00:00",
+    "finished_at": "2026-10-11T02:52:24.517331+00:00",
+    "exit_code": 0,
+    "stdout": "environment-os.stdout.log",
+    "stderr": "environment-os.stderr.log"
+  },
+  {
+    "label": "environment-gcc",
+    "argv": [
+      "gcc",
+      "--version"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:24.523221+00:00",
+    "finished_at": "2026-10-11T02:52:24.562301+00:00",
+    "exit_code": 0,
+    "stdout": "environment-gcc.stdout.log",
+    "stderr": "environment-gcc.stderr.log"
+  },
+  {
+    "label": "environment-make",
+    "argv": [
+      "make",
+      "--version"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:24.583607+00:00",
+    "finished_at": "2026-10-11T02:52:24.637376+00:00",
+    "exit_code": 0,
+    "stdout": "environment-make.stdout.log",
+    "stderr": "environment-make.stderr.log"
+  },
+  {
+    "label": "environment-python",
+    "argv": [
+      "/usr/bin/python3",
+      "--version"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:24.664767+00:00",
+    "finished_at": "2026-10-11T02:52:24.705505+00:00",
+    "exit_code": 0,
+    "stdout": "environment-python.stdout.log",
+    "stderr": "environment-python.stderr.log"
+  },
+  {
+    "label": "environment-git",
+    "argv": [
+      "git",
+      "--version"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:24.729614+00:00",
+    "finished_at": "2026-10-11T02:52:24.778394+00:00",
+    "exit_code": 0,
+    "stdout": "environment-git.stdout.log",
+    "stderr": "environment-git.stderr.log"
+  },
+  {
+    "label": "c0-git-init",
+    "argv": [
+      "git",
+      "init",
+      "-q"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c0",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:31.571262+00:00",
+    "finished_at": "2026-10-11T02:52:32.130418+00:00",
+    "exit_code": 0,
+    "stdout": "c0-git-init.stdout.log",
+    "stderr": "c0-git-init.stderr.log"
+  },
+  {
+    "label": "c0-patch-check",
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/fixtures/e3/echecker/c0.patch"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c0",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:32.154481+00:00",
+    "finished_at": "2026-10-11T02:52:32.346469+00:00",
+    "exit_code": 0,
+    "stdout": "c0-patch-check.stdout.log",
+    "stderr": "c0-patch-check.stderr.log"
+  },
+  {
+    "label": "c0-patch-apply",
+    "argv": [
+      "git",
+      "apply",
+      "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/fixtures/e3/echecker/c0.patch"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c0",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:32.369368+00:00",
+    "finished_at": "2026-10-11T02:52:32.471427+00:00",
+    "exit_code": 0,
+    "stdout": "c0-patch-apply.stdout.log",
+    "stderr": "c0-patch-apply.stderr.log"
+  },
+  {
+    "label": "c1-git-init",
+    "argv": [
+      "git",
+      "init",
+      "-q"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:38.505721+00:00",
+    "finished_at": "2026-10-11T02:52:39.059616+00:00",
+    "exit_code": 0,
+    "stdout": "c1-git-init.stdout.log",
+    "stderr": "c1-git-init.stderr.log"
+  },
+  {
+    "label": "c1-patch-check",
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "--ignore-whitespace",
+      "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/fixtures/e3/echecker/c1.patch"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:39.109187+00:00",
+    "finished_at": "2026-10-11T02:52:39.190188+00:00",
+    "exit_code": 0,
+    "stdout": "c1-patch-check.stdout.log",
+    "stderr": "c1-patch-check.stderr.log"
+  },
+  {
+    "label": "c1-patch-apply",
+    "argv": [
+      "git",
+      "apply",
+      "--ignore-whitespace",
+      "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/fixtures/e3/echecker/c1.patch"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:39.203644+00:00",
+    "finished_at": "2026-10-11T02:52:39.353414+00:00",
+    "exit_code": 0,
+    "stdout": "c1-patch-apply.stdout.log",
+    "stderr": "c1-patch-apply.stderr.log"
+  },
+  {
+    "label": "c1-configure",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "config.h"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:42.224738+00:00",
+    "finished_at": "2026-10-11T02:52:42.368359+00:00",
+    "exit_code": 0,
+    "stdout": "c1-configure.stdout.log",
+    "stderr": "c1-configure.stderr.log"
+  },
+  {
+    "label": "c1-actual-dependencies",
+    "argv": [
+      "gcc",
+      "-MM",
+      "src/options.c"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:42.385355+00:00",
+    "finished_at": "2026-10-11T02:52:42.556313+00:00",
+    "exit_code": 0,
+    "stdout": "c1-actual-dependencies.stdout.log",
+    "stderr": "c1-actual-dependencies.stderr.log"
+  },
+  {
+    "label": "c1-declared-dependencies",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "-pn",
+      "src/options.o"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:42.577572+00:00",
+    "finished_at": "2026-10-11T02:52:42.739461+00:00",
+    "exit_code": 0,
+    "stdout": "c1-declared-dependencies.stdout.log",
+    "stderr": "c1-declared-dependencies.stderr.log"
+  },
+  {
+    "label": "c1-command",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "-n",
+      "-B",
+      "src/options.o"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:42.766595+00:00",
+    "finished_at": "2026-10-11T02:52:42.925532+00:00",
+    "exit_code": 0,
+    "stdout": "c1-command.stdout.log",
+    "stderr": "c1-command.stderr.log"
+  },
+  {
+    "label": "initial-clean",
+    "argv": [
+      "make",
+      "clean"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:42.942826+00:00",
+    "finished_at": "2026-10-11T02:52:43.117988+00:00",
+    "exit_code": 0,
+    "stdout": "initial-clean.stdout.log",
+    "stderr": "initial-clean.stderr.log"
+  },
+  {
+    "label": "initial-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:43.136233+00:00",
+    "finished_at": "2026-10-11T02:52:48.882323+00:00",
+    "exit_code": 0,
+    "stdout": "initial-build.stdout.log",
+    "stderr": "initial-build.stderr.log"
+  },
+  {
+    "label": "initial-tests",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "check"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:48.890609+00:00",
+    "finished_at": "2026-10-11T02:52:54.242132+00:00",
+    "exit_code": 0,
+    "stdout": "initial-tests.stdout.log",
+    "stderr": "initial-tests.stderr.log"
+  },
+  {
+    "label": "initial-functional",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-10-11T02:52:54.249892+00:00",
+    "finished_at": "2026-10-11T02:52:54.285454+00:00",
+    "exit_code": 0,
+    "stdout": "initial-functional.stdout.log",
+    "stderr": "initial-functional.stderr.log"
+  },
+  {
+    "label": "initial-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:54.290182+00:00",
+    "finished_at": "2026-10-11T02:52:54.311519+00:00",
+    "exit_code": 0,
+    "stdout": "initial-version.stdout.log",
+    "stderr": "initial-version.stderr.log"
+  },
+  {
+    "label": "incremental-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:54.388800+00:00",
+    "finished_at": "2026-10-11T02:52:54.705214+00:00",
+    "exit_code": 0,
+    "stdout": "incremental-build.stdout.log",
+    "stderr": "incremental-build.stderr.log"
+  },
+  {
+    "label": "incremental-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:54.748183+00:00",
+    "finished_at": "2026-10-11T02:52:54.798857+00:00",
+    "exit_code": 0,
+    "stdout": "incremental-version.stdout.log",
+    "stderr": "incremental-version.stderr.log"
+  },
+  {
+    "label": "clean-after-change",
+    "argv": [
+      "make",
+      "clean"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:54.814722+00:00",
+    "finished_at": "2026-10-11T02:52:55.215689+00:00",
+    "exit_code": 0,
+    "stdout": "clean-after-change.stdout.log",
+    "stderr": "clean-after-change.stderr.log"
+  },
+  {
+    "label": "clean-build-after-change",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:55.250575+00:00",
+    "finished_at": "2026-10-11T02:52:59.137131+00:00",
+    "exit_code": 0,
+    "stdout": "clean-build-after-change.stdout.log",
+    "stderr": "clean-build-after-change.stderr.log"
+  },
+  {
+    "label": "clean-version-after-change",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:59.150004+00:00",
+    "finished_at": "2026-10-11T02:52:59.197343+00:00",
+    "exit_code": 0,
+    "stdout": "clean-version-after-change.stdout.log",
+    "stderr": "clean-version-after-change.stderr.log"
+  },
+  {
+    "label": "clean-tests-after-change",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "check"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": null,
+    "started_at": "2026-10-11T02:52:59.210913+00:00",
+    "finished_at": "2026-10-11T02:53:05.556951+00:00",
+    "exit_code": 0,
+    "stdout": "clean-tests-after-change.stdout.log",
+    "stderr": "clean-tests-after-change.stderr.log"
+  },
+  {
+    "label": "clean-functional-after-change",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/mnt/d/学习项目/Devops/实验2/devops-build-toolchain-05/work/e3/20261011T025224Z-40c9382e/c1",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-10-11T02:53:05.591130+00:00",
+    "finished_at": "2026-10-11T02:53:05.678500+00:00",
+    "exit_code": 0,
+    "stdout": "clean-functional-after-change.stdout.log",
+    "stderr": "clean-functional-after-change.stderr.log"
+  }
+]
