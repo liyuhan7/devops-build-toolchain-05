@@ -165,7 +165,7 @@ def main():
     observations.extend(f"| {item['check']} | {'通过' if item['passed'] else '失败'} |" for item in checks)
     observations.extend(["", "运行状态：" + run["status"] + "。",
                          "", "失败原因：" + run.get("failure", "无") + "。",
-                         "", "Git 提交标签：" + (args.revision or "尚未提交，需用户完成提交后另作带 SHA 的运行记录") + "。"])
+                         "", "Git 提交标签：" + (args.revision or "未指定") + "。"])
     (evidence / "observations.md").write_text("\n".join(observations) + "\n", encoding="utf-8")
     print("EVIDENCE_DIR=" + str(evidence))
     print("STATUS=" + run["status"])
