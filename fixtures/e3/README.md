@@ -1,51 +1,66 @@
-# E3 项目基线入口
+# fzy 测试基线
 
-本阶段使用 fzy 准备四工具的可重复测试基线。当前已准备 C0、EChecker C1 和 C2；MD/RD、DRAFT 故障和 MDFixer 修复由对应成员分别完成。
+本目录固定测试项目与样本，为构建工具链提供可判断对错、可重复运行的输入。
 
-## 固定版本
+来源标签：`TEAM_ORACLE` 为人工编写的预期答案，`ACTUAL_RUN` 为脚本产生的实际记录，`TOOL_OUTPUT` 保留给工具真实运行后的输出。
 
-- 上游：<https://github.com/jhawthorn/fzy>。
-- Commit：`34b88869d022e861da4846c4463aea3ddfb3ff30`。
-- 未改动源码快照：`fixtures/e3/fzy/`，包含原始 MIT 许可证及随源码分发的第三方许可证。
-- C0 实验副本：`fixtures/e3/echecker/project/`，只改变 Makefile；差异见 `echecker/c0.patch`。
-- 归档与源码摘要见 [projects.json](projects.json)。源码摘要按 POSIX 相对路径排序、LF 行尾规范化计算。
-- libco 为后续集成候选，版本、论文对应关系和 Dockerfile 状态尚未核验，不属于本次实验运行。
+## 固定项目与版本
 
-## 原始项目与 C0
+| 项 | 值 |
+|---|---|
+| 上游项目 | [jhawthorn/fzy](https://github.com/jhawthorn/fzy) |
+| 上游 Commit | `34b88869d022e861da4846c4463aea3ddfb3ff30` |
+| 上游快照 | `fzy/`，未改动源码，含原始 MIT 许可证与随源码分发的第三方许可证 |
+| 实验源码 | `echecker/project/`，依次演进 C0 → C1 → C2 |
+| 版本映射 | [echecker/commits.json](echecker/commits.json) |
+| 归档与源码摘要 | [projects.json](projects.json)，摘要按 POSIX 相对路径排序、LF 行尾规范化计算 |
 
-原始 fzy 可用 `make CC=gcc` 构建，`make CC=gcc check` 执行已有测试；`printf 'apple\nbanana\n' | ./fzy -e apple` 提供无终端交互的功能用例。
+C0 由上游快照叠加 `echecker/c0.patch` 重建，改造只作用于 Makefile。各样本统一使用配置 `fzy-c0-options-linux-v1`、构建命令 `make CC=gcc`、测试命令 `make CC=gcc check`，功能断言使用无终端交互的 `./fzy -e <查询词>`。
 
-C0 限定 `src/options.o` 的项目依赖正确性。它显式依赖 `src/options.c`、`src/options.h`、`config.h`，该对象不生成或加载 `.d`。其他对象沿用上游自动依赖机制。因此不宣称整个 fzy 项目不存在 MD/RD。
+## 判断范围
 
-## 从仓库根目录复跑
+人工答案限定在选定目标 `src/options.o` 的项目文件依赖：`src/options.c`、`src/options.h`，以及由 `src/config.def.h` 生成的 `config.h`。系统头文件、其他对象目标、Make 自身读取与编译器内部文件不在范围内。
 
-材料检查可在 Windows 或 Linux 执行：
+该对象不生成或加载 `src/options.d`，使受控的漏声明不会被自动依赖补回；其他对象沿用上游的自动依赖规则。该改造以 Patch 形式保存，不声称上游存在同类缺陷。
 
-```sh
-python scripts/e3/check_baselines.py
-```
+## 样本
 
-Linux 已具备 gcc、libc 开发头文件、GNU Make、Python 3 和 Git 时：
+| 样本 | 目录 | 关注点 |
+|---|---|---|
+| C0 | [echecker/](echecker/) | 声明完整：目标的项目依赖与编译读取一致，预期无 Finding |
+| C1 | [echecker/](echecker/) | 新增 `src/e3_c1_marker.h` 被读取但未声明，预期一条 introduced MISSING |
+| C2 | [echecker/](echecker/) | 源码保持 C1，只把 VERSION 从 `1.1` 改为 `1.2-e3`，原 Finding 保持 unchanged |
+| MD/RD | [buildchecker/](buildchecker/) | 同一目标的漏声明与冗余声明各一条，含普通增量与 clean 构建的行为对照 |
+| DRAFT | [draft/](draft/) | 上游快照的构建与功能判据，含容器工具缺失失败与参考成功环境 |
+| MDFixer | [mdfixer/](mdfixer/) | 固定 MISSING 报告、参考补丁与修复前后的增量验证 |
 
-```sh
-python3 scripts/e3/run_c0.py --operator 你的姓名
-```
+每个样本包含样本输入（Patch 或源码）、人工预期与判断依据三类文件，具体命名见各目录 README。
 
-Windows PowerShell 使用隔离 Linux 容器：
+## 复跑入口
 
-```powershell
-docker build -t devops-e3-c0:ubuntu24.04 -f scripts/e3/Dockerfile.baseline scripts/e3
-docker run --rm --network none --workdir /repo --mount "type=bind,src=$((Get-Location).Path),dst=/repo" -e E3_ENVIRONMENT_REFERENCE=devops-e3-c0:ubuntu24.04 devops-e3-c0:ubuntu24.04 python3 scripts/e3/run_c0.py --operator LiYuhan
-```
+| 入口 | 环境 | 说明 |
+|---|---|---|
+| `python scripts/e3/check_baselines.py` | Windows 或 Linux | 材料、版本映射、源码边界与人工答案一致性 |
+| `python3 scripts/e3/run_c0.py --operator <姓名>` | Linux | C0 构建、测试、功能与依赖对照 |
+| `python3 scripts/e3/run_c1.py --operator <姓名>` | Linux | C1 新增头文件的漏重建验证 |
+| `python3 scripts/e3/run_c2.py --operator <姓名>` | Linux | C2 仅编译命令变化的增量与 clean 对照 |
+| `bash scripts/e3/reproduce_a.sh --operator <姓名>` | Linux | MD/RD 样本，从上游快照与补丁重建 C0 |
+| `bash scripts/e3/verify_fzy.sh --operator <姓名>` | Linux | DRAFT 构建与功能用例 |
+| `bash scripts/e3/verify_repair.sh --operator <姓名>` | Linux | MDFixer 修复前后的增量验证 |
+| `python scripts/e3/run_draft_container.py --operator <姓名>` | Windows + Docker | DRAFT 失败候选与参考成功容器 |
 
-脚本每次创建新的 `work/e3/<run-id>/` 副本和 `evidence/e3/c0/<run-id>/` 证据，输出 `EVIDENCE_DIR` 与 `STATUS`。它不修改受版本控制的源文件、不提交或推送 Git。
+脚本在 `work/e3/<run-id>/` 创建运行副本，证据写入 `evidence/e3/<tool>/<run-id>/`，输出 `EVIDENCE_DIR` 与 `STATUS`，不修改受版本控制的源文件。`--revision <完整SHA>` 标注已提交版本；未传入时记录为提交前状态。
 
-每个证据目录包含环境与命令日志、退出码和 `run.json` 中的断言。人工预期保存在 `echecker/expected.json`，来源 `TEAM_ORACLE`；运行记录来源 `ACTUAL_RUN`。本阶段未运行真实 BuildChecker 或 EChecker。
+参考环境为 Ubuntu 24.04 x86_64（gcc 13.3.0、GNU Make 4.3、Git 2.43.0、Python 3.12.3）。容器方式使用固定基础镜像摘要，见 [Dockerfile.baseline](../../scripts/e3/Dockerfile.baseline)。
 
-## C0 提交后
+## 证据与读取
 
-C0 提交为 `0769e815259ab2cae12a21be43256c05906215e0`，版本映射见 `echecker/commits.json`。后续文档和证据提交不改变初始 C0 的版本标识。
+运行目录包含 `run.json`（输入、配置、环境、状态与检查结果）、`commands.json`（命令、时间、退出码与输出字节索引）、`observations.md`（观察摘要）以及逐命令的 `*.stdout.log`、`*.stderr.log`。读取顺序为 `run.json` → `commands.json` → 对应输出。
 
-复跑已提交版本时，可增加 `--revision <当前实际检出的完整SHA>`，该参数是运行版本标签，脚本不验证工作区是否干净；操作者应核对 checkout 和 diff，源码摘要用于补充核验。PR 的合并 SHA 与 C0 SHA 分别记录。
+提交证据可用 `python scripts/e3/pack_evidence.py --directory <运行目录>` 整理为合并日志。失败记录与成功记录分别读取，失败记录不构成成功证据。
 
-C0/C1/C2 的真实历史必须保留，建议这几个 PR 使用普通 merge，并保留基线分支。后续 C1 在 C0 副本中新增头文件及可观察使用；C2 在同一个样本源码树内只改变编译参数。代码与 Makefile 的改造必须另存预期和实际记录。
+## 范围外
+
+- libco 作为后续集成候选记录在 [projects.json](projects.json)，本基线不覆盖其版本核验。
+- `make acceptance` 需要 Ruby 与 Bundler，不作为成功条件。
+- 依赖缺陷的自动检测、修复与重检属工具实现范围，本基线只提供人工预期与实际运行记录。
