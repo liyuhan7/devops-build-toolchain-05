@@ -34,7 +34,22 @@ C0 由上游快照叠加 `echecker/c0.patch` 重建，改造只作用于 Makefil
 | DRAFT | [draft/](draft/) | 上游快照的构建与功能判据，含容器工具缺失失败与参考成功环境 |
 | MDFixer | [mdfixer/](mdfixer/) | 固定 MISSING 报告、参考补丁与修复前后的增量验证 |
 
-每个样本包含样本输入（Patch 或源码）、人工预期与判断依据三类文件，具体命名见各目录 README。
+## 样本命名
+
+每个样本目录包含样本输入、人工预期与判断依据三类文件。预期文件以 `case_id` 与 `provenance` 开头，`provenance` 固定为 `TEAM_ORACLE`；运行记录为 `ACTUAL_RUN`。
+
+| 文件 | 使用场景 |
+|---|---|
+| `expected.json` | 单版本样本的预期，`buildchecker/`、`echecker/`（C0） |
+| `<版本>-expected.json` | 同目录多版本样本按版本小写命名，`echecker/c1-expected.json`、`echecker/c2-expected.json` |
+| `cases.json` 与 `cases/<id>/` | 用例型样本，`cases.json` 保存构建、环境与用例清单，逐用例保存 `argv`、`stdin`、`expected_stdout`、`expected_exit_code`，需要断言错误输出时另有 `expected_stderr_contains`，`draft/` |
+| `fixed-md.json` | 固定输入报告型样本，保存 Finding 与 `expected_behavior`，`mdfixer/` |
+| `oracle.md` | 判断依据，`buildchecker/`、`echecker/`、`mdfixer/` |
+| `repair.md` | 修复类样本的判据，`mdfixer/` |
+| `commits.json` | 版本映射，`echecker/` |
+| `projects.json` | 固定项目的归档与源码摘要，本目录 |
+
+命名按样本形态区分：单版本样本只需一个预期文件；多版本样本按版本区分；用例型与报告型样本的预期无法压成单个 `expected.json`，分别使用 `cases.json` 与 `fixed-md.json`。新增样本沿用上述名称，不引入同义命名。
 
 ## 复跑入口
 
