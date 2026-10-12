@@ -1,0 +1,64 @@
+{
+  "provenance": "LOCAL_VERIFICATION",
+  "baseline": {
+    "checked_at": "2026-10-12T08:41:43.770521+00:00",
+    "status": "PASSED",
+    "check_count": 43,
+    "scope": [
+      "输入摘要",
+      "命令与功能日志完整性",
+      "LF",
+      "文档链接",
+      "交付范围"
+    ]
+  },
+  "packed_evidence": {
+    "checked_at": "2026-10-12T09:01:31.763491+00:00",
+    "stream_count": 104,
+    "auxiliary_file_count": 44,
+    "unchanged_input_result_files": 14,
+    "files_before": 165,
+    "files_after": 23,
+    "logs_before": 104,
+    "logs_after": 3,
+    "status": "PASSED",
+    "check_count": 31
+  },
+  "main_sync": {
+    "checked_at": "2026-10-12T09:17:02.149308+00:00",
+    "head": "85819f63d7405b5b11a4ae3f5fdc1f339a9178e3",
+    "branch": "docs/e3-closeout",
+    "original_head": "d92b3b3a9c551d0bc2a70156fc39f7be4a62742a",
+    "snapshot_files": 66,
+    "unchanged_files": 57,
+    "status": "PASSED",
+    "check_count": 91,
+    "scope": "文件恢复、C2 主线内容、文档与已合并输出摘要"
+  },
+  "c2_independent_replay": {
+    "status": "PASSED",
+    "check_count": 17,
+    "operator": "liyuhan-CodexAssisted",
+    "experiment_commit": "d9e9c80ea27510a71db1a6425585604c83ce0306",
+    "repository_snapshot": "85819f63d7405b5b11a4ae3f5fdc1f339a9178e3",
+    "evidence": "echecker/20261012T093057Z-ef2359f1/run.json"
+  },
+  "delivery": {
+    "checked_at": "2026-10-12T09:45:51.117890+00:00",
+    "status": "PASSED",
+    "files": 28,
+    "logs": 4,
+    "indexed_streams": 174,
+    "complete_streams": 173,
+    "excerpted_streams": 1,
+    "auxiliary_texts": 44,
+    "scope": [
+      "结果与输入身份",
+      "命令元数据",
+      "保留输出与原始内容一致",
+      "全文及节选摘要",
+      "Git 字节稳定性",
+      "本地链接与交付范围"
+    ]
+  }
+}

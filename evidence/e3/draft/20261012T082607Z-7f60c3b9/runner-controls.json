@@ -1,0 +1,48 @@
+{
+  "provenance": "SYNTHETIC_CONTROL",
+  "scope": "DRAFT runner control flow; no Docker operations",
+  "checks": [
+    {
+      "case": "docker-unavailable",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "passed": true
+    },
+    {
+      "case": "base-mismatch",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "passed": true
+    },
+    {
+      "case": "broken-network",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "passed": true
+    },
+    {
+      "case": "reference-failure",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "passed": true
+    },
+    {
+      "case": "functional-failure",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "passed": true
+    },
+    {
+      "case": "missing-functional-log",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "passed": true
+    },
+    {
+      "case": "success",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "passed": true
+    }
+  ]
+}

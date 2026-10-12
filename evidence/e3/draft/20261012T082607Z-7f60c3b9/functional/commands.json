@@ -1,0 +1,322 @@
+[
+  {
+    "label": "environment-os",
+    "argv": [
+      "cat",
+      "/etc/os-release"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "started_at": "2026-10-12T08:26:33Z",
+    "finished_at": "2026-10-12T08:26:33Z",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 80,
+      "length": 400,
+      "sha256": "87458b3b1f1ca0e5c693ade771de7007c3783bdc692fa6b39eb6414bf2af2763",
+      "original_file": "environment-os.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 490,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "environment-os.stderr.log"
+    }
+  },
+  {
+    "label": "environment-gcc",
+    "argv": [
+      "gcc",
+      "--version"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "started_at": "2026-10-12T08:26:33Z",
+    "finished_at": "2026-10-12T08:26:33Z",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 574,
+      "length": 246,
+      "sha256": "8497f84b2b8334c413d9c6166bd39d009ba55d2ff60a8f23e66dfa5819c2b048",
+      "original_file": "environment-gcc.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 830,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "environment-gcc.stderr.log"
+    }
+  },
+  {
+    "label": "environment-make",
+    "argv": [
+      "make",
+      "--version"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "started_at": "2026-10-12T08:26:33Z",
+    "finished_at": "2026-10-12T08:26:33Z",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 916,
+      "length": 297,
+      "sha256": "8ee498ee2fc27e8dcdf99191b454077df95e3840d841ec94321748b6d7f36819",
+      "original_file": "environment-make.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 1223,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "environment-make.stderr.log"
+    }
+  },
+  {
+    "label": "environment-git",
+    "argv": [
+      "git",
+      "--version"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "started_at": "2026-10-12T08:26:33Z",
+    "finished_at": "2026-10-12T08:26:33Z",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 1307,
+      "length": 19,
+      "sha256": "25f3602b5caaf92437be1e76b53698e8d73f14a6c71c2e91c8d5875f923ab29f",
+      "original_file": "environment-git.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 1336,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "environment-git.stderr.log"
+    }
+  },
+  {
+    "label": "build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/repo/work/e3/20261012T082633Z-e900ff1e/fzy",
+    "stdin": null,
+    "started_at": "2026-10-12T08:26:33Z",
+    "finished_at": "2026-10-12T08:26:35Z",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 1408,
+      "length": 984,
+      "sha256": "8132573f963579e4923606cae2ef372fa1c87aade80c7f2506a38923b6ec0ca9",
+      "original_file": "build.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 2402,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "build.stderr.log"
+    }
+  },
+  {
+    "label": "validation",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "check"
+    ],
+    "cwd": "/repo/work/e3/20261012T082633Z-e900ff1e/fzy",
+    "stdin": null,
+    "started_at": "2026-10-12T08:26:35Z",
+    "finished_at": "2026-10-12T08:26:37Z",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 2488,
+      "length": 1312,
+      "sha256": "aab74055a6f539748f0cc0b9fbc6a50d1c353b802eabbd89887a31edc9b7bff2",
+      "original_file": "validation.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 3810,
+      "length": 990,
+      "sha256": "6ae4d2aaa0306293afbb101297b45836df7f47636ef6ef4a36a1a1d210af686a",
+      "original_file": "validation.stderr.log"
+    }
+  },
+  {
+    "label": "version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/repo/work/e3/20261012T082633Z-e900ff1e/fzy",
+    "stdin": null,
+    "started_at": "2026-10-12T08:26:37Z",
+    "finished_at": "2026-10-12T08:26:37Z",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 4871,
+      "length": 37,
+      "sha256": "b7177d0b1a89158b22783751f1b5002c03408012af130c57f74eccafc0e00d3f",
+      "original_file": "version.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 4918,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "version.stderr.log"
+    }
+  },
+  {
+    "label": "functional-invalid-lines-usage",
+    "argv": [
+      "./fzy",
+      "-l",
+      "1",
+      "-e",
+      "app"
+    ],
+    "cwd": "/repo/work/e3/20261012T082633Z-e900ff1e/fzy",
+    "stdin": "/repo/fixtures/e3/draft/cases/invalid-lines-usage/stdin",
+    "started_at": "2026-10-12T08:26:37Z",
+    "finished_at": "2026-10-12T08:26:37Z",
+    "exit_code": 1,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 5030,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "functional-invalid-lines-usage.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 5047,
+      "length": 775,
+      "sha256": "51535e20748eb62ccab71d8e84cc5bb2253f634002afdaf1b78e783bdde50b53",
+      "original_file": "functional-invalid-lines-usage.stderr.log"
+    }
+  },
+  {
+    "label": "functional-match-apple",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/repo/work/e3/20261012T082633Z-e900ff1e/fzy",
+    "stdin": "/repo/fixtures/e3/draft/cases/match-apple/stdin",
+    "started_at": "2026-10-12T08:26:37Z",
+    "finished_at": "2026-10-12T08:26:37Z",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 5910,
+      "length": 6,
+      "sha256": "303980bcb9e9e6cdec515230791af8b0ab1aaa244b58a8d99152673aa22197d0",
+      "original_file": "functional-match-apple.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 5926,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "functional-match-apple.stderr.log"
+    }
+  },
+  {
+    "label": "functional-match-banana",
+    "argv": [
+      "./fzy",
+      "-e",
+      "banana"
+    ],
+    "cwd": "/repo/work/e3/20261012T082633Z-e900ff1e/fzy",
+    "stdin": "/repo/fixtures/e3/draft/cases/match-banana/stdin",
+    "started_at": "2026-10-12T08:26:37Z",
+    "finished_at": "2026-10-12T08:26:37Z",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 6023,
+      "length": 7,
+      "sha256": "5a81483d96b0bc15ad19af7f5a662e14b275729fbc05579b18513e7f550016b1",
+      "original_file": "functional-match-banana.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 6040,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "functional-match-banana.stderr.log"
+    }
+  },
+  {
+    "label": "functional-multi-match-sorted",
+    "argv": [
+      "./fzy",
+      "-e",
+      "app"
+    ],
+    "cwd": "/repo/work/e3/20261012T082633Z-e900ff1e/fzy",
+    "stdin": "/repo/fixtures/e3/draft/cases/multi-match-sorted/stdin",
+    "started_at": "2026-10-12T08:26:37Z",
+    "finished_at": "2026-10-12T08:26:37Z",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 6140,
+      "length": 18,
+      "sha256": "0109087254ab66fd1d064d92af27993f59ba14484d7d4e2024916a8d6bb68466",
+      "original_file": "functional-multi-match-sorted.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 6168,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "functional-multi-match-sorted.stderr.log"
+    }
+  },
+  {
+    "label": "functional-no-match-empty",
+    "argv": [
+      "./fzy",
+      "-e",
+      "zzz"
+    ],
+    "cwd": "/repo/work/e3/20261012T082633Z-e900ff1e/fzy",
+    "stdin": "/repo/fixtures/e3/draft/cases/no-match-empty/stdin",
+    "started_at": "2026-10-12T08:26:37Z",
+    "finished_at": "2026-10-12T08:26:37Z",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 6264,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "functional-no-match-empty.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 6281,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "functional-no-match-empty.stderr.log"
+    }
+  }
+]

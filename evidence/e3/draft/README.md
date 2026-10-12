@@ -1,6 +1,8 @@
 # DRAFT 构建与功能验证实际记录
 
-日期：2026-10-09。任务负责人李新昊；运行由 CodeBuddy 辅助执行，日志的 operator 标签使用负责人姓名，不代表已经完成成员独立复跑。
+本目录分别保留功能运行与容器运行记录。容器记录见 [20261012T082607Z-7f60c3b9](20261012T082607Z-7f60c3b9/run.json)，功能详情见该目录 `functional/`。整体环境、复现入口与验收范围见 [E3 汇总](../summary.md)。
+
+来源：`ACTUAL_RUN`，运行由 CodeBuddy 辅助执行；operator 标签与 AI 辅助范围见 `run.json` 与 [AI_USAGE.md](../../../AI_USAGE.md)。
 
 ## 运行与输入
 
@@ -8,9 +10,7 @@
 
 人工预期：[fixtures/e3/draft/cases.json](../../../fixtures/e3/draft/cases.json)（`TEAM_ORACLE`）。本记录来源 `ACTUAL_RUN`。该运行发生在提交前，`run.json` 的 `experiment_commit` 为 null，以源码快照与上游 SHA 定位当次输入。
 
-关联任务：E3-04。2026-10-09 查询远端全部 Issue，尚无对应 DRAFT 基线 Issue，真实编号待仓库协调人创建后回填。分支 `test/e3-draft-input`，已推送并创建 [PR #21](https://github.com/liyuhan7/devops-build-toolchain-05/pull/21)，指定刘君杰（Liuyiiing）为 Reviewer；尚未合并。
-
-环境：WSL2 Ubuntu 24.04.3 LTS，Linux 5.15.167.4-microsoft-standard-WSL2，x86_64，gcc 13.3.0，GNU Make 4.3，Git 2.43.0，Python 3.12.3。本次未使用容器。
+环境：WSL2 Ubuntu 24.04.3 LTS，Linux 5.15.167.4-microsoft-standard-WSL2，x86_64，gcc 13.3.0，GNU Make 4.3，Git 2.43.0，Python 3.12.3。该记录不使用容器。
 
 ## 结果
 
@@ -42,15 +42,14 @@ bash scripts/e3/verify_fzy.sh --operator 你的姓名 --output /tmp/e3-negative/
 cp /tmp/backup fixtures/e3/draft/cases/match-apple/expected_stdout
 ```
 
-## 边界与未完成
+## 边界
 
 - `make acceptance` 需要 Ruby 与 Bundler，本机未安装，未运行，也不作为成功条件。
-- 容器构建失败与参考成功环境由后续任务交付，本次未使用 Docker。
-- 独立复跑由组内其他成员完成，本记录不代替成员复跑或 Review 批准。
-- Issue 编号待回填；Actions 结果以 PR 对应提交的实际运行为准。本 PR 是 E3-04 的输入部分，不关闭整个任务。
+- 本记录未使用 Docker，容器样本见 [20261012T082607Z-7f60c3b9](20261012T082607Z-7f60c3b9/run.json)。
+- 本记录为作者采集的一次运行，不是独立复跑。
 
-## Codex 辅助复跑
+## 复跑记录
 
-修正后复跑：[20261009T061915Z-d1e0ac8e](20261009T061915Z-d1e0ac8e/run.json)，输入提交 29dc66256ec12cdfd72f2fb06d7338c707319f59。使用同一固定上游快照，在 WSL Linux 中构建并执行全部功能用例，21 项检查通过、12 条命令已记录。该记录由 Codex 辅助执行，不代表刘君杰的独立 Review。
+复跑：[20261009T061915Z-d1e0ac8e](20261009T061915Z-d1e0ac8e/run.json)，输入提交 `29dc66256ec12cdfd72f2fb06d7338c707319f59`。使用同一固定上游快照，在 WSL Linux 中构建并执行全部功能用例，21 项检查通过、12 条命令已记录；记录由 Codex 辅助执行。
 
 E2 契约检查（29 JSON / 4 Schema）、18 项回归测试、C0 材料检查均通过。另在检查副本确认相对输出目录可用、已有证据目录和缺少参数值被拒绝，改错 match-apple 的预期 stdout 会准确判 FAILED，随后恢复原预期。

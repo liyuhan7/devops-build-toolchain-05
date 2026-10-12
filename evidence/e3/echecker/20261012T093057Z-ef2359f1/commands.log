@@ -1,0 +1,414 @@
+=== 001 environment-os ===
+argv=["cat", "/etc/os-release"]
+exit_code=0
+[stdout]
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+
+[stderr]
+(empty)
+
+=== 002 environment-gcc ===
+argv=["gcc", "--version"]
+exit_code=0
+[stdout]
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+[stderr]
+(empty)
+
+=== 003 environment-make ===
+argv=["make", "--version"]
+exit_code=0
+[stdout]
+GNU Make 4.3
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+[stderr]
+(empty)
+
+=== 004 environment-python ===
+argv=["/usr/bin/python3", "--version"]
+exit_code=0
+[stdout]
+Python 3.12.3
+
+[stderr]
+(empty)
+
+=== 005 environment-git ===
+argv=["git", "--version"]
+exit_code=0
+[stdout]
+git version 2.43.0
+
+[stderr]
+(empty)
+
+=== 006 c0-git-init ===
+argv=["git", "init", "-q"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+(empty)
+
+=== 007 c0-patch-check ===
+argv=["git", "apply", "--check", "--ignore-whitespace", "/repo/fixtures/e3/echecker/c0.patch"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+(empty)
+
+=== 008 c0-patch-apply ===
+argv=["git", "apply", "--ignore-whitespace", "/repo/fixtures/e3/echecker/c0.patch"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+(empty)
+
+=== 009 c1-git-init ===
+argv=["git", "init", "-q"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+(empty)
+
+=== 010 c1-patch-check ===
+argv=["git", "apply", "--check", "--ignore-whitespace", "/repo/fixtures/e3/echecker/c1.patch"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+warning: src/options.c has type 100755, expected 100644
+
+
+=== 011 c1-patch-apply ===
+argv=["git", "apply", "--ignore-whitespace", "/repo/fixtures/e3/echecker/c1.patch"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+warning: src/options.c has type 100755, expected 100644
+
+
+=== 012 c2-reference-git-init ===
+argv=["git", "init", "-q"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+(empty)
+
+=== 013 c2-reference-patch-check ===
+argv=["git", "apply", "--check", "--ignore-whitespace", "/repo/fixtures/e3/echecker/c2.patch"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+warning: Makefile has type 100755, expected 100644
+
+
+=== 014 c2-reference-patch-apply ===
+argv=["git", "apply", "--ignore-whitespace", "/repo/fixtures/e3/echecker/c2.patch"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+warning: Makefile has type 100755, expected 100644
+
+
+=== 015 c1-configure ===
+argv=["make", "CC=gcc", "config.h"]
+exit_code=0
+[stdout]
+cp src/config.def.h config.h
+
+[stderr]
+(empty)
+
+=== 016 c1-command ===
+argv=["make", "CC=gcc", "-n", "-B", "src/options.o"]
+exit_code=0
+[stdout]
+cp src/config.def.h config.h
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/options.o src/options.c
+
+[stderr]
+(empty)
+
+=== 017 c1-clean ===
+argv=["make", "clean"]
+exit_code=0
+[stdout]
+rm -f fzy test/fzytest src/*.o src/*.d deps/*/*.o
+
+[stderr]
+(empty)
+
+=== 018 c1-build ===
+argv=["make", "CC=gcc"]
+exit_code=0
+[stdout]
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/fzy.o src/fzy.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/match.o src/match.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/tty.o src/tty.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/choices.o src/choices.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/options.o src/options.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/tty_interface.o src/tty_interface.c
+gcc -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla  -o fzy src/fzy.o src/match.o src/tty.o src/choices.o src/options.o src/tty_interface.o -lpthread
+
+[stderr]
+(empty)
+
+=== 019 c1-tests ===
+argv=["make", "CC=gcc", "check"]
+exit_code=0
+[stdout]
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft.o deps/theft/theft.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft_bloom.o deps/theft/theft_bloom.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft_mt.o deps/theft/theft_mt.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft_hash.o deps/theft/theft_hash.c
+gcc -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla  -Isrc -o test/fzytest test/fzytest.c test/test_properties.c test/test_choices.c test/test_match.c src/match.o src/choices.o src/options.o deps/theft/theft.o deps/theft/theft_bloom.o deps/theft/theft_mt.o deps/theft/theft_hash.o -lpthread
+./test/fzytest
+
+* Suite match_suite:
+........................
+24 tests - 24 passed, 0 failed, 0 skipped (98 ticks, 0.000 sec)
+
+* Suite choices_suite:
+......
+6 tests - 6 passed, 0 failed, 0 skipped (23542 ticks, 0.024 sec)
+
+* Suite properties_suite:
+..
+2 tests - 2 passed, 0 failed, 0 skipped (465743 ticks, 0.466 sec)
+
+Total: 32 tests (489432 ticks, 0.489 sec), 102 assertions
+Pass: 32, fail: 0, skip: 0.
+
+[stderr]
+deps/theft/theft.c: In function ‘report_on_failure’:
+deps/theft/theft.c:483:49: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 4 has type ‘long unsigned int’ [-Wformat=]
+  483 |     fprintf(t->out, "    Trial %u, Seed 0x%016llx\n", ti->trial,
+      |                                           ~~~~~~^
+      |                                                 |
+      |                                                 long long unsigned int
+      |                                           %016lx
+  484 |         (uint64_t)ti->seed);
+      |         ~~~~~~~~~~~~~~~~~~                       
+      |         |
+      |         long unsigned int
+test/test_choices.c: In function ‘test_choices_large_input’:
+test/test_choices.c:142:17: warning: ignoring return value of ‘asprintf’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  142 |                 asprintf(&strings[i], "%i", i);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+=== 020 c1-functional ===
+argv=["./fzy", "-e", "apple"]
+exit_code=0
+[stdout]
+apple
+
+[stderr]
+(empty)
+
+=== 021 c1-version ===
+argv=["./fzy", "--version"]
+exit_code=0
+[stdout]
+./fzy 1.1 E3_C1_MARKER=one © 2014-2025 John Hawthorn
+
+[stderr]
+(empty)
+
+=== 022 c2-git-init ===
+argv=["git", "init", "-q"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+(empty)
+
+=== 023 c2-patch-check ===
+argv=["git", "apply", "--check", "--ignore-whitespace", "/repo/fixtures/e3/echecker/c2.patch"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+warning: Makefile has type 100755, expected 100644
+
+
+=== 024 c2-patch-apply ===
+argv=["git", "apply", "--ignore-whitespace", "/repo/fixtures/e3/echecker/c2.patch"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+warning: Makefile has type 100755, expected 100644
+
+
+=== 025 c2-command ===
+argv=["make", "CC=gcc", "-n", "-B", "src/options.o"]
+exit_code=0
+[stdout]
+cp src/config.def.h config.h
+gcc -DVERSION=\"1.2-e3\" -D_GNU_SOURCE -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/options.o src/options.c
+
+[stderr]
+(empty)
+
+=== 026 c2-configure ===
+argv=["make", "CC=gcc", "config.h"]
+exit_code=0
+[stdout]
+make: 'config.h' is up to date.
+
+[stderr]
+(empty)
+
+=== 027 c2-actual-dependencies ===
+argv=["gcc", "-MM", "src/options.c"]
+exit_code=0
+[stdout]
+options.o: src/options.c src/e3_c1_marker.h src/options.h src/../config.h
+
+[stderr]
+(empty)
+
+=== 028 c2-declared-dependencies ===
+argv=["make", "CC=gcc", "-pn", "src/options.o"]
+exit_code=0
+[stdout EXCERPT]
+src/options.o: src/options.c src/options.h config.h
+
+[stderr]
+(empty)
+
+=== 029 c2-ordinary-build ===
+argv=["make", "CC=gcc"]
+exit_code=0
+[stdout]
+make: Nothing to be done for 'all'.
+
+[stderr]
+(empty)
+
+=== 030 c2-ordinary-version ===
+argv=["./fzy", "--version"]
+exit_code=0
+[stdout]
+./fzy 1.1 E3_C1_MARKER=one © 2014-2025 John Hawthorn
+
+[stderr]
+(empty)
+
+=== 031 c2-clean ===
+argv=["make", "clean"]
+exit_code=0
+[stdout]
+rm -f fzy test/fzytest src/*.o src/*.d deps/*/*.o
+
+[stderr]
+(empty)
+
+=== 032 c2-clean-build ===
+argv=["make", "CC=gcc"]
+exit_code=0
+[stdout]
+gcc -DVERSION=\"1.2-e3\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/fzy.o src/fzy.c
+gcc -DVERSION=\"1.2-e3\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/match.o src/match.c
+gcc -DVERSION=\"1.2-e3\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/tty.o src/tty.c
+gcc -DVERSION=\"1.2-e3\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/choices.o src/choices.c
+gcc -DVERSION=\"1.2-e3\" -D_GNU_SOURCE -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/options.o src/options.c
+gcc -DVERSION=\"1.2-e3\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/tty_interface.o src/tty_interface.c
+gcc -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla  -o fzy src/fzy.o src/match.o src/tty.o src/choices.o src/options.o src/tty_interface.o -lpthread
+
+[stderr]
+(empty)
+
+=== 033 c2-clean-version ===
+argv=["./fzy", "--version"]
+exit_code=0
+[stdout]
+./fzy 1.2-e3 E3_C1_MARKER=one © 2014-2025 John Hawthorn
+
+[stderr]
+(empty)
+
+=== 034 c2-clean-tests ===
+argv=["make", "CC=gcc", "check"]
+exit_code=0
+[stdout]
+gcc -DVERSION=\"1.2-e3\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft.o deps/theft/theft.c
+gcc -DVERSION=\"1.2-e3\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft_bloom.o deps/theft/theft_bloom.c
+gcc -DVERSION=\"1.2-e3\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft_mt.o deps/theft/theft_mt.c
+gcc -DVERSION=\"1.2-e3\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft_hash.o deps/theft/theft_hash.c
+gcc -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla  -Isrc -o test/fzytest test/fzytest.c test/test_properties.c test/test_choices.c test/test_match.c src/match.o src/choices.o src/options.o deps/theft/theft.o deps/theft/theft_bloom.o deps/theft/theft_mt.o deps/theft/theft_hash.o -lpthread
+./test/fzytest
+
+* Suite match_suite:
+........................
+24 tests - 24 passed, 0 failed, 0 skipped (99 ticks, 0.000 sec)
+
+* Suite choices_suite:
+......
+6 tests - 6 passed, 0 failed, 0 skipped (21491 ticks, 0.021 sec)
+
+* Suite properties_suite:
+..
+2 tests - 2 passed, 0 failed, 0 skipped (516243 ticks, 0.516 sec)
+
+Total: 32 tests (537885 ticks, 0.538 sec), 102 assertions
+Pass: 32, fail: 0, skip: 0.
+
+[stderr]
+deps/theft/theft.c: In function ‘report_on_failure’:
+deps/theft/theft.c:483:49: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 4 has type ‘long unsigned int’ [-Wformat=]
+  483 |     fprintf(t->out, "    Trial %u, Seed 0x%016llx\n", ti->trial,
+      |                                           ~~~~~~^
+      |                                                 |
+      |                                                 long long unsigned int
+      |                                           %016lx
+  484 |         (uint64_t)ti->seed);
+      |         ~~~~~~~~~~~~~~~~~~                       
+      |         |
+      |         long unsigned int
+test/test_choices.c: In function ‘test_choices_large_input’:
+test/test_choices.c:142:17: warning: ignoring return value of ‘asprintf’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  142 |                 asprintf(&strings[i], "%i", i);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+=== 035 c2-clean-functional ===
+argv=["./fzy", "-e", "apple"]
+exit_code=0
+[stdout]
+apple
+
+[stderr]
+(empty)
+

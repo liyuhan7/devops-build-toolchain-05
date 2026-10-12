@@ -1,0 +1,18 @@
+{
+  "provenance": "SYNTHETIC_CONTROL",
+  "scope": "MD/RD input identity; no compilation",
+  "checks": [
+    {
+      "case": "upstream-mismatch",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "passed": true
+    },
+    {
+      "case": "c0-mismatch",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "passed": true
+    }
+  ]
+}
