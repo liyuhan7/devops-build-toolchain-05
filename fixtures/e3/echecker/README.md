@@ -50,4 +50,4 @@ python3 scripts/e3/run_c2.py --operator 黄骢驰
 
 ## 三种版本
 
-`commits.json` 记录上游 SHA 和实验版本映射。C0 提交为 `0769e815259ab2cae12a21be43256c05906215e0`，C1 提交为 `563f9c5b797aff1174f726f029e67cd352400a24`。C2 的项目内容已经准备完成，真实 SHA 在用户创建本地 C2 提交后回填。
+`commits.json` 记录上游 SHA 和实验版本映射。C0 提交为 `0769e815259ab2cae12a21be43256c05906215e0`，C1 提交为 `563f9c5b797aff1174f726f029e67cd352400a24`，C2 提交为 `d9e9c80ea27510a71db1a6425585604c83ce0306`。

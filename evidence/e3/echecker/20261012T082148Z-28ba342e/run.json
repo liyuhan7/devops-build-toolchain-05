@@ -1,0 +1,104 @@
+{
+  "case_id": "fzy-c2-options-command",
+  "provenance": "ACTUAL_RUN",
+  "run_id": "20261012T082148Z-28ba342e",
+  "operator": "黄骢驰",
+  "started_at": "2026-10-12T08:21:48.382622+00:00",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "architecture": "x86_64",
+  "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
+  "base_commit": "563f9c5b797aff1174f726f029e67cd352400a24",
+  "experiment_commit": "d9e9c80ea27510a71db1a6425585604c83ce0306",
+  "previous_configuration_id": "fzy-c0-options-linux-v1",
+  "configuration_id": "fzy-c2-options-version-1.2-e3-linux-v1",
+  "target": "src/options.o",
+  "status": "PASSED",
+  "checks": [
+    {
+      "check": "使用 Linux 环境",
+      "passed": true
+    },
+    {
+      "check": "重建的 C1 与固定摘要一致",
+      "passed": true
+    },
+    {
+      "check": "C1 加 C2 Patch 与签入的 C2 项目一致",
+      "passed": true
+    },
+    {
+      "check": "C1 功能断言通过",
+      "passed": true,
+      "actual": "apple\n"
+    },
+    {
+      "check": "C1 版本输出正确",
+      "passed": true,
+      "actual": "./fzy 1.1 E3_C1_MARKER=one © 2014-2025 John Hawthorn"
+    },
+    {
+      "check": "C2 的 .c/.h 与 C1 完全一致",
+      "passed": true
+    },
+    {
+      "check": "C2 Makefile 使用新 VERSION",
+      "passed": true
+    },
+    {
+      "check": "C1/C2 编译命令发生变化",
+      "passed": true
+    },
+    {
+      "check": "VERSION 编译宏按预期变化",
+      "passed": true
+    },
+    {
+      "check": "C2 编译器实际依赖与 C1 一致",
+      "passed": true,
+      "actual": [
+        "config.h",
+        "src/e3_c1_marker.h",
+        "src/options.c",
+        "src/options.h"
+      ]
+    },
+    {
+      "check": "C2 Make 声明与 C1 一致",
+      "passed": true,
+      "actual": [
+        "config.h",
+        "src/options.c",
+        "src/options.h"
+      ]
+    },
+    {
+      "check": "C1 的 MISSING 在 C2 保持 unchanged",
+      "passed": true
+    },
+    {
+      "check": "保留 C1 对象时普通 make 未重编译目标",
+      "passed": true,
+      "actual": "make: Nothing to be done for 'all'."
+    },
+    {
+      "check": "普通 make 保留 C1 版本输出",
+      "passed": true,
+      "actual": "./fzy 1.1 E3_C1_MARKER=one © 2014-2025 John Hawthorn"
+    },
+    {
+      "check": "C2 clean build 使用新 VERSION 编译宏",
+      "passed": true
+    },
+    {
+      "check": "C2 clean build 输出新版本",
+      "passed": true,
+      "actual": "./fzy 1.2-e3 E3_C1_MARKER=one © 2014-2025 John Hawthorn"
+    },
+    {
+      "check": "C2 clean build 后功能断言通过",
+      "passed": true,
+      "actual": "apple\n"
+    }
+  ],
+  "finished_at": "2026-10-12T08:22:15.931039+00:00"
+}

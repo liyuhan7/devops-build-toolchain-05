@@ -1,9 +1,9 @@
 {
   "case_id": "fzy-c2-options-command",
   "provenance": "TEAM_ORACLE",
-  "status": "PENDING_COMMIT",
+  "status": "COMMITTED",
   "base_commit": "563f9c5b797aff1174f726f029e67cd352400a24",
-  "source_commit": null,
+  "source_commit": "d9e9c80ea27510a71db1a6425585604c83ce0306",
   "previous_configuration_id": "fzy-c0-options-linux-v1",
   "configuration_id": "fzy-c2-options-version-1.2-e3-linux-v1",
   "scope": {
@@ -21,7 +21,7 @@
   "findings": [
     {
       "finding_id": "ec-c1-options-marker-001",
-      "source_commit": null,
+      "source_commit": "d9e9c80ea27510a71db1a6425585604c83ce0306",
       "configuration_id": "fzy-c2-options-version-1.2-e3-linux-v1",
       "target": "src/options.o",
       "location": {"path": "Makefile", "line": 38, "column": 1},

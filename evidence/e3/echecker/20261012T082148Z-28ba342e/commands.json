@@ -1,0 +1,531 @@
+[
+  {
+    "label": "environment-os",
+    "argv": [
+      "cat",
+      "/etc/os-release"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:48.397041+00:00",
+    "finished_at": "2026-10-12T08:21:48.417281+00:00",
+    "exit_code": 0,
+    "stdout": "environment-os.stdout.log",
+    "stderr": "environment-os.stderr.log"
+  },
+  {
+    "label": "environment-gcc",
+    "argv": [
+      "gcc",
+      "--version"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:48.424520+00:00",
+    "finished_at": "2026-10-12T08:21:48.444572+00:00",
+    "exit_code": 0,
+    "stdout": "environment-gcc.stdout.log",
+    "stderr": "environment-gcc.stderr.log"
+  },
+  {
+    "label": "environment-make",
+    "argv": [
+      "make",
+      "--version"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:48.452736+00:00",
+    "finished_at": "2026-10-12T08:21:48.469214+00:00",
+    "exit_code": 0,
+    "stdout": "environment-make.stdout.log",
+    "stderr": "environment-make.stderr.log"
+  },
+  {
+    "label": "environment-python",
+    "argv": [
+      "/usr/bin/python3",
+      "--version"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:48.474334+00:00",
+    "finished_at": "2026-10-12T08:21:48.494647+00:00",
+    "exit_code": 0,
+    "stdout": "environment-python.stdout.log",
+    "stderr": "environment-python.stderr.log"
+  },
+  {
+    "label": "environment-git",
+    "argv": [
+      "git",
+      "--version"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:48.501531+00:00",
+    "finished_at": "2026-10-12T08:21:48.523116+00:00",
+    "exit_code": 0,
+    "stdout": "environment-git.stdout.log",
+    "stderr": "environment-git.stderr.log"
+  },
+  {
+    "label": "c0-git-init",
+    "argv": [
+      "git",
+      "init",
+      "-q"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:50.804865+00:00",
+    "finished_at": "2026-10-12T08:21:51.208646+00:00",
+    "exit_code": 0,
+    "stdout": "c0-git-init.stdout.log",
+    "stderr": "c0-git-init.stderr.log"
+  },
+  {
+    "label": "c0-patch-check",
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "--ignore-whitespace",
+      "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c0.patch"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:51.217857+00:00",
+    "finished_at": "2026-10-12T08:21:51.281070+00:00",
+    "exit_code": 0,
+    "stdout": "c0-patch-check.stdout.log",
+    "stderr": "c0-patch-check.stderr.log"
+  },
+  {
+    "label": "c0-patch-apply",
+    "argv": [
+      "git",
+      "apply",
+      "--ignore-whitespace",
+      "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c0.patch"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:51.286032+00:00",
+    "finished_at": "2026-10-12T08:21:51.348357+00:00",
+    "exit_code": 0,
+    "stdout": "c0-patch-apply.stdout.log",
+    "stderr": "c0-patch-apply.stderr.log"
+  },
+  {
+    "label": "c1-git-init",
+    "argv": [
+      "git",
+      "init",
+      "-q"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:51.454718+00:00",
+    "finished_at": "2026-10-12T08:21:51.725331+00:00",
+    "exit_code": 0,
+    "stdout": "c1-git-init.stdout.log",
+    "stderr": "c1-git-init.stderr.log"
+  },
+  {
+    "label": "c1-patch-check",
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "--ignore-whitespace",
+      "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c1.patch"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:51.732071+00:00",
+    "finished_at": "2026-10-12T08:21:51.805382+00:00",
+    "exit_code": 0,
+    "stdout": "c1-patch-check.stdout.log",
+    "stderr": "c1-patch-check.stderr.log"
+  },
+  {
+    "label": "c1-patch-apply",
+    "argv": [
+      "git",
+      "apply",
+      "--ignore-whitespace",
+      "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c1.patch"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:51.811439+00:00",
+    "finished_at": "2026-10-12T08:21:51.906457+00:00",
+    "exit_code": 0,
+    "stdout": "c1-patch-apply.stdout.log",
+    "stderr": "c1-patch-apply.stderr.log"
+  },
+  {
+    "label": "c2-reference-git-init",
+    "argv": [
+      "git",
+      "init",
+      "-q"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c2-reference",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:56.013645+00:00",
+    "finished_at": "2026-10-12T08:21:56.346296+00:00",
+    "exit_code": 0,
+    "stdout": "c2-reference-git-init.stdout.log",
+    "stderr": "c2-reference-git-init.stderr.log"
+  },
+  {
+    "label": "c2-reference-patch-check",
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "--ignore-whitespace",
+      "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c2.patch"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c2-reference",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:56.355167+00:00",
+    "finished_at": "2026-10-12T08:21:56.405758+00:00",
+    "exit_code": 0,
+    "stdout": "c2-reference-patch-check.stdout.log",
+    "stderr": "c2-reference-patch-check.stderr.log"
+  },
+  {
+    "label": "c2-reference-patch-apply",
+    "argv": [
+      "git",
+      "apply",
+      "--ignore-whitespace",
+      "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c2.patch"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c2-reference",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:56.413929+00:00",
+    "finished_at": "2026-10-12T08:21:56.493116+00:00",
+    "exit_code": 0,
+    "stdout": "c2-reference-patch-apply.stdout.log",
+    "stderr": "c2-reference-patch-apply.stderr.log"
+  },
+  {
+    "label": "c1-configure",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "config.h"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:58.147076+00:00",
+    "finished_at": "2026-10-12T08:21:58.201232+00:00",
+    "exit_code": 0,
+    "stdout": "c1-configure.stdout.log",
+    "stderr": "c1-configure.stderr.log"
+  },
+  {
+    "label": "c1-command",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "-n",
+      "-B",
+      "src/options.o"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:58.208009+00:00",
+    "finished_at": "2026-10-12T08:21:58.249855+00:00",
+    "exit_code": 0,
+    "stdout": "c1-command.stdout.log",
+    "stderr": "c1-command.stderr.log"
+  },
+  {
+    "label": "c1-clean",
+    "argv": [
+      "make",
+      "clean"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:58.255053+00:00",
+    "finished_at": "2026-10-12T08:21:58.324383+00:00",
+    "exit_code": 0,
+    "stdout": "c1-clean.stdout.log",
+    "stderr": "c1-clean.stderr.log"
+  },
+  {
+    "label": "c1-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:21:58.337110+00:00",
+    "finished_at": "2026-10-12T08:22:01.011312+00:00",
+    "exit_code": 0,
+    "stdout": "c1-build.stdout.log",
+    "stderr": "c1-build.stderr.log"
+  },
+  {
+    "label": "c1-tests",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "check"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:01.018893+00:00",
+    "finished_at": "2026-10-12T08:22:04.286828+00:00",
+    "exit_code": 0,
+    "stdout": "c1-tests.stdout.log",
+    "stderr": "c1-tests.stderr.log"
+  },
+  {
+    "label": "c1-functional",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-10-12T08:22:04.294024+00:00",
+    "finished_at": "2026-10-12T08:22:04.319515+00:00",
+    "exit_code": 0,
+    "stdout": "c1-functional.stdout.log",
+    "stderr": "c1-functional.stderr.log"
+  },
+  {
+    "label": "c1-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:04.324978+00:00",
+    "finished_at": "2026-10-12T08:22:04.351214+00:00",
+    "exit_code": 0,
+    "stdout": "c1-version.stdout.log",
+    "stderr": "c1-version.stderr.log"
+  },
+  {
+    "label": "c2-git-init",
+    "argv": [
+      "git",
+      "init",
+      "-q"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:04.363842+00:00",
+    "finished_at": "2026-10-12T08:22:04.629041+00:00",
+    "exit_code": 0,
+    "stdout": "c2-git-init.stdout.log",
+    "stderr": "c2-git-init.stderr.log"
+  },
+  {
+    "label": "c2-patch-check",
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "--ignore-whitespace",
+      "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c2.patch"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:04.634570+00:00",
+    "finished_at": "2026-10-12T08:22:04.695294+00:00",
+    "exit_code": 0,
+    "stdout": "c2-patch-check.stdout.log",
+    "stderr": "c2-patch-check.stderr.log"
+  },
+  {
+    "label": "c2-patch-apply",
+    "argv": [
+      "git",
+      "apply",
+      "--ignore-whitespace",
+      "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c2.patch"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:04.704085+00:00",
+    "finished_at": "2026-10-12T08:22:04.764294+00:00",
+    "exit_code": 0,
+    "stdout": "c2-patch-apply.stdout.log",
+    "stderr": "c2-patch-apply.stderr.log"
+  },
+  {
+    "label": "c2-command",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "-n",
+      "-B",
+      "src/options.o"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:05.595517+00:00",
+    "finished_at": "2026-10-12T08:22:05.659256+00:00",
+    "exit_code": 0,
+    "stdout": "c2-command.stdout.log",
+    "stderr": "c2-command.stderr.log"
+  },
+  {
+    "label": "c2-configure",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "config.h"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:05.666007+00:00",
+    "finished_at": "2026-10-12T08:22:05.722595+00:00",
+    "exit_code": 0,
+    "stdout": "c2-configure.stdout.log",
+    "stderr": "c2-configure.stderr.log"
+  },
+  {
+    "label": "c2-actual-dependencies",
+    "argv": [
+      "gcc",
+      "-MM",
+      "src/options.c"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:05.728844+00:00",
+    "finished_at": "2026-10-12T08:22:05.756002+00:00",
+    "exit_code": 0,
+    "stdout": "c2-actual-dependencies.stdout.log",
+    "stderr": "c2-actual-dependencies.stderr.log"
+  },
+  {
+    "label": "c2-declared-dependencies",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "-pn",
+      "src/options.o"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:05.760953+00:00",
+    "finished_at": "2026-10-12T08:22:05.819525+00:00",
+    "exit_code": 0,
+    "stdout": "c2-declared-dependencies.stdout.log",
+    "stderr": "c2-declared-dependencies.stderr.log"
+  },
+  {
+    "label": "c2-ordinary-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:05.824657+00:00",
+    "finished_at": "2026-10-12T08:22:05.931911+00:00",
+    "exit_code": 0,
+    "stdout": "c2-ordinary-build.stdout.log",
+    "stderr": "c2-ordinary-build.stderr.log"
+  },
+  {
+    "label": "c2-ordinary-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c1-to-c2",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:05.941372+00:00",
+    "finished_at": "2026-10-12T08:22:05.962280+00:00",
+    "exit_code": 0,
+    "stdout": "c2-ordinary-version.stdout.log",
+    "stderr": "c2-ordinary-version.stderr.log"
+  },
+  {
+    "label": "c2-clean",
+    "argv": [
+      "make",
+      "clean"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c2-clean",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:09.884466+00:00",
+    "finished_at": "2026-10-12T08:22:10.077399+00:00",
+    "exit_code": 0,
+    "stdout": "c2-clean.stdout.log",
+    "stderr": "c2-clean.stderr.log"
+  },
+  {
+    "label": "c2-clean-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c2-clean",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:10.084549+00:00",
+    "finished_at": "2026-10-12T08:22:12.373615+00:00",
+    "exit_code": 0,
+    "stdout": "c2-clean-build.stdout.log",
+    "stderr": "c2-clean-build.stderr.log"
+  },
+  {
+    "label": "c2-clean-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c2-clean",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:12.387059+00:00",
+    "finished_at": "2026-10-12T08:22:12.421310+00:00",
+    "exit_code": 0,
+    "stdout": "c2-clean-version.stdout.log",
+    "stderr": "c2-clean-version.stderr.log"
+  },
+  {
+    "label": "c2-clean-tests",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "check"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c2-clean",
+    "stdin": null,
+    "started_at": "2026-10-12T08:22:12.433069+00:00",
+    "finished_at": "2026-10-12T08:22:15.891022+00:00",
+    "exit_code": 0,
+    "stdout": "c2-clean-tests.stdout.log",
+    "stderr": "c2-clean-tests.stderr.log"
+  },
+  {
+    "label": "c2-clean-functional",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/work/e3/20261012T082148Z-28ba342e/c2-clean",
+    "stdin": "apple\nbanana\n",
+    "started_at": "2026-10-12T08:22:15.900352+00:00",
+    "finished_at": "2026-10-12T08:22:15.924267+00:00",
+    "exit_code": 0,
+    "stdout": "c2-clean-functional.stdout.log",
+    "stderr": "c2-clean-functional.stderr.log"
+  }
+]
