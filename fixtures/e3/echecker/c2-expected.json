@@ -1,0 +1,50 @@
+{
+  "case_id": "fzy-c2-options-command",
+  "provenance": "TEAM_ORACLE",
+  "status": "COMMITTED",
+  "base_commit": "563f9c5b797aff1174f726f029e67cd352400a24",
+  "source_commit": "d9e9c80ea27510a71db1a6425585604c83ce0306",
+  "previous_configuration_id": "fzy-c0-options-linux-v1",
+  "configuration_id": "fzy-c2-options-version-1.2-e3-linux-v1",
+  "scope": {
+    "target": "src/options.o",
+    "actual_project_inputs": ["src/options.c", "src/e3_c1_marker.h", "src/options.h", "config.h"],
+    "declared_inputs": ["src/options.c", "src/options.h", "config.h"]
+  },
+  "command_change": {
+    "path": "Makefile",
+    "variable": "VERSION",
+    "before": "1.1",
+    "after": "1.2-e3",
+    "affected_flag": "-DVERSION"
+  },
+  "findings": [
+    {
+      "finding_id": "ec-c1-options-marker-001",
+      "source_commit": "d9e9c80ea27510a71db1a6425585604c83ce0306",
+      "configuration_id": "fzy-c2-options-version-1.2-e3-linux-v1",
+      "target": "src/options.o",
+      "location": {"path": "Makefile", "line": 38, "column": 1},
+      "category": "MISSING",
+      "severity": "WARNING",
+      "message": "C2 保持 C1 源码和依赖声明，src/options.o 仍实际读取未声明的 src/e3_c1_marker.h。",
+      "dependency": {"ecosystem": "make", "name": "src/e3_c1_marker.h", "scope": "build"},
+      "evidence": [
+        "fixtures/e3/echecker/oracle.md#c2-仅改变编译命令",
+        "fixtures/e3/echecker/c2.patch"
+      ]
+    }
+  ],
+  "delta": {
+    "introduced": [],
+    "resolved": [],
+    "unchanged": ["ec-c1-options-marker-001"]
+  },
+  "expected_behavior": {
+    "c1_version_token": "1.1",
+    "c2_version_token": "1.2-e3",
+    "ordinary_make_with_c1_objects": {"version_token": "1.1", "rebuild": false},
+    "clean_c2_build": {"version_token": "1.2-e3", "rebuild": true},
+    "marker": "E3_C1_MARKER=one"
+  }
+}

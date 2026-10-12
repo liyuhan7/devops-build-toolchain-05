@@ -1,0 +1,46 @@
+{
+  "case_id": "fzy-c2-options-command",
+  "provenance": "ACTUAL_RUN",
+  "run_id": "20261012T080800Z-41035ea0",
+  "operator": "黄骢驰",
+  "started_at": "2026-10-12T08:08:00.069059+00:00",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "architecture": "x86_64",
+  "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
+  "base_commit": "563f9c5b797aff1174f726f029e67cd352400a24",
+  "experiment_commit": null,
+  "previous_configuration_id": "fzy-c0-options-linux-v1",
+  "configuration_id": "fzy-c2-options-version-1.2-e3-linux-v1",
+  "target": "src/options.o",
+  "status": "FAILED",
+  "failure": "C2 的 .c/.h 与 C1 完全一致",
+  "checks": [
+    {
+      "check": "使用 Linux 环境",
+      "passed": true
+    },
+    {
+      "check": "重建的 C1 与固定摘要一致",
+      "passed": true
+    },
+    {
+      "check": "C1 加 C2 Patch 与签入的 C2 项目一致",
+      "passed": true
+    },
+    {
+      "check": "C1 功能断言通过",
+      "passed": true,
+      "actual": "apple\n"
+    },
+    {
+      "check": "C1 版本输出正确",
+      "passed": true,
+      "actual": "./fzy 1.1 E3_C1_MARKER=one © 2014-2025 John Hawthorn"
+    },
+    {
+      "check": "C2 的 .c/.h 与 C1 完全一致",
+      "passed": false
+    }
+  ],
+  "finished_at": "2026-10-12T08:08:15.170003+00:00"
+}

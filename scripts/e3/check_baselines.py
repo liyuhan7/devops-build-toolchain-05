@@ -1,4 +1,4 @@
-"""检查已交付 C0 材料；不将材料完整性等同于实际构建通过。"""
+"""检查已交付 C0/C1/C2 材料；不将材料完整性等同于实际构建通过。"""
 
 import json
 from pathlib import Path
@@ -31,13 +31,14 @@ def main():
     for name, version in versions["versions"].items():
         sha = version["commit_sha"]
         assert sha is None or re.fullmatch(r"[0-9a-f]{40}", sha), f"{name} SHA 无效"
-    assert fzy["current_experiment_version"] == "C1", "当前实验版本必须为 C1"
+    assert fzy["current_experiment_version"] == "C2", "当前实验版本必须为 C2"
     assert versions["versions"]["C1"]["status"] == "COMMITTED", "C1 必须有真实提交"
-    assert versions["versions"]["C1"]["source_tree_sha256"] == fzy["current_source_tree_sha256"]
+    assert versions["versions"]["C2"]["status"] in {"PENDING_COMMIT", "COMMITTED"}, "C2 状态无效"
+    assert versions["versions"]["C2"]["source_tree_sha256"] == fzy["current_source_tree_sha256"]
 
     expected = json.loads((ROOT / "fixtures/e3/echecker/expected.json").read_text(encoding="utf-8"))
     assert expected["provenance"] == "TEAM_ORACLE", "C0 人工答案来源不明确"
-    assert expected["configuration_id"] == fzy["configuration_id"], "C0 配置标识不一致"
+    assert expected["configuration_id"] == versions["versions"]["C0"]["configuration_id"], "C0 配置标识不一致"
     assert expected["findings"] == [], "C0 限定范围应无 MD/RD"
     assert set(expected["expected_graph"]["src/options.o"]) == {"src/options.c", "src/options.h", "config.h"}
 
@@ -45,10 +46,13 @@ def main():
         temporary = Path(directory)
         c0 = temporary / "c0"
         c1 = temporary / "c1"
+        c2 = temporary / "c2"
         shutil.copytree(upstream, c0)
-        for revision, workspace in [("c0", c0), ("c1", c1)]:
+        for revision, workspace in [("c0", c0), ("c1", c1), ("c2", c2)]:
             if revision == "c1":
                 shutil.copytree(c0, c1)
+            elif revision == "c2":
+                shutil.copytree(c1, c2)
             patch = ROOT / f"fixtures/e3/echecker/{revision}.patch"
             subprocess.run(["git", "init", "-q"], cwd=workspace, check=True)
             result = subprocess.run(
@@ -60,8 +64,18 @@ def main():
             shutil.rmtree(workspace / ".git")
 
         assert source_digest(c0) == fzy["c0_source_tree_sha256"], "重建的 C0 源码摘要不一致"
-        assert source_digest(c1) == fzy["current_source_tree_sha256"], "重建的 C1 源码摘要不一致"
-        assert source_digest(c1) == source_digest(project), "签入的 C1 与 Patch 重建结果不一致"
+        assert source_digest(c1) == versions["versions"]["C1"]["source_tree_sha256"], "重建的 C1 源码摘要不一致"
+        assert source_digest(c2) == fzy["current_source_tree_sha256"], "重建的 C2 源码摘要不一致"
+        assert source_digest(c2) == source_digest(project), "签入的 C2 与 Patch 重建结果不一致"
+        c1_sources = {
+            path.relative_to(c1): path.read_bytes().replace(b"\r\n", b"\n")
+            for path in c1.rglob("*") if path.is_file() and path.suffix in {".c", ".h"}
+        }
+        c2_sources = {
+            path.relative_to(c2): path.read_bytes().replace(b"\r\n", b"\n")
+            for path in c2.rglob("*") if path.is_file() and path.suffix in {".c", ".h"}
+        }
+        assert c1_sources == c2_sources, "C2 不得修改 C1 的 .c/.h 内容"
         upstream_files = {p.relative_to(upstream) for p in upstream.rglob("*") if p.is_file()}
         c0_files = {p.relative_to(c0) for p in c0.rglob("*") if p.is_file()}
         assert upstream_files == c0_files, "C0 文件集合与上游快照不一致"
@@ -77,7 +91,7 @@ def main():
     c1_expected = json.loads((ROOT / "fixtures/e3/echecker/c1-expected.json").read_text(encoding="utf-8"))
     assert c1_expected["provenance"] == "TEAM_ORACLE", "C1 人工答案来源不明确"
     assert c1_expected["source_commit"] == versions["versions"]["C1"]["commit_sha"]
-    assert c1_expected["configuration_id"] == fzy["configuration_id"]
+    assert c1_expected["configuration_id"] == versions["versions"]["C1"]["configuration_id"]
     assert len(c1_expected["findings"]) == 1, "C1 必须只有一条 Finding"
     finding = c1_expected["findings"][0]
     assert finding["category"] == "MISSING"
@@ -85,14 +99,27 @@ def main():
     assert finding["dependency"]["name"] == "src/e3_c1_marker.h"
     assert set(c1_expected["scope"]["actual_project_inputs"]) - set(c1_expected["scope"]["declared_inputs"]) == {"src/e3_c1_marker.h"}
     assert c1_expected["delta"] == {"introduced": [finding["finding_id"]], "resolved": [], "unchanged": []}
+    c2_expected = json.loads((ROOT / "fixtures/e3/echecker/c2-expected.json").read_text(encoding="utf-8"))
+    assert c2_expected["provenance"] == "TEAM_ORACLE", "C2 人工答案来源不明确"
+    assert c2_expected["source_commit"] == versions["versions"]["C2"]["commit_sha"]
+    assert c2_expected["configuration_id"] == fzy["configuration_id"]
+    assert c2_expected["command_change"] == {
+        "path": "Makefile", "variable": "VERSION", "before": "1.1",
+        "after": "1.2-e3", "affected_flag": "-DVERSION",
+    }
+    assert len(c2_expected["findings"]) == 1, "C2 必须保持 C1 的一条 Finding"
+    assert c2_expected["findings"][0]["finding_id"] == finding["finding_id"]
+    assert c2_expected["delta"] == {"introduced": [], "resolved": [], "unchanged": [finding["finding_id"]]}
     for path in ["fixtures/e3/README.md", "fixtures/e3/echecker/README.md",
                  "fixtures/e3/echecker/oracle.md", "fixtures/e3/echecker/c1.patch",
                  "fixtures/e3/echecker/c1-expected.json", "scripts/e3/run_c1.py",
+                 "fixtures/e3/echecker/c2.patch", "fixtures/e3/echecker/c2-expected.json",
+                 "scripts/e3/run_c2.py",
                  "docs/adr/0002-e3-baseline-decisions.md"]:
         assert (ROOT / path).is_file(), f"缺少材料：{path}"
-    print("PASS: C0/C1 材料、源码边界、配置和人工答案一致。")
-    if versions["versions"]["C0"]["commit_sha"] is None:
-        print("PENDING: C0 真实 Git SHA 待用户提交后回填；不是已完成版本冻结。")
+    print("PASS: C0/C1/C2 材料、源码边界、配置和人工答案一致。")
+    if versions["versions"]["C2"]["commit_sha"] is None:
+        print("PENDING: C2 真实 Git SHA 待用户提交后回填；当前材料不是最终版本冻结。")
     return 0
 
 

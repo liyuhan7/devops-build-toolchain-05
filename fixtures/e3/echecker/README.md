@@ -1,8 +1,8 @@
-# EChecker C0/C1 基线
+# EChecker C0/C1/C2 基线
 
 ## 输入和配置
 
-上游与源码摘要见 `../projects.json`。当前实验源码位于 `project/`，已经演进到 C1；配置 ID 仍为 `fzy-c0-options-linux-v1`，构建入口 `make CC=gcc`、已有测试入口 `make CC=gcc check`。保留上游 VERSION=1.1、CPPFLAGS 和 CFLAGS；仅选定对象的 recipe 从 CFLAGS 中过滤 `-MD -MMD -MP`。
+上游与源码摘要见 `../projects.json`。当前实验源码位于 `project/`，已经演进到 C2；配置 ID 为 `fzy-c2-options-version-1.2-e3-linux-v1`，构建入口 `make CC=gcc`、已有测试入口 `make CC=gcc check`。C2 只把 VERSION 从 `1.1` 改为 `1.2-e3`；仅选定对象的 recipe 从 CFLAGS 中过滤 `-MD -MMD -MP`。
 
 限定对象目标为 `src/options.o`，项目文件范围为源码、`src/options.h`、`config.h`。`config.h` 由 `src/config.def.h` 复制生成。系统头文件不在人工 Finding 集合中。
 
@@ -34,8 +34,20 @@ python3 scripts/e3/run_c1.py --operator 管泽昊
 
 管泽昊的 Linux 成功复跑为 `evidence/e3/echecker/20261011T025224Z-40c9382e/`。两次前置失败记录 `20261011T024942Z-26215586/` 和 `20261011T025143Z-87b105b8/` 也予以保留，分别证明复跑脚本曾检出 CRLF 补丁兼容问题和缺少生成态 `config.h`；它们不能代替成功记录。
 
+## C2 仅改变编译命令
+
+C2 保持 C1 的全部 `.c/.h` 内容和依赖声明，只通过 `c2.patch` 把 Makefile 的 VERSION 从 `1.1` 改为 `1.2-e3`。因此 C1 的 `MISSING` Finding 在 C2 中属于 `unchanged`，命令变化本身不产生新的 MD。
+
+复跑脚本先在 C1 构建对象，再把同一副本推进到 C2，并在不清理 C1 对象的前提下运行普通 make；另在同源码副本执行 C2 clean build：
+
+```sh
+python3 scripts/e3/run_c2.py --operator 黄骢驰
+```
+
+创建只包含 C2 配置变化的真实提交后，最终复跑增加 `--revision <完整C2-SHA>`；提交前不传该参数时，证据状态为 `PASSED_PRECOMMIT`。
+
+普通 make 预期保留旧对象及版本 `1.1`，clean build 预期得到 `1.2-e3`。两者均保留 `E3_C1_MARKER=one`，功能和上游测试必须通过。该差异说明 GNU Make 不会仅因 recipe 展开值变化自动失效目标，后续工具需要把编译命令作为配置输入重新分析。
+
 ## 三种版本
 
-`commits.json` 记录上游 SHA 和实验版本映射。C0 提交为 `0769e815259ab2cae12a21be43256c05906215e0`，C1 提交如上；C2 由后续任务制作。
-
-C2 可以改变 VERSION 编译宏，在保留 C1 对象文件时比较普通构建和 clean 构建的版本输出；需记录真实编译命令和配置变化。C2 必须保持 C1 源码不变，不能把命令变化误报为新的缺失依赖。
+`commits.json` 记录上游 SHA 和实验版本映射。C0 提交为 `0769e815259ab2cae12a21be43256c05906215e0`，C1 提交为 `563f9c5b797aff1174f726f029e67cd352400a24`，C2 提交为 `d9e9c80ea27510a71db1a6425585604c83ce0306`。

@@ -1,0 +1,12 @@
+/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c1.patch:7: trailing whitespace.
+#ifndef E3_C1_MARKER_H
+/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c1.patch:8: trailing whitespace.
+#define E3_C1_MARKER_H
+/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c1.patch:9: trailing whitespace.
+
+/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c1.patch:10: trailing whitespace.
+#define E3_C1_MARKER "E3_C1_MARKER=one"
+/mnt/f/26Fall/Devops/labs/devops-build-toolchain-05/fixtures/e3/echecker/c1.patch:11: trailing whitespace.
+
+warning: squelched 1 whitespace error
+warning: 6 lines add whitespace errors.
