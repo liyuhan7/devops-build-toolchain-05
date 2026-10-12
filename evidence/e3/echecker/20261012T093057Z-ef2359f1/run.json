@@ -1,0 +1,126 @@
+{
+  "case_id": "fzy-c2-options-command",
+  "provenance": "ACTUAL_RUN",
+  "run_id": "20261012T093057Z-ef2359f1",
+  "operator": "liyuhan-CodexAssisted",
+  "started_at": "2026-10-12T09:30:57.911493+00:00",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "architecture": "x86_64",
+  "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
+  "base_commit": "563f9c5b797aff1174f726f029e67cd352400a24",
+  "experiment_commit": "d9e9c80ea27510a71db1a6425585604c83ce0306",
+  "previous_configuration_id": "fzy-c0-options-linux-v1",
+  "configuration_id": "fzy-c2-options-version-1.2-e3-linux-v1",
+  "target": "src/options.o",
+  "status": "PASSED",
+  "checks": [
+    {
+      "check": "使用 Linux 环境",
+      "passed": true
+    },
+    {
+      "check": "重建的 C1 与固定摘要一致",
+      "passed": true
+    },
+    {
+      "check": "C1 加 C2 Patch 与签入的 C2 项目一致",
+      "passed": true
+    },
+    {
+      "check": "C1 功能断言通过",
+      "passed": true,
+      "actual": "apple\n"
+    },
+    {
+      "check": "C1 版本输出正确",
+      "passed": true,
+      "actual": "./fzy 1.1 E3_C1_MARKER=one © 2014-2025 John Hawthorn"
+    },
+    {
+      "check": "C2 的 .c/.h 与 C1 完全一致",
+      "passed": true
+    },
+    {
+      "check": "C2 Makefile 使用新 VERSION",
+      "passed": true
+    },
+    {
+      "check": "C1/C2 编译命令发生变化",
+      "passed": true
+    },
+    {
+      "check": "VERSION 编译宏按预期变化",
+      "passed": true
+    },
+    {
+      "check": "C2 编译器实际依赖与 C1 一致",
+      "passed": true,
+      "actual": [
+        "config.h",
+        "src/e3_c1_marker.h",
+        "src/options.c",
+        "src/options.h"
+      ]
+    },
+    {
+      "check": "C2 Make 声明与 C1 一致",
+      "passed": true,
+      "actual": [
+        "config.h",
+        "src/options.c",
+        "src/options.h"
+      ]
+    },
+    {
+      "check": "C1 的 MISSING 在 C2 保持 unchanged",
+      "passed": true
+    },
+    {
+      "check": "保留 C1 对象时普通 make 未重编译目标",
+      "passed": true,
+      "actual": "make: Nothing to be done for 'all'."
+    },
+    {
+      "check": "普通 make 保留 C1 版本输出",
+      "passed": true,
+      "actual": "./fzy 1.1 E3_C1_MARKER=one © 2014-2025 John Hawthorn"
+    },
+    {
+      "check": "C2 clean build 使用新 VERSION 编译宏",
+      "passed": true
+    },
+    {
+      "check": "C2 clean build 输出新版本",
+      "passed": true,
+      "actual": "./fzy 1.2-e3 E3_C1_MARKER=one © 2014-2025 John Hawthorn"
+    },
+    {
+      "check": "C2 clean build 后功能断言通过",
+      "passed": true,
+      "actual": "apple\n"
+    }
+  ],
+  "finished_at": "2026-10-12T09:31:25.529095+00:00",
+  "execution": {
+    "repository_snapshot": "85819f63d7405b5b11a4ae3f5fdc1f339a9178e3",
+    "source_export": "git archive; core.autocrlf=false; core.eol=lf",
+    "runner_sha256": "737e62cc8415520599adcd29bde4534d375472df27f936dc9cf5b45261ccdf51",
+    "source_tree_sha256": "5d76c338b3136f8f56af0cc91f7428071981d1d2edd8051615699a78b7d8bf9f",
+    "image_id": "sha256:8499298b2ec433b6d852729fe77e30b28a96a3f592fe07c965e9383bc2ef6fc7",
+    "container_network": "none",
+    "independent_replay": true,
+    "operator_role": "李宇瀚任务由 Codex 辅助执行，非 C2 作者；本记录不代替人工批准",
+    "invocation": [
+      "python3",
+      "scripts/e3/run_c2.py",
+      "--operator",
+      "liyuhan-CodexAssisted",
+      "--revision",
+      "d9e9c80ea27510a71db1a6425585604c83ce0306"
+    ],
+    "container_exit_code": 0,
+    "c1_c2_project_changed_files": [
+      "fixtures/e3/echecker/project/Makefile"
+    ]
+  }
+}

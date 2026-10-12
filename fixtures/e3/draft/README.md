@@ -4,7 +4,7 @@
 
 - 人工预期来源：`cases.json`，标记 `TEAM_ORACLE`。
 - 实际运行记录：`evidence/e3/draft/<run-id>/`，标记 `ACTUAL_RUN`。
-- DRAFT 自动生成 Dockerfile 并迭代属于后续阶段，不在本目录断言。
+- DRAFT 自动生成 Dockerfile 并迭代属工具实现范围，本目录不断言。
 
 ## 固定输入
 
@@ -81,19 +81,19 @@ bash scripts/e3/verify_fzy.sh --operator 你的姓名
 | `build.command` | `make CC=gcc` |
 | `validation.command` | `make CC=gcc check` |
 | `configuration.configuration_id` | `fzy-upstream-linux-v1` |
-| `docker.dockerfile_path` / `context_path` | 由后续容器任务提供，本目录不预设 |
+| `docker.dockerfile_path` / `context_path` | 由本目录的容器样本提供 |
 
 功能用例本身不在 E2 契约字段内，作为 `validation` 之外的功能断言单独保留，供需要在容器内判定功能可用性的任务复用。
 
-## 交接：容器失败与参考环境
+## 容器失败与参考环境
 
-后续容器任务必须复用本目录的同一套命令与用例，只改变容器环境：
+容器样本复用本目录的同一套命令与用例，只改变容器环境：
 
 - 失败候选应明确缺少 `make` 或 C 工具链，构建失败需保留非零退出码与错误日志，并区分工具缺失与网络或镜像拉取失败。
 - 参考候选安装必要工具链后，用同一源码、同一构建命令和同一功能用例复跑，确认退出码 0、可执行文件生成、功能断言通过。
 - 参考 Dockerfile 为人工准备，不属于 DRAFT 的自动生成结果。
 
-## 容器基线（E3-04 PR2）
+## 容器样本
 
 本节固定 DRAFT 的失败候选与参考成功环境。两个 Dockerfile 使用同一份
 `fixtures/e3/fzy/` 原始快照、同一上游 Commit 和同一构建命令；差异只在构建环境是否提供 C 工具链。
@@ -117,26 +117,28 @@ docker build -f fixtures/e3/draft/Dockerfile.broken -t devops-e3-draft-broken:ub
 ```sh
 docker build -f fixtures/e3/draft/Dockerfile.reference -t devops-e3-draft-reference:ubuntu24.04 .
 docker image inspect devops-e3-draft-reference:ubuntu24.04 --format '{{.Id}} {{.RepoDigests}}'
-docker image inspect ubuntu:24.04 --format '{{.Id}} {{.RepoDigests}}'
+docker image inspect ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3 --format '{{.Id}} {{.RepoDigests}}'
 ```
 
-构建完成后关闭网络，复用本目录的全部功能用例并写入新的证据目录：
+完整采集入口要求 Python 3.10 或以上、Git 和可用的 Docker Linux 引擎。Windows PowerShell 在仓库根目录执行：
 
-```sh
-docker run --rm --network none --workdir /repo \
-  devops-e3-draft-reference:ubuntu24.04 \
-  bash scripts/e3/verify_fzy.sh --operator 你的姓名
+```powershell
+python scripts/e3/run_draft_container.py --operator 你的姓名
 ```
 
-可使用 `scripts/e3/run_draft_container.sh --operator 姓名` 一次执行上述命令并生成完整证据。
-失败构建日志、成功镜像信息和容器验证结果的来源均为 `ACTUAL_RUN`，保存到
-`evidence/e3/draft/<run-id>/`。证据至少包含 `run.json`、`commands.json`、
-`observations.md`、两个 Docker build 的 stdout/stderr、退出码和容器功能验证日志。
-预期失败不能由网络不可用、基础镜像拉取失败或源码路径错误造成。
+Linux 可执行 `bash scripts/e3/run_draft_container.sh --operator 你的姓名`。入口检查固定上游源码摘要，复制受控文件到唯一构建上下文并规范为 LF，核验两个 Dockerfile 的基础镜像摘要。基础镜像未缓存时先拉取，再核对实际 RepoDigest；身份不一致直接判定失败。
 
-## 未完成项
+两个候选使用本次运行的独立标签。参考构建必须成功产生镜像 ID，容器按该 ID 运行，关闭网络，并将宿主机证据目录绑定到 `/evidence`。`verify_fzy.sh` 的结果、命令和每个功能用例日志保存到 `functional/`，容器删除后仍可读取。手动构建时同样要求源码、脚本与用例为 LF，并挂载功能证据目录。
+
+真实运行记录保存到 `evidence/e3/draft/<run-id>/`，包含 `run.json`、`commands.json`、`observations.md`、构建上下文清单、两个 Dockerfile、镜像身份、退出码与日志。`--output <新目录>` 可指定证据路径；已有目录会被拒绝。只有基础镜像身份、工具缺失失败、参考构建、功能检查和详细证据全部满足条件时返回退出码 0，否则返回非零并保存失败原因。网络、镜像拉取与源码路径错误不能解释为预期工具缺失。
+
+容器运行记录见 `evidence/e3/draft/`，成功记录与历史失败记录分别保存。
+
+提交证据可用 `scripts/e3/pack_evidence.py` 整理为合并日志；`commands.json` 的输出字节索引与 SHA-256 保留精确内容，`functional/` 单独保留功能命令和检查结果。
+
+## 限制
 
 - `make acceptance` 因缺少 Ruby 与 Bundler 未运行，不作为成功条件。
-- 容器构建失败与参考成功证据由 E3-04 PR2 的运行脚本生成并提交。
-- 配置标识 `fzy-upstream-linux-v1` 仅在 `cases.json` 中使用；是否登记进 `fixtures/e3/projects.json` 由该文件的负责人确认。
-- `scripts/e3/check_baselines.py` 目前只检查 C0 材料，未包含本目录；扩展该共享脚本需与负责人确认范围。
+- 容器运行记录位于 `evidence/e3/draft/<run-id>/`，其中 `20261010T115032Z-4284e785` 为网络与构建失败记录。
+- 配置标识 `fzy-upstream-linux-v1` 只在 `cases.json` 中使用。
+- `scripts/e3/check_baselines.py` 只检查 C0/C1/C2 材料；DRAFT 的容器验证由本目录入口单独执行。

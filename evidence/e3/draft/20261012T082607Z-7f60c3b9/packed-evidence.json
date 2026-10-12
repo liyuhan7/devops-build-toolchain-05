@@ -1,0 +1,58 @@
+{
+  "format": "command-stream-byte-ranges-v1",
+  "prepared_by": "liyuhan-CodexAssisted",
+  "prepared_at": "2026-10-12T08:56:59.448251+00:00",
+  "original_commands_sha256": "869ef30c3b84b0ab32042c7e550428adaedab7e037846f1cea85e5e4ef38bcfe",
+  "commands_log_sha256": "c6ce03b1918d2b12cc52a4b8727096c54bceab6e543de85ee096953460458be9",
+  "stream_count": 24,
+  "auxiliary_files": {
+    "base-cache-inspect.exit": {
+      "text": "1\r\n",
+      "sha256": "f1b2f662800122bed0ff255693df89c4487fbdcf453d3524a42d4ec20c3d9c04"
+    },
+    "base-inspect.exit": {
+      "text": "0\r\n",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    "base-pull.exit": {
+      "text": "0\r\n",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    "broken-build.exit": {
+      "text": "1\r\n",
+      "sha256": "f1b2f662800122bed0ff255693df89c4487fbdcf453d3524a42d4ec20c3d9c04"
+    },
+    "container-validation.exit": {
+      "text": "0\r\n",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    "context-files.exit": {
+      "text": "0\r\n",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    "docker-platform.exit": {
+      "text": "0\r\n",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    "docker-version.exit": {
+      "text": "0\r\n",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    "git-revision.exit": {
+      "text": "0\r\n",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    "git-status.exit": {
+      "text": "0\r\n",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    "reference-build.exit": {
+      "text": "0\r\n",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    "reference-inspect.exit": {
+      "text": "0\r\n",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    }
+  }
+}

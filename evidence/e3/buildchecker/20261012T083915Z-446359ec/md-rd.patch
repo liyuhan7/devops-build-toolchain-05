@@ -1,0 +1,48 @@
+diff --git a/Makefile b/Makefile
+index fd0d7a8dee182543c640f60b83e2d8e1123e0cd1..3aae91dacaa4e906b333b52fc3c4772bfc1e0380 100644
+--- a/Makefile
++++ b/Makefile
+@@ -35,7 +35,7 @@ fzy: $(OBJECTS)
+ 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+ 
+ # 对选定目标使用完整显式依赖，避免自动依赖掩盖后续故障注入。
+-src/options.o: src/options.c src/options.h config.h
++src/options.o: src/options.c src/options.h config.h src/e3_rd_unused.h
+ 	$(CC) $(CPPFLAGS) $(filter-out -MD -MMD -MP,$(CFLAGS)) -c -o $@ $<
+ 
+ config.h: src/config.def.h
+diff --git a/src/e3_md_marker.h b/src/e3_md_marker.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..4dad73d98aff61c4b13634f09219443a5e5b926a
+--- /dev/null
++++ b/src/e3_md_marker.h
+@@ -0,0 +1 @@
++#define E3_MD_MARKER "E3_MD_MARKER=one"
+diff --git a/src/e3_rd_unused.h b/src/e3_rd_unused.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..c488056dc1af2be995b331e35e9852601c6374cd
+--- /dev/null
++++ b/src/e3_rd_unused.h
+@@ -0,0 +1 @@
++/* Deliberately unused by options.c: its declaration is a redundant dependency. */
+diff --git a/src/options.c b/src/options.c
+index 485fc982ce9f4578630f31ace8d15117aa9e2fb9..ea64017e548bb820e24604cdf33b838fcf94ff39 100644
+--- a/src/options.c
++++ b/src/options.c
+@@ -5,6 +5,7 @@
+ #include <string.h>
+ 
+ #include "options.h"
++#include "e3_md_marker.h"
+ 
+ #include "../config.h"
+ 
+@@ -63,7 +64,7 @@ void options_parse(options_t *options, int argc, char *argv[]) {
+ 	while ((c = getopt_long(argc, argv, "vhs0e:q:l:t:p:j:i", longopts, NULL)) != -1) {
+ 		switch (c) {
+ 			case 'v':
+-				printf("%s " VERSION " © 2014-2025 John Hawthorn\n", argv[0]);
++				printf("%s " VERSION " " E3_MD_MARKER " © 2014-2025 John Hawthorn\n", argv[0]);
+ 				exit(EXIT_SUCCESS);
+ 			case 's':
+ 				options->show_scores = 1;

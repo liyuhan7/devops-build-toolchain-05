@@ -291,7 +291,7 @@ write_commands
     printf '| %s | %s |\n' "$label" "$verdict"
   done
   printf '\n运行状态：%s。\n\n失败原因：%s。\n' "$STATUS" "${FAILURE:-无}"
-  printf '\nGit 提交标签：%s。\n' "${REVISION:-尚未提交，需操作者完成提交后另作带 SHA 的运行记录}"
+  printf '\nGit 提交标签：%s。\n' "${REVISION:-未指定}"
 } > "$OUT/observations.md"
 
 printf 'EVIDENCE_DIR=%s\n' "$OUT"

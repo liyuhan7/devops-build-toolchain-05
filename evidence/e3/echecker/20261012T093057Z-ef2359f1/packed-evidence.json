@@ -1,0 +1,12 @@
+{
+  "format": "command-stream-byte-ranges-v1",
+  "prepared_by": "liyuhan-CodexAssisted",
+  "prepared_at": "2026-10-12T09:33:56.736787+00:00",
+  "original_commands_sha256": "f6a8486e9086748d79e3cc6d192d7b75a9ab4b3e908cdb96c26a547f87df97d1",
+  "commands_log_sha256": "a9b74eed0ceb55de824b1e080e7989fc381f449183f520584fc562b809d8b42d",
+  "stream_count": 70,
+  "auxiliary_files": {},
+  "excerpted_streams": [
+    "c2-declared-dependencies.stdout"
+  ]
+}

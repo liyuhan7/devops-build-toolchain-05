@@ -1,0 +1,764 @@
+=== 001 git-revision ===
+argv=["git", "-c", "safe.directory=/repo", "rev-parse", "HEAD"]
+exit_code=0
+[stdout]
+d92b3b3a9c551d0bc2a70156fc39f7be4a62742a
+
+[stderr]
+(empty)
+
+=== 002 git-status ===
+argv=["git", "-c", "safe.directory=/repo", "status", "--porcelain"]
+exit_code=0
+[stdout]
+ M .github/ISSUE_TEMPLATE/e2-task.md
+ M .github/pull_request_template.md
+ M .github/workflows/contract-validation.yml
+ M .github/workflows/e3-baseline.yml
+ M .gitignore
+ M AGENTS.md
+ M AI_USAGE.md
+ M CONTRIBUTING.md
+ M README.md
+ M contracts/buildchecker/full-check.failed.json
+ M contracts/buildchecker/full-check.request.json
+ M contracts/buildchecker/full-check.response.json
+ M contracts/common/artifact.schema.json
+ M contracts/common/error.schema.json
+ M contracts/common/finding.schema.json
+ M contracts/common/job.schema.json
+ M contracts/draft/draft.failed.json
+ M contracts/draft/draft.request.json
+ M contracts/draft/draft.response.json
+ M contracts/echecker/incremental-check.failed.json
+ M contracts/echecker/incremental-check.request.json
+ M contracts/echecker/incremental-check.response.json
+ M contracts/mdfixer/recheck.report.json
+ M contracts/mdfixer/repair.manifest.json
+ M contracts/mdfixer/repair.rejected.json
+ M contracts/mdfixer/repair.request.json
+ M contracts/mdfixer/repair.response.json
+ M contracts/mdfixer/validation/upstream-report.excerpt.json
+ M contracts/negative/draft-missing-commit.json
+ M contracts/negative/draft-missing-image.json
+ M contracts/negative/finding-commit-mismatch.json
+ M contracts/negative/finding-configuration-mismatch.json
+ M contracts/negative/incremental-commit-mismatch.json
+ M contracts/negative/incremental-configuration-mismatch.json
+ M contracts/negative/incremental-missing-baseline.json
+ M contracts/negative/repair-commit-mismatch.json
+ M contracts/negative/repair-redundant-finding.json
+ M contracts/negative/repair-validation-failed.json
+ M docs/adr/0001-e2-interface-decisions.md
+ M docs/adr/0002-e3-baseline-decisions.md
+ M docs/backlog/E2.md
+ M docs/backlog/E3.md
+ M "docs/guides/E3\344\273\273\345\212\241\344\270\216\347\273\204\345\206\205\344\272\244\346\216\245\350\257\264\346\230\216.md"
+ M "docs/guides/devops-build-toolchain-05_E2_GitHub\345\215\217\344\275\234\346\211\213\345\206\214.md"
+ M docs/interfaces/buildchecker.md
+ M docs/interfaces/draft.md
+ M docs/interfaces/echecker.md
+ M docs/interfaces/mdfixer.md
+ M docs/validation/buildchecker-consumers.md
+ M docs/validation/draft-buildchecker.md
+ M docs/validation/echecker-mdfixer.md
+ M docs/validation/mdfixer-revalidation.md
+ M evidence/e2/contributions.md
+ M evidence/e2/end-to-end-example.md
+ M evidence/e2/open-items.md
+ M evidence/e2/validation-summary.md
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/commands.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/initial-build.exit
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/initial-build.stdout.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/initial-clean.exit
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/initial-clean.stdout.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/initial-functional.exit
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/initial-functional.stdout.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/initial-options.mtime
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/md-clean-build.exit
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/md-clean-build.stdout.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/md-clean-version.stdout.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/md-clean.exit
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/md-clean.stdout.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/md-header-change.exit
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/md-ordinary-make.exit
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/md-ordinary-make.stdout.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/md-ordinary-options.mtime
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/md-ordinary-version.stdout.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/md-rd.patch
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/observations.md
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/patch.exit
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/rd-after-options.mtime
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/rd-before-options.mtime
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/rd-build.exit
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/rd-build.stdout.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/rd-clean.exit
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/rd-clean.stdout.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/rd-header-change.exit
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/rd-ordinary-make.exit
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/rd-ordinary-make.stdout.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/rd-version.stdout.log
+ M evidence/e3/buildchecker/20261010T082507Z-fead02e2/run.json
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/initial-build.exit
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/initial-build.stdout.log
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/initial-clean.exit
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/initial-clean.stdout.log
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/initial-functional.exit
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/initial-functional.stdout.log
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/initial-options.mtime
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/md-clean-build.exit
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/md-clean-build.stdout.log
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/md-clean-version.stdout.log
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/md-clean.exit
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/md-clean.stdout.log
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/md-header-change.exit
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/md-ordinary-make.exit
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/md-ordinary-make.stdout.log
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/md-ordinary-options.mtime
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/md-ordinary-version.stdout.log
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/md-rd.patch
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/observations.md
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/patch.exit
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/rd-after-options.mtime
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/rd-before-options.mtime
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/rd-build.exit
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/rd-build.stdout.log
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/rd-clean.exit
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/rd-clean.stdout.log
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/rd-header-change.exit
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/rd-ordinary-make.exit
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/rd-ordinary-make.stdout.log
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/rd-version.stdout.log
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/review-draft.md
+ M evidence/e3/buildchecker/20261012T034849Z-54e87e27/run.json
+ M evidence/e3/c0/20260930T050826Z-5526eb2f/commands.json
+ M evidence/e3/c0/20260930T050826Z-5526eb2f/observations.md
+ M evidence/e3/c0/20260930T050826Z-5526eb2f/run.json
+ M evidence/e3/c0/20260930T082248Z-cd642e81/c0-after-header.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/c0-build.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/c0-command.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/c0-functional-0.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/c0-functional-1.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/c0-header-rebuild.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/c0-make-database.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/c0-project-dependencies.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/c0-tests.stderr.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/c0-tests.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/c0-version.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/commands.json
+ M evidence/e3/c0/20260930T082248Z-cd642e81/environment-gcc.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/environment-git.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/environment-make.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/environment-os.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/environment-python.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/observations.md
+ M evidence/e3/c0/20260930T082248Z-cd642e81/run.json
+ M evidence/e3/c0/20260930T082248Z-cd642e81/upstream-build.stdout.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/upstream-tests.stderr.log
+ M evidence/e3/c0/20260930T082248Z-cd642e81/upstream-tests.stdout.log
+ M evidence/e3/c0/README.md
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/build.stdout.log
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/commands.json
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/environment-gcc.stdout.log
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/environment-git.stdout.log
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/environment-make.stdout.log
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/environment-os.stdout.log
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/functional-invalid-lines-usage.stderr.log
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/functional-match-apple.stdout.log
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/functional-match-banana.stdout.log
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/functional-multi-match-sorted.stdout.log
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/observations.md
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/run.json
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/validation.stderr.log
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/validation.stdout.log
+ M evidence/e3/draft/20261009T051451Z-4f7f3891/version.stdout.log
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/build.stdout.log
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/commands.json
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/environment-gcc.stdout.log
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/environment-git.stdout.log
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/environment-make.stdout.log
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/environment-os.stdout.log
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/functional-invalid-lines-usage.stderr.log
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/functional-match-apple.stdout.log
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/functional-match-banana.stdout.log
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/functional-multi-match-sorted.stdout.log
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/observations.md
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/run.json
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/validation.stderr.log
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/validation.stdout.log
+ M evidence/e3/draft/20261009T061915Z-d1e0ac8e/version.stdout.log
+ M evidence/e3/draft/20261010T115032Z-4284e785/base-inspect.exit
+ M evidence/e3/draft/20261010T115032Z-4284e785/base-inspect.stderr.log
+ M evidence/e3/draft/20261010T115032Z-4284e785/base-inspect.stdout.log
+ M evidence/e3/draft/20261010T115032Z-4284e785/broken-build.exit
+ M evidence/e3/draft/20261010T115032Z-4284e785/broken-build.stderr.log
+ M evidence/e3/draft/20261010T115032Z-4284e785/commands.json
+ M evidence/e3/draft/20261010T115032Z-4284e785/container-validation.exit
+ M evidence/e3/draft/20261010T115032Z-4284e785/container-validation.stderr.log
+ M evidence/e3/draft/20261010T115032Z-4284e785/observations.md
+ M evidence/e3/draft/20261010T115032Z-4284e785/reference-build.exit
+ M evidence/e3/draft/20261010T115032Z-4284e785/reference-build.stderr.log
+ M evidence/e3/draft/20261010T115032Z-4284e785/reference-inspect.exit
+ M evidence/e3/draft/20261010T115032Z-4284e785/reference-inspect.stderr.log
+ M evidence/e3/draft/20261010T115032Z-4284e785/reference-inspect.stdout.log
+ M evidence/e3/draft/20261010T115032Z-4284e785/run.json
+ M evidence/e3/draft/README.md
+ M evidence/e3/echecker/20261011T024942Z-26215586/c1-patch-check.stderr.log
+ M evidence/e3/echecker/20261011T024942Z-26215586/commands.json
+ M evidence/e3/echecker/20261011T024942Z-26215586/environment-gcc.stdout.log
+ M evidence/e3/echecker/20261011T024942Z-26215586/environment-git.stdout.log
+ M evidence/e3/echecker/20261011T024942Z-26215586/environment-make.stdout.log
+ M evidence/e3/echecker/20261011T024942Z-26215586/environment-os.stdout.log
+ M evidence/e3/echecker/20261011T024942Z-26215586/environment-python.stdout.log
+ M evidence/e3/echecker/20261011T024942Z-26215586/observations.md
+ M evidence/e3/echecker/20261011T024942Z-26215586/run.json
+ M evidence/e3/echecker/20261011T025143Z-87b105b8/c1-actual-dependencies.stderr.log
+ M evidence/e3/echecker/20261011T025143Z-87b105b8/commands.json
+ M evidence/e3/echecker/20261011T025143Z-87b105b8/environment-gcc.stdout.log
+ M evidence/e3/echecker/20261011T025143Z-87b105b8/environment-git.stdout.log
+ M evidence/e3/echecker/20261011T025143Z-87b105b8/environment-make.stdout.log
+ M evidence/e3/echecker/20261011T025143Z-87b105b8/environment-os.stdout.log
+ M evidence/e3/echecker/20261011T025143Z-87b105b8/environment-python.stdout.log
+ M evidence/e3/echecker/20261011T025143Z-87b105b8/observations.md
+ M evidence/e3/echecker/20261011T025143Z-87b105b8/run.json
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/c1-actual-dependencies.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/c1-command.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/c1-configure.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/c1-declared-dependencies.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/clean-after-change.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/clean-build-after-change.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/clean-functional-after-change.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/clean-tests-after-change.stderr.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/clean-tests-after-change.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/clean-version-after-change.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/commands.json
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/environment-gcc.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/environment-git.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/environment-make.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/environment-os.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/environment-python.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/incremental-build.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/incremental-version.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/initial-build.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/initial-clean.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/initial-functional.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/initial-tests.stderr.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/initial-tests.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/initial-version.stdout.log
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/observations.md
+ M evidence/e3/echecker/20261011T025224Z-40c9382e/run.json
+ M evidence/e3/mdfixer/20261009T02/clean-build.exit
+ M evidence/e3/mdfixer/20261009T02/clean-build.stderr.log
+ M evidence/e3/mdfixer/20261009T02/clean-build.stdout.log
+ M evidence/e3/mdfixer/20261009T02/clean-functional.exit
+ M evidence/e3/mdfixer/20261009T02/clean-functional.stdout.log
+ M evidence/e3/mdfixer/20261009T02/clean-version.exit
+ M evidence/e3/mdfixer/20261009T02/clean-version.stdout.log
+ M evidence/e3/mdfixer/20261009T02/clean.exit
+ M evidence/e3/mdfixer/20261009T02/clean.stdout.log
+ M evidence/e3/mdfixer/20261009T02/commands.json
+ M evidence/e3/mdfixer/20261009T02/environment.stdout.log
+ M evidence/e3/mdfixer/20261009T02/incremental-build.exit
+ M evidence/e3/mdfixer/20261009T02/incremental-build.stdout.log
+ M evidence/e3/mdfixer/20261009T02/incremental-version.exit
+ M evidence/e3/mdfixer/20261009T02/incremental-version.stdout.log
+ M evidence/e3/mdfixer/20261009T02/initial-build.exit
+ M evidence/e3/mdfixer/20261009T02/initial-build.stderr.log
+ M evidence/e3/mdfixer/20261009T02/initial-build.stdout.log
+ M evidence/e3/mdfixer/20261009T02/initial-check.exit
+ M evidence/e3/mdfixer/20261009T02/initial-check.stderr.log
+ M evidence/e3/mdfixer/20261009T02/initial-check.stdout.log
+ M evidence/e3/mdfixer/20261009T02/initial-functional.exit
+ M evidence/e3/mdfixer/20261009T02/initial-functional.stdout.log
+ M evidence/e3/mdfixer/20261009T02/initial-version.exit
+ M evidence/e3/mdfixer/20261009T02/initial-version.stdout.log
+ M evidence/e3/mdfixer/20261009T02/observations.md
+ M evidence/e3/mdfixer/20261009T02/patch-apply.exit
+ M evidence/e3/mdfixer/20261009T02/patch-check.exit
+ M evidence/e3/mdfixer/20261009T02/run.json
+ M evidence/e3/mdfixer/20261009T02/worktree.status
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/before-build.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/before-check.stderr.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/before-check.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/before-functional.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/before-incremental.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/before-stale-version.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/before-version.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/commands.json
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/environment-gcc.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/environment-git.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/environment-make.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/environment-os.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/fault-apply.stderr.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/fault-check.stderr.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/observations.md
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/reference-apply.stderr.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/reference-check.stderr.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/repaired-build.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/repaired-check.stderr.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/repaired-check.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/repaired-clean-build.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/repaired-clean-version.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/repaired-clean.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/repaired-functional.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/repaired-incremental-version.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/repaired-incremental.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/repaired-version.stdout.log
+ M evidence/e3/mdfixer/20261009T113517Z-65be5eb1/run.json
+ M fixtures/e3/README.md
+ M fixtures/e3/buildchecker/README.md
+ M fixtures/e3/buildchecker/expected.json
+ M fixtures/e3/buildchecker/md-rd.patch
+ M fixtures/e3/buildchecker/oracle.md
+ M fixtures/e3/draft/Dockerfile.broken
+ M fixtures/e3/draft/Dockerfile.reference
+ M fixtures/e3/draft/README.md
+ M fixtures/e3/draft/cases/invalid-lines-usage/argv
+ M fixtures/e3/draft/cases/invalid-lines-usage/expected_exit_code
+ M fixtures/e3/draft/cases/invalid-lines-usage/expected_stderr_contains
+ M fixtures/e3/draft/cases/invalid-lines-usage/stdin
+ M fixtures/e3/draft/cases/match-apple/argv
+ M fixtures/e3/draft/cases/match-apple/expected_exit_code
+ M fixtures/e3/draft/cases/match-apple/expected_stdout
+ M fixtures/e3/draft/cases/match-apple/stdin
+ M fixtures/e3/draft/cases/match-banana/argv
+ M fixtures/e3/draft/cases/match-banana/expected_exit_code
+ M fixtures/e3/draft/cases/match-banana/expected_stdout
+ M fixtures/e3/draft/cases/match-banana/stdin
+ M fixtures/e3/draft/cases/multi-match-sorted/argv
+ M fixtures/e3/draft/cases/multi-match-sorted/expected_exit_code
+ M fixtures/e3/draft/cases/multi-match-sorted/expected_stdout
+ M fixtures/e3/draft/cases/multi-match-sorted/stdin
+ M fixtures/e3/draft/cases/no-match-empty/argv
+ M fixtures/e3/draft/cases/no-match-empty/expected_exit_code
+ M fixtures/e3/draft/cases/no-match-empty/stdin
+ M fixtures/e3/echecker/README.md
+ M fixtures/e3/echecker/c0.patch
+ M fixtures/e3/echecker/c1-expected.json
+ M fixtures/e3/echecker/c1.patch
+ M fixtures/e3/echecker/commits.json
+ M fixtures/e3/echecker/expected.json
+ M fixtures/e3/echecker/oracle.md
+ M fixtures/e3/echecker/project/.clang-format
+ M fixtures/e3/echecker/project/.github/workflows/test.yml
+ M fixtures/e3/echecker/project/.gitignore
+ M fixtures/e3/echecker/project/.travis.yml
+ M fixtures/e3/echecker/project/ALGORITHM.md
+ M fixtures/e3/echecker/project/CHANGELOG.md
+ M fixtures/e3/echecker/project/LICENSE
+ M fixtures/e3/echecker/project/Makefile
+ M fixtures/e3/echecker/project/README.md
+ M fixtures/e3/echecker/project/contrib/fzy-dvtm
+ M fixtures/e3/echecker/project/contrib/fzy-tmux
+ M fixtures/e3/echecker/project/deps/greatest/greatest.h
+ M fixtures/e3/echecker/project/deps/greatest/package.json
+ M fixtures/e3/echecker/project/deps/theft/.gitignore
+ M fixtures/e3/echecker/project/deps/theft/LICENSE
+ M fixtures/e3/echecker/project/deps/theft/theft.c
+ M fixtures/e3/echecker/project/deps/theft/theft.h
+ M fixtures/e3/echecker/project/deps/theft/theft_bloom.c
+ M fixtures/e3/echecker/project/deps/theft/theft_bloom.h
+ M fixtures/e3/echecker/project/deps/theft/theft_hash.c
+ M fixtures/e3/echecker/project/deps/theft/theft_mt.c
+ M fixtures/e3/echecker/project/deps/theft/theft_mt.h
+ M fixtures/e3/echecker/project/deps/theft/theft_types.h
+ M fixtures/e3/echecker/project/deps/theft/theft_types_internal.h
+ M fixtures/e3/echecker/project/fzy.1
+ M fixtures/e3/echecker/project/src/bonus.h
+ M fixtures/e3/echecker/project/src/choices.c
+ M fixtures/e3/echecker/project/src/choices.h
+ M fixtures/e3/echecker/project/src/config.def.h
+ M fixtures/e3/echecker/project/src/e3_c1_marker.h
+ M fixtures/e3/echecker/project/src/fzy.c
+ M fixtures/e3/echecker/project/src/match.c
+ M fixtures/e3/echecker/project/src/match.h
+ M fixtures/e3/echecker/project/src/options.c
+ M fixtures/e3/echecker/project/src/options.h
+ M fixtures/e3/echecker/project/src/tty.c
+ M fixtures/e3/echecker/project/src/tty.h
+ M fixtures/e3/echecker/project/src/tty_interface.c
+ M fixtures/e3/echecker/project/src/tty_interface.h
+ M fixtures/e3/echecker/project/test/acceptance/Gemfile
+ M fixtures/e3/echecker/project/test/acceptance/Gemfile.lock
+ M fixtures/e3/echecker/project/test/acceptance/acceptance_test.rb
+ M fixtures/e3/echecker/project/test/fzytest.c
+ M fixtures/e3/echecker/project/test/test_choices.c
+ M fixtures/e3/echecker/project/test/test_match.c
+ M fixtures/e3/echecker/project/test/test_properties.c
+ M fixtures/e3/fzy/.clang-format
+ M fixtures/e3/fzy/.github/workflows/test.yml
+ M fixtures/e3/fzy/.gitignore
+ M fixtures/e3/fzy/.travis.yml
+ M fixtures/e3/fzy/ALGORITHM.md
+ M fixtures/e3/fzy/CHANGELOG.md
+ M fixtures/e3/fzy/LICENSE
+ M fixtures/e3/fzy/Makefile
+ M fixtures/e3/fzy/README.md
+ M fixtures/e3/fzy/contrib/fzy-dvtm
+ M fixtures/e3/fzy/contrib/fzy-tmux
+ M fixtures/e3/fzy/deps/greatest/greatest.h
+ M fixtures/e3/fzy/deps/greatest/package.json
+ M fixtures/e3/fzy/deps/theft/.gitignore
+ M fixtures/e3/fzy/deps/theft/LICENSE
+ M fixtures/e3/fzy/deps/theft/theft.c
+ M fixtures/e3/fzy/deps/theft/theft.h
+ M fixtures/e3/fzy/deps/theft/theft_bloom.c
+ M fixtures/e3/fzy/deps/theft/theft_bloom.h
+ M fixtures/e3/fzy/deps/theft/theft_hash.c
+ M fixtures/e3/fzy/deps/theft/theft_mt.c
+ M fixtures/e3/fzy/deps/theft/theft_mt.h
+ M fixtures/e3/fzy/deps/theft/theft_types.h
+ M fixtures/e3/fzy/deps/theft/theft_types_internal.h
+ M fixtures/e3/fzy/fzy.1
+ M fixtures/e3/fzy/src/bonus.h
+ M fixtures/e3/fzy/src/choices.c
+ M fixtures/e3/fzy/src/choices.h
+ M fixtures/e3/fzy/src/config.def.h
+ M fixtures/e3/fzy/src/fzy.c
+ M fixtures/e3/fzy/src/match.c
+ M fixtures/e3/fzy/src/match.h
+ M fixtures/e3/fzy/src/options.c
+ M fixtures/e3/fzy/src/options.h
+ M fixtures/e3/fzy/src/tty.c
+ M fixtures/e3/fzy/src/tty.h
+ M fixtures/e3/fzy/src/tty_interface.c
+ M fixtures/e3/fzy/src/tty_interface.h
+ M fixtures/e3/fzy/test/acceptance/Gemfile
+ M fixtures/e3/fzy/test/acceptance/Gemfile.lock
+ M fixtures/e3/fzy/test/acceptance/acceptance_test.rb
+ M fixtures/e3/fzy/test/fzytest.c
+ M fixtures/e3/fzy/test/test_choices.c
+ M fixtures/e3/fzy/test/test_match.c
+ M fixtures/e3/fzy/test/test_properties.c
+ M fixtures/e3/mdfixer/.gitattributes
+ M fixtures/e3/mdfixer/README.md
+ M fixtures/e3/mdfixer/fixed-md.json
+ M fixtures/e3/mdfixer/oracle.md
+ M fixtures/e3/mdfixer/repair.md
+ M fixtures/e3/projects.json
+ M scripts/e3/Dockerfile.baseline
+ M scripts/e3/reproduce_a.sh
+ M scripts/e3/run_draft_container.sh
+ M scripts/e3/verify_fzy.sh
+ M scripts/validate.py
+ M tests/test_e3_c1_baseline.py
+ M tests/test_validate_echecker.py
+ M tests/test_validate_mdfixer.py
+?? .gitattributes
+?? evidence/e3/buildchecker/20261012T082624Z-82fb65ff/
+?? evidence/e3/buildchecker/20261012T083915Z-446359ec/
+?? evidence/e3/contributions.md
+?? evidence/e3/draft/20261012T082607Z-7f60c3b9/
+?? evidence/e3/open-items.md
+?? evidence/e3/summary.md
+?? scripts/e3/reproduce_a.py
+?? scripts/e3/run_draft_container.py
+
+[stderr]
+(empty)
+
+=== 003 environment-os ===
+argv=["cat", "/etc/os-release"]
+exit_code=0
+[stdout]
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+
+[stderr]
+(empty)
+
+=== 004 environment-gcc ===
+argv=["gcc", "--version"]
+exit_code=0
+[stdout]
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+[stderr]
+(empty)
+
+=== 005 environment-make ===
+argv=["make", "--version"]
+exit_code=0
+[stdout]
+GNU Make 4.3
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+[stderr]
+(empty)
+
+=== 006 environment-python ===
+argv=["/usr/bin/python3", "--version"]
+exit_code=0
+[stdout]
+Python 3.12.3
+
+[stderr]
+(empty)
+
+=== 007 environment-git ===
+argv=["git", "--version"]
+exit_code=0
+[stdout]
+git version 2.43.0
+
+[stderr]
+(empty)
+
+=== 008 c0-git-init ===
+argv=["git", "init", "-q"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+(empty)
+
+=== 009 c0-patch-check ===
+argv=["git", "apply", "--check", "--ignore-whitespace", "/repo/fixtures/e3/echecker/c0.patch"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+(empty)
+
+=== 010 c0-patch-apply ===
+argv=["git", "apply", "--ignore-whitespace", "/repo/fixtures/e3/echecker/c0.patch"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+(empty)
+
+=== 011 sample-git-init ===
+argv=["git", "init", "-q"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+(empty)
+
+=== 012 patch-check ===
+argv=["git", "apply", "--check", "--ignore-whitespace", "/repo/fixtures/e3/buildchecker/md-rd.patch"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+warning: Makefile has type 100755, expected 100644
+warning: src/options.c has type 100755, expected 100644
+
+
+=== 013 patch ===
+argv=["git", "apply", "--ignore-whitespace", "/repo/fixtures/e3/buildchecker/md-rd.patch"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+/repo/fixtures/e3/buildchecker/md-rd.patch:20: trailing whitespace.
+#define E3_MD_MARKER "E3_MD_MARKER=one"
+/repo/fixtures/e3/buildchecker/md-rd.patch:27: trailing whitespace.
+/* Deliberately unused by options.c: its declaration is a redundant dependency. */
+warning: Makefile has type 100755, expected 100644
+warning: src/options.c has type 100755, expected 100644
+warning: 2 lines add whitespace errors.
+
+
+=== 014 initial-clean ===
+argv=["make", "clean"]
+exit_code=0
+[stdout]
+rm -f fzy test/fzytest src/*.o src/*.d deps/*/*.o
+
+[stderr]
+(empty)
+
+=== 015 initial-build ===
+argv=["make", "CC=gcc"]
+exit_code=0
+[stdout]
+cp src/config.def.h config.h
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/fzy.o src/fzy.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/match.o src/match.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/tty.o src/tty.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/choices.o src/choices.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/options.o src/options.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/tty_interface.o src/tty_interface.c
+gcc -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla  -o fzy src/fzy.o src/match.o src/tty.o src/choices.o src/options.o src/tty_interface.o -lpthread
+
+[stderr]
+(empty)
+
+=== 016 initial-tests ===
+argv=["make", "CC=gcc", "check"]
+exit_code=0
+[stdout]
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft.o deps/theft/theft.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft_bloom.o deps/theft/theft_bloom.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft_mt.o deps/theft/theft_mt.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o deps/theft/theft_hash.o deps/theft/theft_hash.c
+gcc -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla  -Isrc -o test/fzytest test/fzytest.c test/test_properties.c test/test_choices.c test/test_match.c src/match.o src/choices.o src/options.o deps/theft/theft.o deps/theft/theft_bloom.o deps/theft/theft_mt.o deps/theft/theft_hash.o -lpthread
+./test/fzytest
+
+* Suite match_suite:
+........................
+24 tests - 24 passed, 0 failed, 0 skipped (71 ticks, 0.000 sec)
+
+* Suite choices_suite:
+......
+6 tests - 6 passed, 0 failed, 0 skipped (16637 ticks, 0.017 sec)
+
+* Suite properties_suite:
+..
+2 tests - 2 passed, 0 failed, 0 skipped (380585 ticks, 0.381 sec)
+
+Total: 32 tests (397404 ticks, 0.397 sec), 102 assertions
+Pass: 32, fail: 0, skip: 0.
+
+[stderr]
+deps/theft/theft.c: In function ‘report_on_failure’:
+deps/theft/theft.c:483:49: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 4 has type ‘long unsigned int’ [-Wformat=]
+  483 |     fprintf(t->out, "    Trial %u, Seed 0x%016llx\n", ti->trial,
+      |                                           ~~~~~~^
+      |                                                 |
+      |                                                 long long unsigned int
+      |                                           %016lx
+  484 |         (uint64_t)ti->seed);
+      |         ~~~~~~~~~~~~~~~~~~                       
+      |         |
+      |         long unsigned int
+test/test_choices.c: In function ‘test_choices_large_input’:
+test/test_choices.c:142:17: warning: ignoring return value of ‘asprintf’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  142 |                 asprintf(&strings[i], "%i", i);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+=== 017 initial-functional ===
+argv=["./fzy", "-e", "apple"]
+exit_code=0
+[stdout]
+apple
+
+[stderr]
+(empty)
+
+=== 018 initial-version ===
+argv=["./fzy", "--version"]
+exit_code=0
+[stdout]
+./fzy 1.1 E3_MD_MARKER=one © 2014-2025 John Hawthorn
+
+[stderr]
+(empty)
+
+=== 019 md-header-change ===
+argv=["/usr/bin/python3", "-c", "from pathlib import Path; p=Path('src/e3_md_marker.h'); p.write_text(p.read_text().replace('E3_MD_MARKER=one','E3_MD_MARKER=two'))"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+(empty)
+
+=== 020 md-ordinary-make ===
+argv=["make", "CC=gcc"]
+exit_code=0
+[stdout]
+make: Nothing to be done for 'all'.
+
+[stderr]
+(empty)
+
+=== 021 md-ordinary-version ===
+argv=["./fzy", "--version"]
+exit_code=0
+[stdout]
+./fzy 1.1 E3_MD_MARKER=one © 2014-2025 John Hawthorn
+
+[stderr]
+(empty)
+
+=== 022 md-clean ===
+argv=["make", "clean"]
+exit_code=0
+[stdout]
+rm -f fzy test/fzytest src/*.o src/*.d deps/*/*.o
+
+[stderr]
+(empty)
+
+=== 023 md-clean-build ===
+argv=["make", "CC=gcc"]
+exit_code=0
+[stdout]
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/fzy.o src/fzy.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/match.o src/match.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/tty.o src/tty.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/choices.o src/choices.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/options.o src/options.c
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/tty_interface.o src/tty_interface.c
+gcc -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla  -o fzy src/fzy.o src/match.o src/tty.o src/choices.o src/options.o src/tty_interface.o -lpthread
+
+[stderr]
+(empty)
+
+=== 024 md-clean-version ===
+argv=["./fzy", "--version"]
+exit_code=0
+[stdout]
+./fzy 1.1 E3_MD_MARKER=two © 2014-2025 John Hawthorn
+
+[stderr]
+(empty)
+
+=== 025 rd-header-change ===
+argv=["/usr/bin/python3", "-c", "from pathlib import Path; p=Path('src/e3_rd_unused.h'); p.write_text(p.read_text().replace('Deliberately','Deliberately touched'))"]
+exit_code=0
+[stdout]
+(empty)
+[stderr]
+(empty)
+
+=== 026 rd-ordinary-make ===
+argv=["make", "CC=gcc"]
+exit_code=0
+[stdout]
+gcc -DVERSION=\"1.1\" -D_GNU_SOURCE -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla -c -o src/options.o src/options.c
+gcc -MD -Wall -Wextra -g -std=c99 -O3 -pedantic -Ideps -Werror=vla  -o fzy src/fzy.o src/match.o src/tty.o src/choices.o src/options.o src/tty_interface.o -lpthread
+
+[stderr]
+(empty)
+
+=== 027 rd-version ===
+argv=["./fzy", "--version"]
+exit_code=0
+[stdout]
+./fzy 1.1 E3_MD_MARKER=two © 2014-2025 John Hawthorn
+
+[stderr]
+(empty)
+
+=== 028 rd-functional ===
+argv=["./fzy", "-e", "apple"]
+exit_code=0
+[stdout]
+apple
+
+[stderr]
+(empty)
+

@@ -1,0 +1,75 @@
+{
+  "case_id": "fzy-c0-options-md-rd",
+  "provenance": "ACTUAL_RUN",
+  "operator": "liyuhan-CodexAssisted",
+  "run_id": "20261012T083915Z-446359ec",
+  "started_at": "2026-10-12T08:39:15.290726+00:00",
+  "status": "PASSED",
+  "base_commit": "0769e815259ab2cae12a21be43256c05906215e0",
+  "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
+  "configuration_id": "fzy-c0-options-linux-v1",
+  "target": "src/options.o",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "architecture": "x86_64",
+  "environment_reference": "sha256:e6d388fc6581591ea0fc52257d53ee572432ed720ec34c38185304edb64281be",
+  "patch": "fixtures/e3/buildchecker/md-rd.patch",
+  "patch_sha256": "f1b58b78cd9bd5972830e582cea0fcdeb9ccc757a4efaa32c3e2431d8cb26428",
+  "source_digest_algorithm": "sha256-sorted-posix-path-lf-v1",
+  "checks": [
+    {
+      "check": "使用 Linux 构建环境",
+      "passed": true
+    },
+    {
+      "check": "上游源码摘要一致",
+      "passed": true
+    },
+    {
+      "check": "冻结 C0 源码摘要一致",
+      "passed": true
+    },
+    {
+      "check": "32 项项目测试通过",
+      "passed": true
+    },
+    {
+      "check": "初始功能标准输出为 apple",
+      "passed": true
+    },
+    {
+      "check": "初始标记为 one",
+      "passed": true
+    },
+    {
+      "check": "MD 普通构建保留旧对象",
+      "passed": true
+    },
+    {
+      "check": "MD 普通构建保留 one",
+      "passed": true
+    },
+    {
+      "check": "MD clean 构建读取 two",
+      "passed": true
+    },
+    {
+      "check": "RD 普通构建发生额外重编译",
+      "passed": true
+    },
+    {
+      "check": "RD 版本输出保持不变",
+      "passed": true
+    },
+    {
+      "check": "RD 功能标准输出为 apple",
+      "passed": true
+    }
+  ],
+  "experiment_commit": "d92b3b3a9c551d0bc2a70156fc39f7be4a62742a",
+  "worktree_dirty": true,
+  "runner_sha256": "41f2a5c6953bdd8b2240d20335c02041e4c4e5969bf56505a3866e4b231e8234",
+  "c0_source_tree_sha256": "a1620cbc7deeca5a6d1fa1c28f50b600761411b26ebb4e3678c9f26199c58d84",
+  "c0_patch_sha256": "13b5aa40744d49f8116793f3c4bf24766a095297f8f9a37ca4b6e0c0325067a6",
+  "sample_source_tree_sha256": "35f346370735c19c834b09fb661b568a9865dc2462e82d004f12805a4cba0468",
+  "finished_at": "2026-10-12T08:39:38.879407+00:00"
+}

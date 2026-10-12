@@ -1,0 +1,101 @@
+{
+  "case_id": "fzy-draft-container",
+  "provenance": "ACTUAL_RUN",
+  "run_id": "20261012T082607Z-7f60c3b9",
+  "operator": "liyuhan-CodexAssisted",
+  "started_at": "2026-10-12T08:26:07.489925+00:00",
+  "status": "PASSED",
+  "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
+  "configuration_id": "fzy-upstream-linux-v1",
+  "base_image": "ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3",
+  "host_platform": "Windows-10-10.0.26200-SP0",
+  "host_architecture": "AMD64",
+  "runner_sha256": "8d465acd3d5f0e124415dced0d8da2e84ae4897ed91ef5c4052176ef23dd6404",
+  "images": {
+    "base": {
+      "id": "sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3",
+      "repo_digests": [
+        "ubuntu@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3"
+      ],
+      "os": "linux",
+      "architecture": "amd64"
+    },
+    "reference": {
+      "id": "sha256:8499298b2ec433b6d852729fe77e30b28a96a3f592fe07c965e9383bc2ef6fc7",
+      "repo_digests": [
+        "devops-e3-draft-reference@sha256:8499298b2ec433b6d852729fe77e30b28a96a3f592fe07c965e9383bc2ef6fc7"
+      ],
+      "os": "linux",
+      "architecture": "amd64"
+    }
+  },
+  "checks": [
+    {
+      "check": "固定上游源码摘要一致",
+      "passed": true
+    },
+    {
+      "check": "broken 使用同一固定基础镜像",
+      "passed": true
+    },
+    {
+      "check": "reference 使用同一固定基础镜像",
+      "passed": true
+    },
+    {
+      "check": "Docker 使用 Linux 容器引擎",
+      "passed": true
+    },
+    {
+      "check": "base-inspect 镜像 ID 有效",
+      "passed": true
+    },
+    {
+      "check": "基础镜像 RepoDigest 与固定摘要一致",
+      "passed": true
+    },
+    {
+      "check": "基础镜像为 Linux",
+      "passed": true
+    },
+    {
+      "check": "失败候选在项目构建步骤报告工具缺失",
+      "passed": true
+    },
+    {
+      "check": "本次构建产生有效镜像 ID",
+      "passed": true
+    },
+    {
+      "check": "reference-inspect 镜像 ID 有效",
+      "passed": true
+    },
+    {
+      "check": "容器功能检查通过且详细证据已导出",
+      "passed": true
+    },
+    {
+      "check": "功能命令的 stdout/stderr 文件齐全",
+      "passed": true
+    }
+  ],
+  "experiment_commit": "d92b3b3a9c551d0bc2a70156fc39f7be4a62742a",
+  "worktree_dirty": true,
+  "context_sha256": "d08d19d028582ba6ce7b34e57ccf90f5d63a576f9261a5f256d0289a6691c670",
+  "source_tree_sha256": "e515424bad62061647f8bffde4d2904c18ce490bf24bd8ec342b05484ccfb151",
+  "context_line_endings": "LF",
+  "broken_build": {
+    "status": "PASSED",
+    "exit_code": 1
+  },
+  "reference_build": {
+    "status": "PASSED",
+    "exit_code": 0
+  },
+  "container_validation": {
+    "exit_code": 0,
+    "status": "PASSED",
+    "evidence": "functional/run.json"
+  },
+  "finished_at": "2026-10-12T08:26:38.200928+00:00"
+}

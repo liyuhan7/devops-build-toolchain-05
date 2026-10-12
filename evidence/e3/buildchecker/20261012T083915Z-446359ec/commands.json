@@ -1,0 +1,781 @@
+[
+  {
+    "label": "git-revision",
+    "argv": [
+      "git",
+      "-c",
+      "safe.directory=/repo",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:15.312975+00:00",
+    "finished_at": "2026-10-12T08:39:15.426364+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 110,
+      "length": 41,
+      "sha256": "fc5c01371e16742eedc61334e9ba8fe6f08c8c77472275a2e72f44d71b22d4f7",
+      "original_file": "git-revision.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 161,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "git-revision.stderr.log"
+    }
+  },
+  {
+    "label": "git-status",
+    "argv": [
+      "git",
+      "-c",
+      "safe.directory=/repo",
+      "status",
+      "--porcelain"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:15.434182+00:00",
+    "finished_at": "2026-10-12T08:39:23.826174+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 282,
+      "length": 25609,
+      "sha256": "b3c5f31387c0f7f41eccd0c80368f97f7505cd0eee5612f933b260c90ba75cf6",
+      "original_file": "git-status.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 25901,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "git-status.stderr.log"
+    }
+  },
+  {
+    "label": "environment-os",
+    "argv": [
+      "cat",
+      "/etc/os-release"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:23.834945+00:00",
+    "finished_at": "2026-10-12T08:39:23.856616+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 25990,
+      "length": 400,
+      "sha256": "87458b3b1f1ca0e5c693ade771de7007c3783bdc692fa6b39eb6414bf2af2763",
+      "original_file": "environment-os.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 26400,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "environment-os.stderr.log"
+    }
+  },
+  {
+    "label": "environment-gcc",
+    "argv": [
+      "gcc",
+      "--version"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:23.862579+00:00",
+    "finished_at": "2026-10-12T08:39:23.888414+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 26484,
+      "length": 246,
+      "sha256": "8497f84b2b8334c413d9c6166bd39d009ba55d2ff60a8f23e66dfa5819c2b048",
+      "original_file": "environment-gcc.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 26740,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "environment-gcc.stderr.log"
+    }
+  },
+  {
+    "label": "environment-make",
+    "argv": [
+      "make",
+      "--version"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:23.893616+00:00",
+    "finished_at": "2026-10-12T08:39:23.914017+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 26826,
+      "length": 297,
+      "sha256": "8ee498ee2fc27e8dcdf99191b454077df95e3840d841ec94321748b6d7f36819",
+      "original_file": "environment-make.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 27133,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "environment-make.stderr.log"
+    }
+  },
+  {
+    "label": "environment-python",
+    "argv": [
+      "/usr/bin/python3",
+      "--version"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:23.921120+00:00",
+    "finished_at": "2026-10-12T08:39:23.937012+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 27233,
+      "length": 14,
+      "sha256": "5b3e43dc38ca01e3f5a7854ba50d4330864b0c1e0f646650b2c78cf072acc366",
+      "original_file": "environment-python.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 27257,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "environment-python.stderr.log"
+    }
+  },
+  {
+    "label": "environment-git",
+    "argv": [
+      "git",
+      "--version"
+    ],
+    "cwd": "/repo",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:23.942220+00:00",
+    "finished_at": "2026-10-12T08:39:23.966008+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 27341,
+      "length": 19,
+      "sha256": "25f3602b5caaf92437be1e76b53698e8d73f14a6c71c2e91c8d5875f923ab29f",
+      "original_file": "environment-git.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 27370,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "environment-git.stderr.log"
+    }
+  },
+  {
+    "label": "c0-git-init",
+    "argv": [
+      "git",
+      "init",
+      "-q"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:26.538809+00:00",
+    "finished_at": "2026-10-12T08:39:26.794628+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 27451,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "c0-git-init.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 27468,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "c0-git-init.stderr.log"
+    }
+  },
+  {
+    "label": "c0-patch-check",
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "--ignore-whitespace",
+      "/repo/fixtures/e3/echecker/c0.patch"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:26.799359+00:00",
+    "finished_at": "2026-10-12T08:39:26.850666+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 27620,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "c0-patch-check.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 27637,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "c0-patch-check.stderr.log"
+    }
+  },
+  {
+    "label": "c0-patch-apply",
+    "argv": [
+      "git",
+      "apply",
+      "--ignore-whitespace",
+      "/repo/fixtures/e3/echecker/c0.patch"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:26.856656+00:00",
+    "finished_at": "2026-10-12T08:39:26.925820+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 27778,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "c0-patch-apply.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 27795,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "c0-patch-apply.stderr.log"
+    }
+  },
+  {
+    "label": "sample-git-init",
+    "argv": [
+      "git",
+      "init",
+      "-q"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:27.662769+00:00",
+    "finished_at": "2026-10-12T08:39:27.906329+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 27880,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "sample-git-init.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 27897,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "sample-git-init.stderr.log"
+    }
+  },
+  {
+    "label": "patch-check",
+    "argv": [
+      "git",
+      "apply",
+      "--check",
+      "--ignore-whitespace",
+      "/repo/fixtures/e3/buildchecker/md-rd.patch"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:27.911217+00:00",
+    "finished_at": "2026-10-12T08:39:27.983518+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 28053,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "patch-check.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 28070,
+      "length": 107,
+      "sha256": "a8e4307f1e8643d9dfba214570190c6f2075a387956cf916083c52bf4b0d2148",
+      "original_file": "patch-check.stderr.log"
+    }
+  },
+  {
+    "label": "patch",
+    "argv": [
+      "git",
+      "apply",
+      "--ignore-whitespace",
+      "/repo/fixtures/e3/buildchecker/md-rd.patch"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:27.988167+00:00",
+    "finished_at": "2026-10-12T08:39:28.089544+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 28309,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "patch.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 28326,
+      "length": 408,
+      "sha256": "f34cbc6e21a4084a976f85ca9e77f65c009a60ced0af6f26f6aa99ae94119fdf",
+      "original_file": "patch.stderr.log"
+    }
+  },
+  {
+    "label": "initial-clean",
+    "argv": [
+      "make",
+      "clean"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:28.771374+00:00",
+    "finished_at": "2026-10-12T08:39:28.825953+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 28806,
+      "length": 50,
+      "sha256": "612ec1363421434b12110981ef425143e6e714188ba52e5c1108ebf13798043b",
+      "original_file": "initial-clean.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 28866,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "initial-clean.stderr.log"
+    }
+  },
+  {
+    "label": "initial-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:28.831232+00:00",
+    "finished_at": "2026-10-12T08:39:30.785557+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 28946,
+      "length": 980,
+      "sha256": "05a6fb1fb7a458291c5f48b2edb3ae30ce9a9d60d613afeb9e6c3c2bf554e3e5",
+      "original_file": "initial-build.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 29936,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "initial-build.stderr.log"
+    }
+  },
+  {
+    "label": "initial-tests",
+    "argv": [
+      "make",
+      "CC=gcc",
+      "check"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:30.790385+00:00",
+    "finished_at": "2026-10-12T08:39:33.601943+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 30025,
+      "length": 1311,
+      "sha256": "1dd72677a96d479c940db82e77ecd2c758e29806a216c9a0f8abecd09328c343",
+      "original_file": "initial-tests.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 31346,
+      "length": 1018,
+      "sha256": "21845554b3476f2ce7c69ed09f55c7580bb7736350e715e6e2105bb6f61054b3",
+      "original_file": "initial-tests.stderr.log"
+    }
+  },
+  {
+    "label": "initial-functional",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": "apple\nbanana\n",
+    "environment": {},
+    "started_at": "2026-10-12T08:39:33.607065+00:00",
+    "finished_at": "2026-10-12T08:39:33.629989+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 32448,
+      "length": 6,
+      "sha256": "303980bcb9e9e6cdec515230791af8b0ab1aaa244b58a8d99152673aa22197d0",
+      "original_file": "initial-functional.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 32464,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "initial-functional.stderr.log"
+    }
+  },
+  {
+    "label": "initial-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:33.635018+00:00",
+    "finished_at": "2026-10-12T08:39:33.655527+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 32550,
+      "length": 54,
+      "sha256": "00e630f33bf930440fca70ea3086bcd2f239ad4dff0988418adbf004f28b1e60",
+      "original_file": "initial-version.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 32614,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "initial-version.stderr.log"
+    }
+  },
+  {
+    "label": "md-header-change",
+    "argv": [
+      "/usr/bin/python3",
+      "-c",
+      "from pathlib import Path; p=Path('src/e3_md_marker.h'); p.write_text(p.read_text().replace('E3_MD_MARKER=one','E3_MD_MARKER=two'))"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:34.767257+00:00",
+    "finished_at": "2026-10-12T08:39:34.824836+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 32839,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "md-header-change.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 32856,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "md-header-change.stderr.log"
+    }
+  },
+  {
+    "label": "md-ordinary-make",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:34.830153+00:00",
+    "finished_at": "2026-10-12T08:39:34.925821+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 32939,
+      "length": 36,
+      "sha256": "68c5f548009ee20966e380682cc0b78f39bea9c8895af0403577a7204fef2e99",
+      "original_file": "md-ordinary-make.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 32985,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "md-ordinary-make.stderr.log"
+    }
+  },
+  {
+    "label": "md-ordinary-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:34.945100+00:00",
+    "finished_at": "2026-10-12T08:39:34.966692+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 33075,
+      "length": 54,
+      "sha256": "00e630f33bf930440fca70ea3086bcd2f239ad4dff0988418adbf004f28b1e60",
+      "original_file": "md-ordinary-version.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 33139,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "md-ordinary-version.stderr.log"
+    }
+  },
+  {
+    "label": "md-clean",
+    "argv": [
+      "make",
+      "clean"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:34.974704+00:00",
+    "finished_at": "2026-10-12T08:39:35.175762+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 33213,
+      "length": 50,
+      "sha256": "612ec1363421434b12110981ef425143e6e714188ba52e5c1108ebf13798043b",
+      "original_file": "md-clean.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 33273,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "md-clean.stderr.log"
+    }
+  },
+  {
+    "label": "md-clean-build",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:35.181557+00:00",
+    "finished_at": "2026-10-12T08:39:37.078004+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 33354,
+      "length": 951,
+      "sha256": "b7429a988d1965b794a644c2fe2abee6e1538bf2bba2aea0a16ec829daeefffb",
+      "original_file": "md-clean-build.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 34315,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "md-clean-build.stderr.log"
+    }
+  },
+  {
+    "label": "md-clean-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:37.084230+00:00",
+    "finished_at": "2026-10-12T08:39:37.115337+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 34402,
+      "length": 54,
+      "sha256": "184429b7d450d2d65fe067f2ff5d1e8b4e55f62f9d1bceb666fc9a089c39e1dc",
+      "original_file": "md-clean-version.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 34466,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "md-clean-version.stderr.log"
+    }
+  },
+  {
+    "label": "rd-header-change",
+    "argv": [
+      "/usr/bin/python3",
+      "-c",
+      "from pathlib import Path; p=Path('src/e3_rd_unused.h'); p.write_text(p.read_text().replace('Deliberately','Deliberately touched'))"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:38.234230+00:00",
+    "finished_at": "2026-10-12T08:39:38.298090+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 34691,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "rd-header-change.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 34708,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "rd-header-change.stderr.log"
+    }
+  },
+  {
+    "label": "rd-ordinary-make",
+    "argv": [
+      "make",
+      "CC=gcc"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:38.303832+00:00",
+    "finished_at": "2026-10-12T08:39:38.806870+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 34791,
+      "length": 294,
+      "sha256": "479fd788c0dc090643ef59e0a20ed135fb57807cf9a4d9158152f3816562c456",
+      "original_file": "rd-ordinary-make.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 35095,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "rd-ordinary-make.stderr.log"
+    }
+  },
+  {
+    "label": "rd-version",
+    "argv": [
+      "./fzy",
+      "--version"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": null,
+    "environment": {},
+    "started_at": "2026-10-12T08:39:38.825639+00:00",
+    "finished_at": "2026-10-12T08:39:38.847480+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 35176,
+      "length": 54,
+      "sha256": "184429b7d450d2d65fe067f2ff5d1e8b4e55f62f9d1bceb666fc9a089c39e1dc",
+      "original_file": "rd-version.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 35240,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "rd-version.stderr.log"
+    }
+  },
+  {
+    "label": "rd-functional",
+    "argv": [
+      "./fzy",
+      "-e",
+      "apple"
+    ],
+    "cwd": "/repo/work/e3/buildchecker/20261012T083915Z-446359ec",
+    "stdin": "apple\nbanana\n",
+    "environment": {},
+    "started_at": "2026-10-12T08:39:38.852848+00:00",
+    "finished_at": "2026-10-12T08:39:38.874845+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 35326,
+      "length": 6,
+      "sha256": "303980bcb9e9e6cdec515230791af8b0ab1aaa244b58a8d99152673aa22197d0",
+      "original_file": "rd-functional.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 35342,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "rd-functional.stderr.log"
+    }
+  }
+]

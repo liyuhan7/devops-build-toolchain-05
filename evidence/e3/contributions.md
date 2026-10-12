@@ -1,0 +1,17 @@
+# E3 个人贡献
+
+日期：2026-10-12。按实际产物、提交与正式 Review 记录，AI 参与见 [AI_USAGE.md](../../AI_USAGE.md)。实验 SHA 见 [版本映射](../../fixtures/e3/echecker/commits.json)，PR 分支 SHA 与实验 SHA 分别使用。
+
+| 成员 | 实际交付 | Issue / PR | PR 分支 SHA | 验证与审核 |
+|---|---|---|---|---|
+| 李宇瀚 | 固定 C0；MD/RD 与 DRAFT 入口、证据整理；C2 独立复跑与收尾 | [#17](https://github.com/liyuhan7/devops-build-toolchain-05/issues/17) / [#18](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18)；[收尾 #30](https://github.com/liyuhan7/devops-build-toolchain-05/issues/30) | C0 PR：`32233aa3c0886b060c009acbb6d18fca7d6c49f5` | [黄骢驰批准 C0](https://github.com/liyuhan7/devops-build-toolchain-05/pull/18#pullrequestreview-5364033599)；[C2 独立记录](echecker/20261012T093057Z-ef2359f1/run.json) 17 项通过 |
+| 孙鲲华 | MD/RD 补丁、人工依据与行为样本；C1 独立审核 | [#24](https://github.com/liyuhan7/devops-build-toolchain-05/issues/24) / [#25](https://github.com/liyuhan7/devops-build-toolchain-05/pull/25) | `6c4037b45db41f793228bde91330a51637309db6` | [管泽昊批准样本](https://github.com/liyuhan7/devops-build-toolchain-05/pull/25#pullrequestreview-5486696299)；[C1 独立审核](https://github.com/liyuhan7/devops-build-toolchain-05/pull/27#pullrequestreview-5482780545) |
+| 管泽昊 | C1 新头文件、人工预期与复跑 | [#26](https://github.com/liyuhan7/devops-build-toolchain-05/issues/26) / [#27](https://github.com/liyuhan7/devops-build-toolchain-05/pull/27) | `c2b3d89afc3f003f2e5891f33c0bb38c5707b746` | 作者记录 13 项通过；孙鲲华批准，审核提交为 `11236d9d13b209f961d97154d4522f88f81c47a4` |
+| 黄骢驰 | C0、MD/RD 独立复跑；C2 命令变化与对照 | [#24](https://github.com/liyuhan7/devops-build-toolchain-05/issues/24) / [#28](https://github.com/liyuhan7/devops-build-toolchain-05/pull/28)；[#26](https://github.com/liyuhan7/devops-build-toolchain-05/issues/26) / [#29](https://github.com/liyuhan7/devops-build-toolchain-05/pull/29) | #28：`1c11b7f421af47bb3798a5552d8b5ff7653464ed`；#29：`5da6735b2ba7a05f2e60afbf85f60f8c8c6c1c48` | [MD/RD 独立记录](buildchecker/20261012T034849Z-54e87e27/run.json)；C2 作者 17 项通过；[李宇瀚批准 C2](https://github.com/liyuhan7/devops-build-toolchain-05/pull/29#pullrequestreview-5488435759) |
+| 李新昊 | DRAFT 输入、5 个功能用例与验证入口；Target 独立审核 | [#21](https://github.com/liyuhan7/devops-build-toolchain-05/pull/21)，未建立独立 Issue | `41fc9a4c3308864a8567579b0214f0953576ed3c` | 功能 21 项通过；[刘君杰批准](https://github.com/liyuhan7/devops-build-toolchain-05/pull/21#pullrequestreview-5467686703)；[Target 独立审核](https://github.com/liyuhan7/devops-build-toolchain-05/pull/22#pullrequestreview-5469912263) |
+| 刘洋 | DRAFT 失败/参考 Dockerfile 与作者采集；固定 MD 审核 | [#23](https://github.com/liyuhan7/devops-build-toolchain-05/pull/23)，未建立独立 Issue | `31cfe33c902ce2262d909220f3296a180563beb8` | [陆泓批准](https://github.com/liyuhan7/devops-build-toolchain-05/pull/23#pullrequestreview-5482607664)；作者容器失败记录保留，成功复验由李宇瀚/Codex 执行 |
+| 刘君杰 | 固定 MD 报告与故障输入；DRAFT 功能审核 | [#19](https://github.com/liyuhan7/devops-build-toolchain-05/issues/19) / [#20](https://github.com/liyuhan7/devops-build-toolchain-05/pull/20) | `5f8f02df97accad8a815b21adf9b8005c2dc66d2` | 报告与故障补丁对应；[刘洋批准](https://github.com/liyuhan7/devops-build-toolchain-05/pull/20#pullrequestreview-5467459355) |
+| 陆泓 | Target 参考补丁、构建/功能/增量验证；DRAFT 容器审核 | [#19](https://github.com/liyuhan7/devops-build-toolchain-05/issues/19) / [#22](https://github.com/liyuhan7/devops-build-toolchain-05/pull/22) | `7c894c920b3d1a7c328daca430daa69650927c8d` | 作者 24 项通过，李新昊独立批准；DRAFT 审核意见与批准保留在 PR #23 |
+
+各样本 PR 均已合并，当前主线合并 SHA 为 `85819f63d7405b5b11a4ae3f5fdc1f339a9178e3`。表中 PR 分支 SHA 与实验 SHA 分开记录，未建立独立 Issue 的任务以 PR 记录为准。
+

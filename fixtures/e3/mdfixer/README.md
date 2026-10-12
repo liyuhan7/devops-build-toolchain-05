@@ -27,13 +27,13 @@ Patch 新增 `src/e3_mdfixer_marker.h`，并让 `src/options.c` 在 `--version` 
 在 Linux/WSL 的仓库根目录执行；脚本自动创建独立副本和新的证据目录：
 
 ```sh
-bash scripts/e3/verify_repair.sh --operator 陆泓
+bash scripts/e3/verify_repair.sh --operator <姓名>
 ```
 
 首次构建的输出应包含 `MDFIXER_MARKER=one`。只修改头文件后，普通 `make` 应保留旧的 `one`，因为 `src/options.o` 未声明该头文件。应用参考 Patch 后，普通 `make` 应重编译并输出 `two`；再次只修改头文件后，普通 `make` 应重编译并输出 `three`。脚本记录命令、退出码、stdout/stderr 和检查结果到新的 `evidence/e3/mdfixer/<run-id>/`。补丁位置和人工依据见 [修复说明](repair.md)。
 
-旧运行记录 `evidence/e3/mdfixer/20261009T02/` 对应的故障 Patch 未随当时提交入库，记录中的摘要 `1f9c120a...` 只作为历史观察保留。本次重建的 `fault.patch` 摘要已写入 `fixed-md.json`；不能把旧运行记录当成本次重建补丁的复跑证据。
+`evidence/e3/mdfixer/20261009T02/` 对应的故障 Patch 摘要为 `1f9c120a...`，与当前 `fault.patch` 不一致，该记录只按历史观察读取，不作为当前样本的运行证据。`fault.patch` 的摘要写入 `fixed-md.json`。
 
 ## 交接边界
 
-固定 MISSING 报告来源为 `TEAM_ORACLE`；复跑脚本产生的记录来源为 `ACTUAL_RUN`。本次 WSL2 复跑证据见 `evidence/e3/mdfixer/20261009T113517Z-65be5eb1/`，24 项检查全部通过。本案例只做人工依赖复核，不声称 MDFixer 或 EChecker 已实际输出修复或重检报告。
+固定 MISSING 报告来源为 `TEAM_ORACLE`；复跑脚本产生的记录来源为 `ACTUAL_RUN`。运行记录见 `evidence/e3/mdfixer/20261009T113517Z-65be5eb1/`，24 项检查通过。本样本只做人工依赖复核，不声称 MDFixer 或 EChecker 已实际输出修复或重检报告。

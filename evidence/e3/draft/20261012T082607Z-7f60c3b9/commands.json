@@ -1,0 +1,363 @@
+[
+  {
+    "label": "git-revision",
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "D:\\WorkSpace\\devops\\devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-12T08:26:07.532941+00:00",
+    "finished_at": "2026-10-12T08:26:08.039445+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 80,
+      "length": 41,
+      "sha256": "fc5c01371e16742eedc61334e9ba8fe6f08c8c77472275a2e72f44d71b22d4f7",
+      "original_file": "git-revision.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 131,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "git-revision.stderr.log"
+    }
+  },
+  {
+    "label": "git-status",
+    "argv": [
+      "git",
+      "status",
+      "--porcelain"
+    ],
+    "cwd": "D:\\WorkSpace\\devops\\devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-12T08:26:08.041455+00:00",
+    "finished_at": "2026-10-12T08:26:08.553926+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 222,
+      "length": 1519,
+      "sha256": "df61a7959e579b00c1e229ce5dd8ab1d1da7474723753ae8a8a3bc7991bc4e1f",
+      "original_file": "git-status.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 1751,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "git-status.stderr.log"
+    }
+  },
+  {
+    "label": "context-files",
+    "argv": [
+      "git",
+      "ls-files",
+      "-z",
+      "fixtures/e3/fzy",
+      "fixtures/e3/draft",
+      "scripts/e3/verify_fzy.sh"
+    ],
+    "cwd": "D:\\WorkSpace\\devops\\devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-12T08:26:08.579997+00:00",
+    "finished_at": "2026-10-12T08:26:09.089534+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 1906,
+      "length": 2780,
+      "sha256": "c0decdfb75882cba9bb72e71d218e9f302443f11775c83d797afe19ed004f397",
+      "original_file": "context-files.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 4696,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "context-files.stderr.log"
+    }
+  },
+  {
+    "label": "docker-version",
+    "argv": [
+      "docker",
+      "version",
+      "--format",
+      "{{json .}}"
+    ],
+    "cwd": "D:\\WorkSpace\\devops\\devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-12T08:26:09.914928+00:00",
+    "finished_at": "2026-10-12T08:26:10.423848+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 4806,
+      "length": 1143,
+      "sha256": "fdfdc1156030a1a8b0309ec9f7489d32fcca5f682d150baf3aa568432a76018e",
+      "original_file": "docker-version.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 5959,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "docker-version.stderr.log"
+    }
+  },
+  {
+    "label": "docker-platform",
+    "argv": [
+      "docker",
+      "info",
+      "--format",
+      "{{.OSType}}"
+    ],
+    "cwd": "D:\\WorkSpace\\devops\\devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-12T08:26:10.442717+00:00",
+    "finished_at": "2026-10-12T08:26:10.958178+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 6068,
+      "length": 6,
+      "sha256": "d745fba1cb70ab9dc02a80eeba8a1864a0f32b2941e008c0af389be7b56ba830",
+      "original_file": "docker-platform.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 6084,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "docker-platform.stderr.log"
+    }
+  },
+  {
+    "label": "base-cache-inspect",
+    "argv": [
+      "docker",
+      "image",
+      "inspect",
+      "ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3"
+    ],
+    "cwd": "D:\\WorkSpace\\devops\\devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-12T08:26:10.963192+00:00",
+    "finished_at": "2026-10-12T08:26:11.482967+00:00",
+    "exit_code": 1,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 6269,
+      "length": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "original_file": "base-cache-inspect.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 6282,
+      "length": 128,
+      "sha256": "8ed141cdb8a06f257dc5f8d9e5d9102d04bbbc78dfb4f772fd47403287e48e82",
+      "original_file": "base-cache-inspect.stderr.log"
+    }
+  },
+  {
+    "label": "base-pull",
+    "argv": [
+      "docker",
+      "pull",
+      "ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3"
+    ],
+    "cwd": "D:\\WorkSpace\\devops\\devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-12T08:26:11.484980+00:00",
+    "finished_at": "2026-10-12T08:26:22.006491+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 6567,
+      "length": 420,
+      "sha256": "34b829cfc0e7e1f3151dff26a7b5e9523cbbd1f33e76acbcee6bdbe3bd92a760",
+      "original_file": "base-pull.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 6997,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "base-pull.stderr.log"
+    }
+  },
+  {
+    "label": "base-inspect",
+    "argv": [
+      "docker",
+      "image",
+      "inspect",
+      "ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3"
+    ],
+    "cwd": "D:\\WorkSpace\\devops\\devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-12T08:26:22.021358+00:00",
+    "finished_at": "2026-10-12T08:26:22.526158+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 7176,
+      "length": 1508,
+      "sha256": "79d598367717df5694fa27154c117f8ffaeaf2faee97fc42be51dc5d0ad2a89c",
+      "original_file": "base-inspect.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 8694,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "base-inspect.stderr.log"
+    }
+  },
+  {
+    "label": "broken-build",
+    "argv": [
+      "docker",
+      "build",
+      "--progress=plain",
+      "-f",
+      "fixtures/e3/draft/Dockerfile.broken",
+      "-t",
+      "devops-e3-draft-broken:20261012t082607z-7f60c3b9",
+      "."
+    ],
+    "cwd": "D:\\WorkSpace\\devops\\devops-build-toolchain-05\\work\\e3\\draft-container\\20261012T082607Z-7f60c3b9\\context",
+    "environment": {},
+    "started_at": "2026-10-12T08:26:22.544261+00:00",
+    "finished_at": "2026-10-12T08:26:24.562018+00:00",
+    "exit_code": 1,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 8902,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "broken-build.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 8919,
+      "length": 1522,
+      "sha256": "702841181156c7f851987a8587d97fe8ab07613f4cdef61f4e11d3e674ba75e4",
+      "original_file": "broken-build.stderr.log"
+    }
+  },
+  {
+    "label": "reference-build",
+    "argv": [
+      "docker",
+      "build",
+      "--progress=plain",
+      "--iidfile",
+      "D:\\WorkSpace\\devops\\devops-build-toolchain-05\\evidence\\e3\\draft\\20261012T082607Z-7f60c3b9\\reference-image.id",
+      "-f",
+      "fixtures/e3/draft/Dockerfile.reference",
+      "-t",
+      "devops-e3-draft-reference:20261012t082607z-7f60c3b9",
+      "."
+    ],
+    "cwd": "D:\\WorkSpace\\devops\\devops-build-toolchain-05\\work\\e3\\draft-container\\20261012T082607Z-7f60c3b9\\context",
+    "environment": {},
+    "started_at": "2026-10-12T08:26:24.580351+00:00",
+    "finished_at": "2026-10-12T08:26:32.606163+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 10784,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "reference-build.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 10801,
+      "length": 6272,
+      "sha256": "5cdd52dde2c4e19ab6e0e8d133ba2ffd39152e59bb64ebd4eba176de0c40573a",
+      "original_file": "reference-build.stderr.log"
+    }
+  },
+  {
+    "label": "reference-inspect",
+    "argv": [
+      "docker",
+      "image",
+      "inspect",
+      "sha256:8499298b2ec433b6d852729fe77e30b28a96a3f592fe07c965e9383bc2ef6fc7"
+    ],
+    "cwd": "D:\\WorkSpace\\devops\\devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-12T08:26:32.609729+00:00",
+    "finished_at": "2026-10-12T08:26:33.123821+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 17237,
+      "length": 2483,
+      "sha256": "78496e7bb046f60c10f7f1fbc8d21400b043466fd0eec0a876cbec159b083be4",
+      "original_file": "reference-inspect.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 19730,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "reference-inspect.stderr.log"
+    }
+  },
+  {
+    "label": "container-validation",
+    "argv": [
+      "docker",
+      "run",
+      "--rm",
+      "--network",
+      "none",
+      "--workdir",
+      "/repo",
+      "--mount",
+      "type=bind,src=D:\\WorkSpace\\devops\\devops-build-toolchain-05\\evidence\\e3\\draft\\20261012T082607Z-7f60c3b9,dst=/evidence",
+      "-e",
+      "E3_ENVIRONMENT_REFERENCE=sha256:8499298b2ec433b6d852729fe77e30b28a96a3f592fe07c965e9383bc2ef6fc7",
+      "sha256:8499298b2ec433b6d852729fe77e30b28a96a3f592fe07c965e9383bc2ef6fc7",
+      "bash",
+      "scripts/e3/verify_fzy.sh",
+      "--operator",
+      "liyuhan-CodexAssisted",
+      "--revision",
+      "d92b3b3a9c551d0bc2a70156fc39f7be4a62742a",
+      "--output",
+      "/evidence/functional"
+    ],
+    "cwd": "D:\\WorkSpace\\devops\\devops-build-toolchain-05",
+    "environment": {},
+    "started_at": "2026-10-12T08:26:33.150509+00:00",
+    "finished_at": "2026-10-12T08:26:38.170822+00:00",
+    "exit_code": 0,
+    "stdout": "commands.log",
+    "stderr": "commands.log",
+    "stdout_range": {
+      "offset": 20356,
+      "length": 82,
+      "sha256": "206307e62f0b91eb00fa16273bbb29253213a2ef4d253cfdde943ffbdb2ac535",
+      "original_file": "container-validation.stdout.log"
+    },
+    "stderr_range": {
+      "offset": 20448,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_file": "container-validation.stderr.log"
+    }
+  }
+]

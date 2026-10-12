@@ -1,0 +1,7 @@
+FROM ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3
+
+WORKDIR /repo/fixtures/e3/fzy
+COPY fixtures/e3/fzy/ /repo/fixtures/e3/fzy/
+
+# 故意不安装构建工具，验证项目构建阶段能定位 make 缺失。
+RUN make CC=gcc
