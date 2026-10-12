@@ -35,3 +35,15 @@ config.h
 它在 C1 中属于 `introduced`，没有 `resolved` 或 `unchanged` Finding。首次源码变化会使 Git 工作树中的对象重新构建，不能据此判断依赖是否完整；只有保留初次构建的 `src/options.o`，随后单独修改新增头文件，普通 make 仍保留旧版本输出，而 clean 构建读到新值，才构成漏重建的行为证据。
 
 本结论不声称真实 EChecker 已运行。`c1-expected.json` 是人工预期，`evidence/e3/echecker/<run-id>/` 是实际构建记录，两者均不得标记为 `TOOL_OUTPUT`。
+
+## C2 仅改变编译命令
+
+来源仍为 `TEAM_ORACLE`。C2 的 `.c/.h` 与 C1 完全一致，`src/options.o` 的实际项目输入和 Make 声明也保持不变，因此稳定 Finding
+
+```json
+["MISSING", "src/options.o", "make", "src/e3_c1_marker.h", "build"]
+```
+
+在 C2 中属于 `unchanged`；`introduced` 和 `resolved` 均为空。Makefile 只把 VERSION 从 `1.1` 改为 `1.2-e3`，使 `src/options.o` 的实际编译命令中 `-DVERSION` 展开值发生变化。该配置变化需要后续工具使旧分析结果失效或重新分析，但不能直接当作另一条新增 MD。
+
+保留 C1 对象进入 C2 时，GNU Make 不会仅因变量展开值变化重编译 `src/options.o`，普通构建仍输出版本 `1.1`。同一 C2 源码 clean build 后输出 `1.2-e3`。两个结果都应包含 `E3_C1_MARKER=one`，并通过上游测试与功能断言。

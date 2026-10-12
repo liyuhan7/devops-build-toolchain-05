@@ -1,6 +1,6 @@
 # E3 项目基线入口
 
-本阶段使用 fzy 准备四工具的可重复测试基线。当前已准备 C0 和 EChecker C1；MD/RD、C2、DRAFT 故障和 MDFixer 修复由对应成员分别完成。
+本阶段使用 fzy 准备四工具的可重复测试基线。当前已准备 C0、EChecker C1 和 C2；MD/RD、DRAFT 故障和 MDFixer 修复由对应成员分别完成。
 
 ## 固定版本
 
