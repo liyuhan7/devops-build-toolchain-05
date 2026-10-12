@@ -22,6 +22,7 @@ __pycache__/
 *.log
 !evidence/e3/**/*.stdout.log
 !evidence/e3/**/*.stderr.log
+!evidence/e3/**/commands.log
 *.tmp
 *.swp
 .cache/
