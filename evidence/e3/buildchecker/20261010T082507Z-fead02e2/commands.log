@@ -1,0 +1,11 @@
++ git + apply + $'/Users/skh/大�\211�\212/devops/�\236�\214�\211交�\230/evidence/e3/buildchecker/20261010T082507Z-fead02e2/md-rd.patch' 
++ make + clean 
++ make + CC=gcc 
++ perl + -pi + -e + s/E3_MD_MARKER=one/E3_MD_MARKER=two/ + $'/Users/skh/大�\211�\212/devops/�\236�\214�\211交�\230/work/e3/buildchecker/20261010T082507Z-fead02e2/src/e3_md_marker.h' 
++ make + CC=gcc 
++ make + clean 
++ make + CC=gcc 
++ make + clean 
++ make + CC=gcc 
++ perl + -pi + -e + s/Deliberately/Deliberately\ touched/ + $'/Users/skh/大�\211�\212/devops/�\236�\214�\211交�\230/work/e3/buildchecker/20261010T082507Z-fead02e2/src/e3_rd_unused.h' 
++ make + CC=gcc 

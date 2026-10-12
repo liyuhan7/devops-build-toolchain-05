@@ -1,0 +1,1 @@
+{"case_id":"fzy-c0-options-md-rd","provenance":"ACTUAL_RUN","operator":"\u5b59\u9cb2\u534e","run_id":"20261010T082507Z-fead02e2","base_commit":"0769e815259ab2cae12a21be43256c05906215e0","configuration_id":"fzy-c0-options-linux-v1","target":"src/options.o","patch":"fixtures/e3/buildchecker/md-rd.patch"}

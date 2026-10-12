@@ -1,0 +1,13 @@
+{
+  "case_id": "fzy-c0-options-md-rd",
+  "provenance": "TEAM_ORACLE",
+  "base_commit": "0769e815259ab2cae12a21be43256c05906215e0",
+  "upstream_commit": "34b88869d022e861da4846c4463aea3ddfb3ff30",
+  "configuration_id": "fzy-c0-options-linux-v1",
+  "scope": {"target": "src/options.o", "files": ["src/options.c", "src/options.h", "config.h", "src/e3_md_marker.h", "src/e3_rd_unused.h"], "excluded": ["系统头文件", "其他对象目标", "Make 构建器自身读取", "编译器及链接器内部文件"]},
+  "findings": [
+    {"category": "MISSING", "target": "src/options.o", "dependency": "src/e3_md_marker.h", "declaration": "src/options.c:8", "basis": "options.c includes the header and reads E3_MD_MARKER; the explicit options.o rule omits it. After changing the header, ordinary make must leave the stale object/output."},
+    {"category": "REDUNDANT", "target": "src/options.o", "dependency": "src/e3_rd_unused.h", "declaration": "Makefile:34", "basis": "the explicit options.o rule lists the header, but options.c neither includes nor reads it. Touching it must cause an extra options.o rebuild while the functional result stays unchanged."}
+  ],
+  "expected_behavior": {"initial_build": "success", "md_touch_ordinary_make": "stale object and old marker remain; MISSING", "md_touch_clean_make": "new marker is compiled; clean result is correct", "rd_touch_ordinary_make": "options.o rebuilds; output remains unchanged; REDUNDANT"}
+}
