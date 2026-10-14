@@ -3,3 +3,15 @@
 /fixtures/e3/draft/Dockerfile.* text eol=lf
 /fixtures/e3/draft/cases/** text eol=lf
 /evidence/e3/**/commands.log -text
+/Makefile text eol=lf
+/compose.yaml text eol=lf
+/requirements-dev.in text eol=lf
+/requirements-dev.lock text eol=lf
+/scripts/e4/*.sh text eol=lf
+/scripts/e4/*.py text eol=lf
+/scripts/doctor.py text eol=lf
+/scripts/secret_scan.py text eol=lf
+/services/** text eol=lf
+/fixtures/md-rd/** text eol=lf
+/fixtures/draft/** text eol=lf
+/setup/*.sh text eol=lf

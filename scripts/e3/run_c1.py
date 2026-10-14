@@ -119,9 +119,10 @@ def main():
             c1,
         )
         shutil.rmtree(c1 / ".git")
+        versions = json.loads((ROOT / "fixtures/e3/echecker/commits.json").read_text(encoding="utf-8"))["versions"]
         require(
-            source_digest(c1) == source_digest(ROOT / "fixtures/e3/echecker/project"),
-            "C0 加 C1 Patch 与签入的 C1 项目一致",
+            source_digest(c1) == versions["C1"]["source_tree_sha256"],
+            "C0 加 C1 Patch 与固定 C1 源码摘要一致",
         )
 
         expected = json.loads((ROOT / "fixtures/e3/echecker/c1-expected.json").read_text(encoding="utf-8"))
