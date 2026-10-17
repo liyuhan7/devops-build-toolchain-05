@@ -49,12 +49,12 @@
     },
     "source_commit": {
       "type": "string",
-      "pattern": "^[a-fA-F0-9]{7,40}$"
+      "pattern": "^[a-f0-9]{40}$"
     },
     "configuration_digest": {
       "type": "string",
       "minLength": 1,
-      "description": "Digest or immutable identifier of the configuration used to produce the artifact."
+      "description": "Immutable toolchain/build configuration identifier; equals configuration.configuration_id in this contract. Source-bound image content is identified separately by the artifact digest."
     },
     "created_at": {
       "type": "string",

@@ -28,7 +28,7 @@ RUN apt-get update \
  && echo "python3=$(python3 -c 'import platform; print(platform.python_version())')" >> /opt/toolchain.lock \
  && echo "arch=$(dpkg --print-architecture)" >> /opt/toolchain.lock
 
-COPY requirements-dev.lock /tmp/requirements-dev.lock
+COPY requirements-dev.lock requirements-contracts.lock /tmp/
 RUN pip install --no-cache-dir --require-hashes -r /tmp/requirements-dev.lock \
  && pip freeze | sed 's/^/pip:/' >> /opt/toolchain.lock
 

@@ -1,4 +1,4 @@
-"""使用 Python 标准库校验仓库中的 JSON 契约。"""
+"""离线校验 Schema 实例、服务语义和跨段交接。"""
 
 from __future__ import annotations
 
@@ -8,6 +8,13 @@ import sys
 from pathlib import Path, PurePosixPath
 from typing import Any, Iterable
 from urllib.parse import unquote
+
+if __package__:
+    from .contract_checks import (ContractSchemas, INPUT_KINDS, OUTPUT_KINDS, artifact_errors,
+                                  evidence_errors, finding_codes, handoff_codes, incremental_codes, request_errors)
+else:
+    from contract_checks import (ContractSchemas, INPUT_KINDS, OUTPUT_KINDS, artifact_errors,
+                                 evidence_errors, finding_codes, handoff_codes, incremental_codes, request_errors)
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -88,39 +95,6 @@ def resolve_fragment(document: Any, fragment: str) -> None:
 def validate_buildchecker_semantics() -> list[str]:
     """Check the cross-document invariants consumed by EChecker and MDFixer."""
     errors: list[str] = []
-    negative_files = (
-        NEGATIVE_ROOT / "finding-commit-mismatch.json",
-        NEGATIVE_ROOT / "finding-configuration-mismatch.json",
-    )
-
-    for path in negative_files:
-        if not path.is_file():
-            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: required negative case is missing")
-            continue
-        try:
-            case = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: cannot parse negative case: {exc}")
-            continue
-        if not isinstance(case, dict):
-            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: negative case root must be an object")
-            continue
-        request = case.get("request")
-        finding = case.get("finding")
-        if not isinstance(request, dict) or not isinstance(finding, dict):
-            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: request and finding objects are required")
-            continue
-        request_commit = request.get("repository", {}).get("commit")
-        finding_commit = finding.get("source_commit")
-        request_config = request.get("configuration", {}).get("configuration_id")
-        finding_config = finding.get("configuration_id")
-        if path.name == "finding-commit-mismatch.json" and request_commit == finding_commit:
-            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: commit must be deliberately mismatched")
-        if path.name == "finding-configuration-mismatch.json" and request_config == finding_config:
-            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: configuration must be deliberately mismatched")
-        if case.get("expected_rejection") is not True:
-            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: expected_rejection must be true")
-
     request_path = BUILDCHECKER_ROOT / "full-check.request.json"
     response_path = BUILDCHECKER_ROOT / "full-check.response.json"
     failed_path = BUILDCHECKER_ROOT / "full-check.failed.json"
@@ -264,48 +238,6 @@ def validate_draft_semantics() -> list[str]:
                 if not isinstance(image_uri, str) or not image_uri.startswith("oci://") or "@sha256:" not in image_uri:
                     errors.append("draft.response.json: CONTAINER_IMAGE must use an immutable OCI digest")
 
-    common_handoff_fields = {
-        "trace_id",
-        "job_id",
-        "status",
-        "source_commit",
-        "working_directory",
-        "dockerfile_path",
-        "context_path",
-        "configuration_digest",
-        "image_uri",
-        "build_exit_code",
-        "validation_exit_code",
-        "final_validation_passed",
-    }
-    negative_cases = {
-        "draft-missing-commit.json": "source_commit",
-        "draft-missing-image.json": "image_uri",
-    }
-    for filename, missing_field in negative_cases.items():
-        path = NEGATIVE_ROOT / filename
-        if not path.is_file():
-            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: required negative case is missing")
-            continue
-        try:
-            case = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: cannot parse negative case: {exc}")
-            continue
-        if not isinstance(case, dict) or not isinstance(case.get("handoff"), dict):
-            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: handoff object is required")
-            continue
-        handoff = case["handoff"]
-        if case.get("expected_rejection") is not True:
-            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: expected_rejection must be true")
-        if missing_field in handoff:
-            errors.append(f"{path.relative_to(REPOSITORY_ROOT)}: {missing_field} must be deliberately absent")
-        other_missing = sorted((common_handoff_fields - {missing_field}) - handoff.keys())
-        if other_missing:
-            errors.append(
-                f"{path.relative_to(REPOSITORY_ROOT)}: unexpected missing fields: "
-                + ", ".join(other_missing)
-            )
 
     return errors
 
@@ -342,7 +274,7 @@ def validate_end_to_end_semantics() -> list[str]:
         mdfixer_request = read("mdfixer/repair.request.json")
         mdfixer_response = read("mdfixer/repair.response.json")
     except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
-        return [f"E2 end-to-end: cannot load successful examples: {exc}"]
+        return [f"end-to-end: cannot load successful examples: {exc}"]
 
     documents = (
         draft_request,
@@ -356,7 +288,14 @@ def validate_end_to_end_semantics() -> list[str]:
     )
     trace_ids = {document.get("trace_id") for document in documents}
     if len(trace_ids) != 1 or None in trace_ids:
-        errors.append("all successful E2 examples must share one trace_id")
+        errors.append("all successful examples must share one trace_id")
+
+    if buildchecker_request.get("configuration") != echecker_request.get("configuration"):
+        errors.append("BuildChecker baseline and EChecker must use identical build configuration")
+    current_configuration = echecker_request.get("configuration", {})
+    if any(current_configuration.get(key) != value
+           for key, value in mdfixer_request.get("configuration", {}).items()):
+        errors.append("MDFixer must preserve the current configuration fields")
 
     configurations = {
         draft_request.get("configuration", {}).get("configuration_id"),
@@ -366,7 +305,7 @@ def validate_end_to_end_semantics() -> list[str]:
         mdfixer_request.get("configuration", {}).get("configuration_id"),
     }
     if len(configurations) != 1 or None in configurations:
-        errors.append("all successful E2 examples must use one immutable configuration")
+        errors.append("all successful examples must use one immutable configuration")
 
     base_commits = {
         draft_request.get("source_commit"),
@@ -398,7 +337,7 @@ def validate_end_to_end_semantics() -> list[str]:
 
     echecker_outputs = by_kind(echecker_response, "output_artifacts")
     mdfixer_inputs = by_kind(mdfixer_request, "input_artifacts")
-    for kind in ("DECLARED_DEPENDENCY_GRAPH", "INCREMENTAL_CHECK_REPORT"):
+    for kind in INPUT_KINDS["MD_FIXER"]:
         if echecker_outputs.get(kind) != mdfixer_inputs.get(kind):
             errors.append(f"MDFixer must consume the exact {kind} produced by EChecker")
 
@@ -418,7 +357,98 @@ def validate_end_to_end_semantics() -> list[str]:
         if response.get("status") != "SUCCEEDED" or response.get("error") is not None:
             errors.append(f"{name} successful chain response must have SUCCEEDED and null error")
 
-    return [f"E2 end-to-end: {error}" for error in errors]
+    return [f"end-to-end: {error}" for error in errors]
+
+
+def validate_contract_instances(documents):
+    """公共模型负责结构，各服务 profile 负责类型、基数与证据来源。"""
+    errors = []
+    schemas = ContractSchemas(CONTRACTS_ROOT)
+    services = {"draft": "DRAFT", "buildchecker": "BUILD_CHECKER", "echecker": "E_CHECKER", "mdfixer": "MD_FIXER"}
+    for path, document in documents.items():
+        relative = path.relative_to(CONTRACTS_ROOT)
+        kind = services.get(relative.parts[0])
+        if not kind or len(relative.parts) != 2:
+            continue
+        issues = []
+        if path.name.endswith(".request.json"):
+            issues = request_errors(document, kind, schemas)
+        elif path.name.endswith((".response.json", ".failed.json", ".rejected.json")):
+            issues = schemas.errors(document, "job.schema.json")
+            if not issues:
+                if document["job_type"] != kind:
+                    issues.append("Job 类型与所属服务不符")
+                issues.extend(artifact_errors(document["input_artifacts"], INPUT_KINDS[kind]))
+                outputs = document["output_artifacts"]
+                issues.extend(artifact_errors(outputs, OUTPUT_KINDS[kind] if document["status"] == "SUCCEEDED" else None))
+                if document["status"] != "SUCCEEDED" and (document["findings"] or any(not a["kind"].endswith("_LOG") for a in outputs)):
+                    issues.append("未成功任务只能保留诊断日志，不能交付 Finding 或业务产物")
+                issues.extend(evidence_errors(document["findings"], outputs))
+        errors.extend(f"{relative}: {issue}" for issue in issues)
+    return errors
+
+
+def validate_negative_cases():
+    """恢复唯一变更后必须等于合法基准，拒绝码由实际消费检查产生。"""
+    errors = []
+    schemas = ContractSchemas(CONTRACTS_ROOT)
+    def read(relative):
+        return json.loads((CONTRACTS_ROOT / relative).read_text(encoding="utf-8"))
+    draft = read("draft/draft.request.json")
+    draft_result = read("draft/draft.response.json")
+    image = next(a for a in draft_result["output_artifacts"] if a["kind"] == "CONTAINER_IMAGE")
+    handoff = {"trace_id": draft["trace_id"], "job_id": draft_result["job_id"], "status": "SUCCEEDED",
+               "source_commit": draft["source_commit"], "working_directory": draft["working_directory"],
+               **{k: draft["docker"][k] for k in ("dockerfile_path", "context_path")},
+               **draft["configuration"], "image_uri": image["uri"], "build_exit_code": 0,
+               "validation_exit_code": 0, "final_validation_passed": True}
+    bc = read("buildchecker/full-check.request.json")
+    finding = read("buildchecker/full-check.response.json")["findings"][0]
+    ec = read("echecker/incremental-check.request.json")
+    cases = [("draft-missing-commit.json", "INVALID_REQUEST", "handoff", "source_commit"),
+             ("draft-missing-image.json", "INVALID_REQUEST", "handoff", "image_uri"),
+             ("finding-commit-mismatch.json", "COMMIT_MISMATCH", "finding", "source_commit"),
+             ("finding-configuration-mismatch.json", "CONFIGURATION_MISMATCH", "finding", "configuration_id"),
+             ("incremental-missing-baseline.json", "INVALID_REQUEST", "request", "baseline"),
+             ("incremental-commit-mismatch.json", "BASELINE_COMMIT_MISMATCH", "request", "source_commit"),
+             ("incremental-configuration-mismatch.json", "CONFIGURATION_MISMATCH", "request", "configuration_id")]
+    for filename, code, key, field in cases:
+        case = read("negative/" + filename)
+        candidate = case.get(key)
+        restored = json.loads(json.dumps(candidate))
+        baseline = None
+        actual = []
+        try:
+            if key == "handoff":
+                baseline = handoff
+                actual = handoff_codes(candidate)
+                if field in restored:
+                    raise ValueError("缺字段负例必须确实省略指定字段")
+                restored[field] = baseline[field]
+                valid = handoff_codes(baseline)
+            elif key == "finding":
+                baseline = finding
+                actual = finding_codes(case.get("request"), candidate, schemas)
+                restored[field] = baseline[field]
+                valid = finding_codes(bc, baseline, schemas)
+                if case.get("request") != bc:
+                    raise ValueError("负例必须保留完整合法请求")
+            else:
+                baseline = ec
+                actual = incremental_codes(candidate, schemas)
+                valid = incremental_codes(baseline, schemas)
+                if field == "baseline":
+                    if field in restored:
+                        raise ValueError("缺基线负例必须确实省略 baseline")
+                    restored[field] = baseline[field]
+                else:
+                    restored["baseline"][field] = baseline["baseline"][field]
+            if (valid or actual != [code] or restored != baseline
+                    or case.get("expected_rejection") is not True or case.get("expected_error_code") != code):
+                raise ValueError("必须仅含指定变异，且由消费检查返回 " + code)
+        except (KeyError, TypeError, ValueError) as exc:
+            errors.append(f"{filename}: {exc}")
+    return errors
 
 
 def validate() -> list[str]:
@@ -491,6 +521,10 @@ def validate() -> list[str]:
                         f"{relative_path}: unresolved local $ref {reference}: {exc}"
                     )
 
+    errors.extend(validate_contract_instances(documents))
+    if errors:
+        return errors
+    errors.extend(validate_negative_cases())
     errors.extend(validate_buildchecker_semantics())
     errors.extend(validate_draft_semantics())
     errors.extend(validate_echecker_semantics())
@@ -540,57 +574,6 @@ def _artifact_map(artifacts: Any) -> dict[str, dict[str, Any]]:
     }
 
 
-def _is_commit_mismatch_case(case: dict[str, Any]) -> bool:
-    request = case.get("request")
-    if not isinstance(request, dict):
-        return False
-    repository = request.get("repository")
-    baseline = request.get("baseline")
-    return (
-        isinstance(repository, dict)
-        and isinstance(baseline, dict)
-        and repository.get("base_commit") != baseline.get("source_commit")
-    )
-
-
-def _is_configuration_mismatch_case(case: dict[str, Any]) -> bool:
-    request = case.get("request")
-    if not isinstance(request, dict):
-        return False
-    configuration = request.get("configuration")
-    baseline = request.get("baseline")
-    artifacts = request.get("input_artifacts")
-    if not isinstance(configuration, dict) or not isinstance(baseline, dict):
-        return False
-    configuration_id = configuration.get("configuration_id")
-    if baseline.get("configuration_id") != configuration_id:
-        return True
-    return isinstance(artifacts, list) and any(
-        isinstance(artifact, dict)
-        and artifact.get("configuration_digest") != configuration_id
-        for artifact in artifacts
-    )
-
-
-def _validate_echecker_negative_case(
-    path: Path, expected_code: str, demonstrates_case: Any
-) -> list[str]:
-    errors: list[str] = []
-    relative_path = path.relative_to(REPOSITORY_ROOT)
-    case = _load_json_example(path, errors)
-    if case is None:
-        return errors
-    if not isinstance(case, dict):
-        return [f"{relative_path}: root must be an object"]
-    if case.get("expected_rejection") is not True:
-        errors.append(f"{relative_path}: expected_rejection must be true")
-    if case.get("expected_error_code") != expected_code:
-        errors.append(f"{relative_path}: expected_error_code must be {expected_code}")
-    if not demonstrates_case(case):
-        errors.append(f"{relative_path}: case does not demonstrate {expected_code}")
-    return errors
-
-
 def validate_echecker_semantics() -> list[str]:
     """Check EChecker provenance, failure, and MDFixer handoff invariants."""
     errors: list[str] = []
@@ -601,6 +584,10 @@ def validate_echecker_semantics() -> list[str]:
         return errors
     if not all(isinstance(document, dict) for document in (request, response, failed)):
         return ["contracts/echecker: all examples must have object roots"]
+
+    codes = incremental_codes(request, ContractSchemas(CONTRACTS_ROOT))
+    if codes:
+        return ["incremental-check.request.json: " + code for code in codes]
 
     repository = request.get("repository")
     configuration = request.get("configuration")
@@ -659,8 +646,8 @@ def validate_echecker_semantics() -> list[str]:
     if response.get("job_type") != "E_CHECKER" or response.get("trace_id") != request.get("trace_id"):
         errors.append("incremental-check.response.json: job_type and trace_id must match request")
     response_input_artifacts = _artifact_map(response.get("input_artifacts"))
-    if set(response_input_artifacts) != set(artifacts_by_kind):
-        errors.append("incremental-check.response.json: input artifact kinds do not match request")
+    if response_input_artifacts != artifacts_by_kind:
+        errors.append("incremental-check.response.json: input artifact metadata does not match request")
     findings = response.get("findings")
     output_artifacts = response.get("output_artifacts")
     if not isinstance(findings, list) or not isinstance(output_artifacts, list):
@@ -697,21 +684,7 @@ def validate_echecker_semantics() -> list[str]:
     if failed.get("findings") != [] or failed.get("output_artifacts") != []:
         errors.append("incremental-check.failed.json: failed result cannot expose findings or output artifacts")
 
-    errors.extend(_validate_echecker_negative_case(
-        NEGATIVE_ROOT / "incremental-missing-baseline.json",
-        "INVALID_REQUEST",
-        lambda case: "baseline" not in case.get("request", {}),
-    ))
-    errors.extend(_validate_echecker_negative_case(
-        NEGATIVE_ROOT / "incremental-commit-mismatch.json",
-        "BASELINE_COMMIT_MISMATCH",
-        _is_commit_mismatch_case,
-    ))
-    errors.extend(_validate_echecker_negative_case(
-        NEGATIVE_ROOT / "incremental-configuration-mismatch.json",
-        "CONFIGURATION_MISMATCH",
-        _is_configuration_mismatch_case,
-    ))
+
     return errors
 
 def object_at(value, key):
@@ -743,6 +716,8 @@ def check_request(request, upstream, report):
     """Return stable rejection codes for a repair request and its upstream evidence."""
     if not all(isinstance(v, dict) for v in (request, upstream, report)):
         return ["INVALID_REQUEST"]
+    if request_errors(request, "MD_FIXER", ContractSchemas(CONTRACTS_ROOT)):
+        return ["INVALID_REQUEST"]
     finding = object_at(request, "finding")
     commit = object_at(request, "repository").get("commit")
     config = object_at(request, "configuration").get("configuration_id")
@@ -769,7 +744,7 @@ def check_request(request, upstream, report):
             or report.get("produced_by_job_id") != upstream.get("job_id")):
         return ["PROVENANCE_MISMATCH"]
     inputs = artifacts(request, "input_artifacts")
-    if not {"INCREMENTAL_CHECK_REPORT", "DECLARED_DEPENDENCY_GRAPH"} <= inputs.keys():
+    if set(inputs) != INPUT_KINDS["MD_FIXER"]:
         return ["INVALID_REQUEST"]
     if len(inputs) != len(array_at(request, "input_artifacts")):
         return ["INVALID_REQUEST"]
@@ -778,6 +753,8 @@ def check_request(request, upstream, report):
                 or a.get("configuration_digest") != config
                 or a.get("produced_by_job_id") != upstream.get("job_id")):
             return ["PROVENANCE_MISMATCH"]
+    if evidence_errors([finding], list(inputs.values())):
+        return ["INVALID_REQUEST"]
     declaration = object_at(request, "declaration")
     policy = object_at(request, "repair_policy")
     if (not safe_path(declaration.get("path"))
@@ -803,6 +780,9 @@ def check_result(request, response, manifest, report):
     """Accept only a successful repair whose evidence agrees across all payloads."""
     if not all(isinstance(v, dict) for v in (request, response, manifest, report)):
         return ["INVALID_RESULT"]
+    schemas = ContractSchemas(CONTRACTS_ROOT)
+    if request_errors(request, "MD_FIXER", schemas) or schemas.errors(response, "job.schema.json"):
+        return ["INVALID_RESULT"]
     commit = object_at(request, "repository").get("commit")
     config = object_at(request, "configuration").get("configuration_id")
     if (response.get("status") != "SUCCEEDED" or response.get("error") is not None
@@ -811,7 +791,7 @@ def check_result(request, response, manifest, report):
         return ["INVALID_RESULT"]
     outputs = artifacts(response, "output_artifacts")
     required = {"GIT_PATCH", "REPAIR_MANIFEST", "BUILD_LOG", "TEST_LOG", "RECHECK_REPORT"}
-    if not required <= outputs.keys() or len(outputs) != len(array_at(response, "output_artifacts")):
+    if set(outputs) != required or len(outputs) != len(array_at(response, "output_artifacts")):
         return ["INVALID_RESULT"]
     if (artifacts(response, "input_artifacts") != artifacts(request, "input_artifacts")
             or len(array_at(response, "input_artifacts")) != len(array_at(request, "input_artifacts"))):

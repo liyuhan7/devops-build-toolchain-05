@@ -29,7 +29,7 @@ MDFixer 在自己的服务基础 URL 下使用 ADR-0001 统一规定的端点。
 | `declaration` | 指定允许修改的声明文件、格式和目标；路径必须在仓库工作目录内 |
 | `repair_policy` | 限制修复策略、可修改路径、最大文件数以及是否允许改源文件 |
 | `validation` | 明确 build、test、recheck 命令和总超时 |
-| `input_artifacts` | 至少包含 `INCREMENTAL_CHECK_REPORT` 和 `DECLARED_DEPENDENCY_GRAPH` |
+| `input_artifacts` | 恰好包含 `INCREMENTAL_CHECK_REPORT`、`ACTUAL_DEPENDENCY_GRAPH`、`DECLARED_DEPENDENCY_GRAPH` 和 `BUILD_LOG`，kind、ID 均不重复，覆盖 Finding 的全部 evidence 引用 |
 
 MDFixer 必须按 `artifact.kind` 查找输入，不依赖数组顺序。`INCREMENTAL_CHECK_REPORT` 必须由请求所引用的 EChecker Job 产生，并证明该 Finding 位于 `introduced` 集合；仅凭客户端传入的 `finding_delta` 不足以授权修复。
 
@@ -152,4 +152,4 @@ contracts/mdfixer/recheck.report.json
 python scripts/validate.py
 ```
 
-当前生产方 PR 验证 JSON 可解析、公共 Schema 引用完整，并可使用公共 Job Schema 检查成功与拒绝响应。MDFixer 的三类消费方负例和跨文件语义校验由后续配对验证 PR 提交。
+统一入口执行请求/公共 Job Schema 实例校验、输入证据闭合性、产物唯一性、跨文件语义检查和三个单字段负例。依赖安装与实际验证边界见 [统一检查说明](../validation/contract-checks.md)。

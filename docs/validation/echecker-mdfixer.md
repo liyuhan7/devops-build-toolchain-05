@@ -13,7 +13,7 @@ BuildChecker 成功基线
   -> EChecker 读取 baseline 图、声明图和历史报告
   -> EChecker 检查 base_commit、当前 commit、配置和 Artifact 来源
   -> EChecker 生成当前图、当前 Finding 和 introduced/resolved/unchanged 变化报告
-  -> MDFixer 读取增量报告和当前 Finding
+  -> MDFixer 接收增量报告、实际图、声明图、构建日志和当前 Finding
 ```
 
 EChecker 与 MDFixer 必须遵守以下筛选规则：
@@ -49,7 +49,7 @@ EChecker 请求中的：
 
 文件：`contracts/negative/incremental-missing-baseline.json`
 
-请求没有 `baseline`，也没有输入 Artifact。服务端在创建 Job 前拒绝请求，预期错误码为：
+请求只删除 `baseline`，其余字段与合法请求相同，包含四份输入 Artifact。服务端在创建 Job 前拒绝请求，预期错误码为：
 
 ```text
 INVALID_REQUEST
@@ -93,4 +93,4 @@ python -m py_compile scripts\validate.py tests\test_validate_echecker.py
 
 `tests/test_validate_echecker.py` 调用 `validate_echecker_semantics()`，确保 EChecker 成功/失败样例和三个负例同时满足校验器的约束。`scripts/validate.py` 还会继续运行已有的公共 Schema、BuildChecker 和 DRAFT 检查。
 
-本 PR 不执行真实构建、不下载虚构 URI，也不声称完成 Draft 2020-12 的完整 Schema 实例验证；它验证的是仓库中可复现的 JSON 解析、公共引用和 EChecker 跨文件交接语义。
+统一入口离线执行 Draft 2020-12 实例校验及交接语义检查，不执行真实构建、不下载虚构 URI。缺基线、commit 错配、配置错配负例调用与正例相同的检查函数，且恢复唯一变异后必须等于正例。

@@ -20,7 +20,7 @@
 | `changed_paths` | 从 Git 比较 `base_commit..commit` 得到的去重仓库相对路径；请求者提供提示，服务端必须自行重算并拒绝不一致结果。 |
 | `input_artifacts` | 恰好一份基线实际图、一份基线声明图、一份基线完整报告，以及一份当前 DRAFT 容器镜像。 |
 
-基线三份产物的 `produced_by_job_id` 必须等于 `baseline.job_id`，其 `source_commit` 必须等于 `base_commit`。当前镜像的 `source_commit` 必须等于 `repository.commit`，且上游 DRAFT Job 已成功完成构建和最终验证。四份产物的 `configuration_digest` 均必须等于 `configuration.configuration_id`。`baseline.trace_id`、请求 `trace_id` 和上游 Job 的追踪 ID 相同。
+基线三份产物的 `produced_by_job_id` 必须等于 `baseline.job_id`，其 `source_commit` 必须等于 `base_commit`。当前镜像的 `source_commit` 必须等于 `repository.commit`，且上游 DRAFT Job 已成功完成构建和最终验证。四份产物的 `configuration_digest` 均必须等于 `configuration.configuration_id`；配置身份不含项目源码和服务镜像内容摘要，所以源码变化产生的新镜像可以沿用同一工具链配置。`baseline.trace_id`、请求 `trace_id` 和上游 Job 的追踪 ID 相同。
 
 EChecker 读取每个 URI 后先验证 SHA-256 和媒体类型，再验证内容的 commit、配置、`produced_by_job_id`、目标集合与外层 Artifact 一致。基线 Job 必须为 `SUCCEEDED`，实际图、声明图、完整报告必须来自同一个 Job；不能使用失败、取消或部分完成的图。完整报告的 `findings` 作为历史 Finding 集合，必须与基线 Job 的 `findings` 相同。配置标识相同还不够：服务端也要逐字段比较完整配置，禁止复用标识掩盖配置变化。若配置变化，应先建立新基线，再进行增量比较。
 
@@ -60,7 +60,7 @@ EChecker 读取每个 URI 后先验证 SHA-256 和媒体类型，再验证内容
 
 ## 5. MDFixer 交接规则
 
-MDFixer 先核验 EChecker Job 为 `SUCCEEDED`，下载并校验 `INCREMENTAL_CHECK_REPORT`、当前实际/声明图及其 Artifact 元数据。修复候选仅取 `delta.introduced` 所指向的、当前 Job `findings` 中 `category=MISSING` 的 Finding。候选的 `source_commit`、`configuration_id`、`trace_id` 所属 Job 和证据产物必须与当前报告一致。`resolved`、`REDUNDANT`、失败任务以及缺失或校验不通过的报告都不得进入自动修复；`unchanged` 的 MISSING 留给单独的修复策略判断，本接口不自动发送。
+MDFixer 先核验 EChecker Job 为 `SUCCEEDED`。修复请求显式携带且恰好携带 `INCREMENTAL_CHECK_REPORT`、`ACTUAL_DEPENDENCY_GRAPH`、`DECLARED_DEPENDENCY_GRAPH`、`BUILD_LOG` 四份 Artifact，全部原样取自当前 EChecker Job；MDFixer 下载并校验它们，不依赖未约定的上游补取。修复候选仅取 `delta.introduced` 所指向的、当前 Job `findings` 中 `category=MISSING` 的 Finding。候选的 `source_commit`、`configuration_id`、`trace_id` 所属 Job 和证据产物必须与当前报告一致。`resolved`、`REDUNDANT`、失败任务以及缺失或校验不通过的报告都不得进入自动修复；`unchanged` 的 MISSING 留给单独的修复策略判断，本接口不自动发送。
 
 ## 6. 非法请求和执行失败
 
@@ -82,7 +82,3 @@ MDFixer 先核验 EChecker Job 为 `SUCCEEDED`，下载并校验 `INCREMENTAL_CH
 | 422 / `CHANGED_PATHS_MISMATCH` | 提交的 `changed_paths` 与服务端 Git 比较结果不一致。 |
 
 已接受任务后才发现 URI 不可读、摘要不符、Git checkout 失败、追踪/解析失败或构建失败，`GET` 保持 HTTP 200，Job 为 `FAILED`，`error.phase` 指明 `INPUT`、`CHECKOUT`、`BUILD`、`TRACE`、`PARSE` 或 `PUBLISH`，`findings=[]`，不能输出可供 MDFixer 使用的增量报告。失败样例展示 `BASELINE_ARTIFACT_INTEGRITY_ERROR`；其他执行码包括 `ARTIFACT_UNAVAILABLE`、`CHECKOUT_FAILED`、`BUILD_FAILED`、`BUILD_TIMEOUT`、`TRACE_FAILED`、`DECLARED_GRAPH_PARSE_FAILED` 和 `INTERNAL_ERROR`。确定性输入或内容错误 `retryable=false`，只有确认的临时故障才为 true。
-
-## 7. 本轮验证边界
-
-`python scripts/validate.py` 验证全部 JSON 的可解析性、Schema 基本元数据和本地 `$ref`，并执行 DRAFT、BuildChecker、EChecker、MDFixer 的跨文件语义检查。EChecker 校验覆盖成功/失败样例、基线和当前来源、delta 集合以及缺基线、commit 错配、配置错配三类负例；`tests/test_validate_echecker.py` 提供对应回归入口。E2 收尾校验还会确认 BuildChecker 输出被 EChecker 原样消费，并确认 EChecker 的当前报告、Finding 和声明图能够交给 MDFixer。上述检查仍是离线契约验证，不执行真实构建或 Artifact 下载。

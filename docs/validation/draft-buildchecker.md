@@ -16,7 +16,7 @@ BuildChecker 至少需要以下交接字段：
 - `trace_id` 和 DRAFT `job_id`；
 - 完整的 `source_commit`；
 - `working_directory`、`dockerfile_path` 和 `context_path`；
-- 不可变的 `configuration_digest`；
+- 相同的 configuration_id 和 configuration_digest（本版均为不可变配置 ID）；
 - 包含 `@sha256:` digest 的 `image_uri`；
 - 构建和验证退出码，以及最终验证结论。
 
@@ -39,7 +39,7 @@ BuildChecker 至少需要以下交接字段：
 | `contracts/negative/draft-missing-commit.json` | `source_commit` | 拒绝；无法确定被检查的源码版本，也无法追溯结果。 |
 | `contracts/negative/draft-missing-image.json` | `image_uri` | 拒绝；无法确定 BuildChecker 应使用的构建环境。 |
 
-两个负例均设置 `expected_rejection=true`。除目标缺失字段外，其余交接字段保持完整，用于证明消费方执行的是字段级门禁，而不是只检查 JSON 是否可解析。
+两个负例均设置 `expected_rejection=true` 和 `expected_error_code=INVALID_REQUEST`，并调用与合法交接相同的消费检查函数。恢复目标缺失字段后必须与合法交接逐字段一致，不能混入其他错误。
 
 ## 4. 自动验证
 

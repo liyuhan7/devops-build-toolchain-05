@@ -66,4 +66,4 @@ Artifact 必须记录：
 
 - 后续四段接口只需要定义服务专属请求、Artifact `kind` 和结果字段。
 - 生产方修改公共字段前必须通知全部消费方并更新本 ADR 或新增 ADR。
-- 当前自动检查只验证 JSON 可解析、Schema 元数据和本地引用存在；具体样例是否满足 Schema 将在对应接口 Issue 中补充。
+- 配置身份、修复入口和自动校验采用 [配置身份与离线契约检查](0003-contract-validation.md) 的后续决策；原有异步 Job 与 Finding/Error 分离约定继续适用。

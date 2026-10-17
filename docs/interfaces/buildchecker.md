@@ -45,8 +45,8 @@ GET 成功返回 HTTP 200（包括 status=FAILED）；未知 job_id 返回 HTTP 
 消费镜像的 manifest 并验证 Artifact.sha256，再按 manifest 的不可变 digest 拉取镜像；不使用浮动 tag。
 镜像和其他输入产物都必须通过公共 Artifact Schema。
 
-configuration_id 是覆盖工作目录、构建系统、目标、环境、clean/build 命令、时限和镜像内容摘要的
-不可变配置标识；任意一项变化都分配新标识，不通过重用同名标识表示不同配置。
+configuration_id 标识不可变的工具链和构建配置，覆盖编译器/运行库身份、工作目录、构建系统、目标、环境、clean/build 命令和时限。任一项变化都分配新标识。
+包含项目源码的服务镜像摘要不属于配置身份：同一工具链下源码变化可以产生不同镜像摘要，仍使用相同配置 ID。DRAFT 必须保证同一 ID 的工具链不变；镜像本身另用 Artifact.sha256 和不可变镜像引用核验。
 本版约定 `Artifact.configuration_digest == configuration.configuration_id`，使用公共 Schema 允许的
 不可变标识形式。下游不把 `configuration_digest` 与 Finding 的 `configuration_id` 当作不同配置。
 所有输入 Artifact.source_commit、输出 Artifact.source_commit 和 Finding.source_commit
@@ -136,8 +136,7 @@ JSON 使用 RFC 6901 JSON Pointer（例如 `/edges/0`），日志使用 `L10-L30
 不存在某条边的证据定位到被比较的完整 edges 数组，不能指向不存在的数组项。
 
 检测到 Finding（即使 severity=ERROR）仍可为 SUCCEEDED 且 error=null。
-MDFixer 只能选择 SUCCEEDED 报告中 category=MISSING 的 Finding，并再次确认 commit、配置、
-目标声明位置和来源；不得将 REDUNDANT 或 FAILED 的部分结果发送修复。
+BuildChecker 的 Finding 用作 EChecker 历史基线，不直接发送 MDFixer。当前自动修复入口只接受 EChecker 的 introduced + MISSING，且须核验当前 commit、配置、位置和证据。
 EChecker 接收本次实际图、完整报告及配置作为同一 baseline，baseline commit 必须等于本次源码 commit。
 
 ## 6. 无效输入与执行失败
@@ -164,15 +163,14 @@ command 和 log_artifact_id（若有日志）。确定性输入/构建错误 ret
 ## 7. 验证与配对交接
 
 运行仓库入口 `python3 scripts/validate.py` 检查所有 JSON 及 Schema 引用。
-该基础入口尚不检查实例是否满足 Schema，也不执行真实 build；生产方还需用 Draft 2020-12
-验证成功/失败 Job 及其内嵌 Artifact/Finding，并核对本节语义。
+入口使用 Draft 2020-12 校验服务请求、成功/失败 Job 及内嵌 Artifact/Finding/Error，按本地 $id registry 解析引用，并执行来源、基数和 evidence 语义检查；不执行真实 build 或下载虚构 URI。安装和检查入口见 docs/validation/contract-checks.md。
 
-刘洋的消费方 PR 负责持久化负例及扩展 `scripts/validate.py`。孙鲲华反向 Review 要求：
+消费方负例和统一校验已保存在仓库；应继续满足以下条件：
 
 1. 正常成功样例（含 MISSING、REDUNDANT）通过，且 error=null；执行失败样例满足公共 Schema。
 2. finding-commit-mismatch.json 仅修改 Finding 的 commit 后被明确拒绝。
 3. finding-configuration-mismatch.json 仅修改 Finding 的配置后被明确拒绝。
-4. MDFixer 只选择 MISSING，拒绝 REDUNDANT 和失败 Job；不得靠把正常 Finding 当 error 让测试通过。
+4. BuildChecker 结果先交给 EChecker，只有 EChecker 的 introduced + MISSING 可以进入 MDFixer；正常 Finding 不写入 job.error。
 5. 检查输入/输出 Artifact、报告内容和图内容的来源一致性及位置证据；基础 JSON 解析成功不能代替上述验证。
 
 生产方 PR 使用 `Related to #3`，消费方最终 PR 使用 `Closes #3`。双方 Review 与 CI 通过后再合并。
