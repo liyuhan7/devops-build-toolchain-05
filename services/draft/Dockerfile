@@ -5,7 +5,7 @@
 #   3. 工具和 Python 包的实际版本在构建时写入 /opt/toolchain.lock
 #   4. 以普通用户 app 运行；访问 docker.sock 所需的用户组在运行时由 group_add 加入
 ARG BASE_IMAGE=m.daocloud.io/docker.io/library/python@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74
-ARG DOCKER_CLI_IMAGE=m.daocloud.io/docker.io/library/docker@sha256:9190b0613792e658a7783cf14b2d5ace5941bb68ede7276922ea36ee457d76ad
+ARG DOCKER_CLI_IMAGE=dockerproxy.net/library/docker@sha256:9190b0613792e658a7783cf14b2d5ace5941bb68ede7276922ea36ee457d76ad
 
 FROM ${DOCKER_CLI_IMAGE} AS docker-cli
 
@@ -20,7 +20,11 @@ ENV LC_ALL=C.UTF-8 \
 COPY --from=docker-cli /usr/local/bin/docker /usr/local/bin/docker
 COPY --from=docker-cli /usr/local/libexec/docker/cli-plugins/docker-buildx /usr/local/libexec/docker/cli-plugins/docker-buildx
 
-RUN apt-get update \
+RUN sed -i \
+      -e 's|deb.debian.org/debian-security|mirrors.tuna.tsinghua.edu.cn/debian-security|g' \
+      -e 's|deb.debian.org/debian|mirrors.tuna.tsinghua.edu.cn/debian|g' \
+      /etc/apt/sources.list.d/debian.sources \
+ && apt-get update \
  && apt-get install -y --no-install-recommends gcc make libc6-dev git \
  && rm -rf /var/lib/apt/lists/* \
  && dpkg-query -W -f='${Package}=${Version}\n' gcc make libc6-dev git > /opt/toolchain.lock \
