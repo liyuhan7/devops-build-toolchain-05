@@ -12,7 +12,7 @@
 4. 校验每个 Artifact 的 URI、SHA-256、`source_commit`、`configuration_digest` 和生产 `job_id`。
 5. 校验每个 Finding 的 `source_commit` 等于请求的仓库 commit，`configuration_id` 等于请求的不可变配置标识。
 6. 将同一 `trace_id`、commit、配置、实际图和报告交给 EChecker 作为 baseline。
-7. 只筛选 `category=MISSING` 且来自成功 Job 的 Finding 交给 MDFixer；`REDUNDANT` 不自动生成修复请求。
+7. 全量 Finding 只作为 EChecker 基线；MDFixer 只消费 EChecker 当前报告的 introduced + MISSING，不接收 BuildChecker 直接修复请求。
 
 正常检测发现不是系统错误。成功报告可以同时包含 `MISSING` 和 `REDUNDANT`，但必须保持
 `job.status=SUCCEEDED`、`job.error=null`。只有构建、清理、追踪、解析、产物完整性等执行问题才进入 `job.error`。
@@ -24,17 +24,17 @@
 | `finding-commit-mismatch.json` | Finding 的 `source_commit` 与请求 commit 不同 | 拒绝，不能交给 EChecker 或 MDFixer |
 | `finding-configuration-mismatch.json` | Finding 的 `configuration_id` 与请求配置不同 | 拒绝，不能交给 EChecker 或 MDFixer |
 
-两个文件保留完整的最小请求和 Finding，`expected_rejection=true` 表示它们是反例而不是合法输出。
+两个文件保留完整合法请求，只修改生产方 Finding 的一个来源字段，并写明 expected_error_code；实际消费检查必须返回对应拒绝码，恢复变异字段后与生产方正例一致。
 它们证明消费者不能只检查 JSON 可解析性，必须核对来源和配置一致性。
 
 ## 3. MDFixer 门禁
 
 MDFixer 的输入必须满足全部条件：
 
-- BuildChecker Job 成功完成，且 `error` 为 `null`；
+- EChecker Job 成功完成，且 `error` 为 `null`，Finding 位于增量报告的 introduced 集合；
 - Finding 的 commit、配置、目标和位置证据都通过校验；
 - Finding 的 `category` 等于 `MISSING`；
-- Finding 来自本次报告的 `findings`，不是手工拼接或另一份 Artifact；
+- Finding 来自 EChecker 当前报告的 `findings`，不是手工拼接或全量基线的旧 Finding；
 - 目标声明位置和证据仍可从同一版本的报告中解析。
 
 `REDUNDANT` 只表示当前配置和本次完整构建中未观察到声明依赖，不能自动删除依赖，也不能转换成修复输入。

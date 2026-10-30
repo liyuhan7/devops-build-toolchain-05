@@ -10,6 +10,7 @@ SOURCE="$ROOT/fixtures/e3/fzy"
 OPERATOR=""
 REVISION=""
 OUTPUT=""
+COMMAND_TIMEOUT=600
 
 usage() {
   cat <<'TXT'
@@ -19,12 +20,13 @@ usage() {
   --source    默认为 fixtures/e3/fzy
   --output    默认为 evidence/e3/draft/<run-id>
   --revision  可选，已提交版本的 40 位小写 Git SHA；尚未提交时留空
+  --command-timeout  每条命令的超时秒数，默认 600
 TXT
 }
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --operator|--source|--output|--revision)
+    --operator|--source|--output|--revision|--command-timeout)
       if [ $# -lt 2 ] || [[ "$2" == --* ]]; then
         printf '参数 %s 缺少取值\n' "$1" >&2
         exit 2
@@ -34,6 +36,7 @@ while [ $# -gt 0 ]; do
         --source) SOURCE="$2" ;;
         --output) OUTPUT="$2" ;;
         --revision) REVISION="$2" ;;
+        --command-timeout) COMMAND_TIMEOUT="$2" ;;
       esac
       shift 2
       ;;
@@ -41,6 +44,15 @@ while [ $# -gt 0 ]; do
     *) printf '未知参数：%s\n' "$1" >&2; usage; exit 2 ;;
   esac
 done
+
+if ! [[ "$COMMAND_TIMEOUT" =~ ^[1-9][0-9]*$ ]]; then
+  printf 'command-timeout 必须为正整数\n' >&2
+  exit 2
+fi
+if ! command -v timeout > /dev/null 2>&1; then
+  printf '缺少 GNU timeout，请安装 coreutils\n' >&2
+  exit 2
+fi
 
 if [ -z "$OPERATOR" ]; then
   printf '缺少 --operator\n' >&2
@@ -108,7 +120,9 @@ add_command() { # 标签 工作目录 开始 结束 退出码 标准输入文件
   local entry
   entry="    {\"label\": \"$(json_escape "$label")\", \"argv\": [$args], \"cwd\": \"$(json_escape "$cwd")\","
   entry="$entry \"stdin\": $stdin_json, \"started_at\": \"$started\", \"finished_at\": \"$finished\","
-  entry="$entry \"exit_code\": $rc, \"stdout\": \"$label.stdout.log\", \"stderr\": \"$label.stderr.log\"}"
+  local timed_out=false
+  [ "$rc" -eq 124 ] && timed_out=true
+  entry="$entry \"exit_code\": $rc, \"timeout_seconds\": $COMMAND_TIMEOUT, \"timed_out\": $timed_out, \"stdout\": \"$label.stdout.log\", \"stderr\": \"$label.stderr.log\"}"
   if [ -z "$COMMANDS" ]; then COMMANDS="$entry"; else COMMANDS="$COMMANDS,
 $entry"; fi
   write_commands
@@ -131,12 +145,17 @@ execute() { # 标签 工作目录 标准输入文件（可为空） 命令...
   (
     cd "$cwd" || exit 127
     if [ -n "$stdin" ]; then
-      exec "$@" < "$stdin"
+      exec timeout --signal=TERM --kill-after=2s "${COMMAND_TIMEOUT}s" "$@" < "$stdin"
     else
-      exec "$@" < /dev/null
+      exec timeout --signal=TERM --kill-after=2s "${COMMAND_TIMEOUT}s" "$@" < /dev/null
     fi
   ) > "$OUT/$label.stdout.log" 2> "$OUT/$label.stderr.log"
   rc=$?
+  if [ "$rc" -eq 124 ] || [ "$rc" -eq 137 ]; then
+    rc=124
+    printf '命令超时（%s 秒）：%s\n' "$COMMAND_TIMEOUT" "$label" >> "$OUT/$label.stderr.log"
+    [ -z "$FAILURE" ] && FAILURE="命令超时：$label"
+  fi
   finished=$(now)
   add_command "$label" "$cwd" "$started" "$finished" "$rc" "$stdin" "$@"
   return $rc
@@ -176,6 +195,7 @@ write_run() { # 状态
   "oracle_path": "fixtures/e3/draft/cases.json",
   "environment_reference": $env_json,
   "status": "$status",
+  "command_timeout_seconds": $COMMAND_TIMEOUT,
   "failure": $failure_json,
   "checks": [
 $CHECKS

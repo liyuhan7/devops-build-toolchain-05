@@ -51,14 +51,14 @@ python -m unittest discover -s tests -v
 git diff --check
 ```
 
-MDFixer 校验直接集成在 `scripts/validate.py`，沿用现有 test 分支的标准库方式。
+MDFixer 校验集成在 `scripts/validate.py`，公共结构由锁定的 Schema 校验器检查，修复门禁继续使用消费方语义检查。
 `tests/test_validate_mdfixer.py` 使用独立变异覆盖失败上游、伪造 introduced、来源错配、
 缺产物、缺终态时间、每个 gate 失败、Patch/工作区错配及剩余问题未清零。
 CI 同时运行契约校验和回归测试。
 
 ## 验证边界
 
-这是 E2 的离线契约语义验证，不是完整 JSON Schema 验证器，也不实现修复服务。
+这是 E2 的离线契约验证，使用标准 Draft 2020-12 校验器验证服务请求和公共模型，同时执行消费方语义检查；不实现修复服务。
 不会执行样例命令、创建 Commit、下载 Artifact 或运行真实构建与 EChecker。
 URI、SHA 和 workspace digest 均为生产方虚构示例；这里只验证它们之间的关联，
 不声称重新计算或验证真实文件内容的摘要，也不验证真实 Patch 的可应用性和安全性。

@@ -7,7 +7,6 @@ import json
 import os
 import platform
 import shutil
-import subprocess
 import sys
 import time
 import uuid
@@ -15,6 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from run_c0 import source_digest
+from bounded_command import run_bounded
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -47,7 +47,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--operator", required=True)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--command-timeout", type=int, default=600, help="每条命令的超时秒数，默认 600")
     args = parser.parse_args()
+    if args.command_timeout <= 0:
+        parser.error("command-timeout 必须为正整数")
 
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:8]
     output = (args.output or ROOT / "evidence/e3/mdfixer" / run_id).resolve()
@@ -69,18 +72,6 @@ def main():
     output.mkdir(parents=True)
     work.parent.mkdir(parents=True, exist_ok=True)
     shutil.copytree(UPSTREAM, work)
-    subprocess.run(["git", "init", "-q"], cwd=work, check=True)
-    c0_result = subprocess.run(
-        ["git", "apply", "--ignore-whitespace", str(C0_PATCH)],
-        cwd=work,
-        capture_output=True,
-        text=True,
-    )
-    if c0_result.returncode:
-        parser.error("无法从上游源码重建 C0：" + c0_result.stderr.strip())
-    shutil.rmtree(work / ".git")
-    if source_digest(work) != projects["fzy"]["c0_source_tree_sha256"]:
-        parser.error("重建的 C0 源码摘要与固定项目清单不一致")
     commands = []
     checks = []
     run = {
@@ -97,8 +88,10 @@ def main():
         "fault_patch_sha256": digest(fault),
         "reference_patch_sha256": digest(reference),
         "status": "RUNNING",
+        "command_timeout_seconds": args.command_timeout,
         "checks": checks,
     }
+    candidate_baseline = None
 
     def save():
         (output / "run.json").write_text(json.dumps(run, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -106,13 +99,15 @@ def main():
 
     def command(label, *argv, stdin=None, cwd=work):
         started = now()
-        result = subprocess.run(argv, cwd=cwd, input=stdin, capture_output=True, text=True, check=False)
+        result = run_bounded(argv, cwd=cwd, stdin=stdin, timeout=args.command_timeout)
         (output / f"{label}.stdout.log").write_text(result.stdout, encoding="utf-8")
         (output / f"{label}.stderr.log").write_text(result.stderr, encoding="utf-8")
         commands.append({
             "label": label, "argv": list(argv), "cwd": str(cwd), "stdin": stdin,
             "started_at": started, "finished_at": now(), "exit_code": result.returncode,
             "stdout": f"{label}.stdout.log", "stderr": f"{label}.stderr.log",
+            "timeout_seconds": args.command_timeout,
+            "timed_out": result.returncode == 124,
         })
         save()
         return result
@@ -124,6 +119,10 @@ def main():
             raise RuntimeError(label)
 
     try:
+        check("初始化运行副本", command("workspace-init", "git", "init", "-q").returncode == 0)
+        check("重建 C0", command("c0-apply", "git", "apply", "--ignore-whitespace", str(C0_PATCH)).returncode == 0)
+        shutil.rmtree(work / ".git")
+        check("重建 C0 摘要一致", source_digest(work) == projects["fzy"]["c0_source_tree_sha256"])
         for name, argv in (
             ("os", ["uname", "-a"]), ("gcc", ["gcc", "--version"]),
             ("make", ["make", "--version"]), ("git", ["git", "--version"]),
@@ -150,8 +149,17 @@ def main():
         stale = command("before-stale-version", "./fzy", "--version")
         check("修复前漏重建并保留 one", before_incremental.returncode == 0 and "src/options.o" not in before_incremental.stdout and stale.returncode == 0 and "MDFIXER_MARKER=one" in stale.stdout)
 
+        # 候选只允许修改 Makefile；拒绝后恢复到验证候选之前的源码状态。
+        candidate_baseline = {path: (work / path).read_bytes() for path in
+                              [p.relative_to(UPSTREAM) for p in UPSTREAM.rglob("*") if p.is_file()]
+                              + [Path("src/e3_mdfixer_marker.h")]}
+        run["candidate_base_workspace_digest"] = workspace_digest(work)
+        candidate_files = command("reference-files", "git", "apply", "--numstat", str(reference), cwd=ROOT)
+        check("候选仅修改 Makefile", candidate_files.returncode == 0 and
+              {line.split("\t")[-1] for line in candidate_files.stdout.splitlines()} == {"Makefile"})
         check("参考 Patch 可应用", command("reference-check", "git", "apply", "--check", "--verbose", patch_directory, "--ignore-whitespace", str(reference), cwd=ROOT).returncode == 0)
         check("参考 Patch 应用", command("reference-apply", "git", "apply", "--verbose", patch_directory, "--ignore-whitespace", str(reference), cwd=ROOT).returncode == 0)
+        check("候选保留源文件", all((work / path).read_bytes() == data for path, data in candidate_baseline.items() if path != Path("Makefile")))
         run["repair_candidate_workspace_digest"] = workspace_digest(work)
         rule = (work / "Makefile").read_text(encoding="utf-8")
         check("人工依赖复核", "src/options.o: src/options.c src/options.h config.h src/e3_mdfixer_marker.h" in rule)
@@ -177,6 +185,20 @@ def main():
     except (OSError, RuntimeError) as exc:
         run["status"] = "FAILED"
         run["failure"] = str(exc)
+        if candidate_baseline is not None:
+            run["recovery"] = {"status": "RUNNING"}
+            try:
+                for path, data in candidate_baseline.items():
+                    (work / path).write_bytes(data)
+                check("拒绝候选后源码恢复", workspace_digest(work) == run["candidate_base_workspace_digest"])
+                check("恢复后清理产物", command("recovery-clean", "make", "veryclean").returncode == 0)
+                check("恢复后构建", command("recovery-build", "make", "CC=gcc").returncode == 0)
+                check("恢复后测试", command("recovery-check", "make", "CC=gcc", "check").returncode == 0)
+                recovered = command("recovery-functional", "./fzy", "-e", "apple", stdin="apple\nbanana\n")
+                check("恢复后功能输出", recovered.returncode == 0 and recovered.stdout == "apple\n")
+                run["recovery"] = {"status": "PASSED", "workspace_digest": workspace_digest(work)}
+            except (OSError, RuntimeError) as recovery_error:
+                run["recovery"] = {"status": "FAILED", "failure": str(recovery_error)}
     finally:
         run["finished_at"] = now()
         save()

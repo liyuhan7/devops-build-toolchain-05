@@ -169,9 +169,11 @@ def main():
 
         execute("c2-configure", ["make", "CC=gcc", "config.h"], c1_to_c2)
         actual_graph = execute("c2-actual-dependencies", ["gcc", "-MM", "src/options.c"], c1_to_c2)
+        require(":" in actual_graph, "编译器依赖输出包含目标分隔符")
         actual = {os.path.normpath(path) for path in actual_graph.replace("\\\n", " ").split(":", 1)[1].split()}
         declared_graph = execute("c2-declared-dependencies", ["make", "CC=gcc", "-pn", "src/options.o"], c1_to_c2)
-        target_line = next(line for line in declared_graph.splitlines() if line.startswith("src/options.o:"))
+        target_line = next((line for line in declared_graph.splitlines() if line.startswith("src/options.o:")), None)
+        require(target_line is not None, "Make 输出包含选定目标声明")
         declared = {os.path.normpath(path) for path in target_line.split(":", 1)[1].split()}
         expected_actual = {os.path.normpath(path) for path in expected["scope"]["actual_project_inputs"]}
         expected_declared = {os.path.normpath(path) for path in expected["scope"]["declared_inputs"]}

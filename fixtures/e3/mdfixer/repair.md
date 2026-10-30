@@ -20,4 +20,4 @@
 
 ## 范围外
 
-Macro、Hybrid、Implicit 声明风格，以及无效候选拒绝与恢复，属课件附录扩展；当前固定输入只定义 Target 风格。真实 MDFixer 和 EChecker 的输出由工具实现阶段验证。
+Macro、Hybrid、Implicit 声明风格仍在当前固定输入范围外。Target 无效候选拒绝与恢复已由[基线回归测试](../../../docs/validation/baseline-regression.md)覆盖：不能应用、构建失败、测试失败、缺失边未修复及命令超时均不能通过；恢复源码后重新验证，恢复失败单独记录。真实 MDFixer 和 EChecker 的输出由工具实现阶段验证。

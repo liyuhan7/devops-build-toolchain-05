@@ -22,6 +22,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install locked contract dependencies
+        run: python -m pip install --require-hashes -r requirements-contracts.lock
+
       - name: Validate JSON contracts
         run: python scripts/validate.py
 

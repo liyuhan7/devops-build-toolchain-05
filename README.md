@@ -65,7 +65,7 @@ MDFixer        对已验证的 MISSING Finding 生成修复并重新检查
 
 ## 环境要求
 
-- 契约校验、回归测试与基线材料检查：Python 3.12（CI 固定版本），仅使用标准库；
+- 契约校验与回归测试：Python 3.12（CI 固定版本），先执行 `python -m pip install --require-hashes -r requirements-contracts.lock` 安装锁定的 Schema 校验依赖；基线材料检查仍使用标准库；
 - 行为复跑：Linux 或 WSL，需要 gcc、GNU Make 与 Git；也可使用固定基础镜像的 Docker 容器。
 
 ## 本地校验

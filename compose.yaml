@@ -1,0 +1,31 @@
+# 通过 make GROUP=A 或 GROUP=B 选择服务；镜像和项目按学号区分。
+services:
+  buildchecker:
+    profiles: [a]
+    build:
+      context: .
+      dockerfile: services/buildchecker/Dockerfile
+    image: e4-buildchecker:${STUDENT_ID:-local}
+    network_mode: none
+    cpus: 2
+    mem_limit: 1g
+    pids_limit: 256
+    cap_add: [SYS_PTRACE]
+    security_opt: [no-new-privileges:true]
+
+  draft:
+    profiles: [b]
+    build:
+      context: .
+      dockerfile: services/draft/Dockerfile
+    image: e4-draft:${STUDENT_ID:-local}
+    # DRAFT 通过宿主机引擎构建课程项目，容器资源限制不约束这些构建。
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    group_add:
+      - "${DOCKER_GID:-0}"
+    env_file: .env
+    cpus: 2
+    mem_limit: 1g
+    pids_limit: 256
+    security_opt: [no-new-privileges:true]

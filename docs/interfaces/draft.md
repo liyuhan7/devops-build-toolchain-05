@@ -29,7 +29,7 @@ DRAFT 根据固定的代码版本和构建配置生成可供 BuildChecker 使用
 | `docker` | 提供 Dockerfile、构建上下文和目标镜像仓库。 |
 | `build` / `validation` | 分别提供可执行命令和超时限制。 |
 | `iteration_limit` | 正整数，限制 DRAFT 的构建/验证尝试次数。 |
-| `configuration` | 稳定的 `configuration_id` 与不可变 `configuration_digest`。 |
+| `configuration` | 不可变工具链/构建配置 ID；本版 `configuration_digest` 与 `configuration_id` 使用相同 ID。源码和服务镜像摘要不计入配置身份。 |
 
 DRAFT 不得擅自切换到请求 Commit 之外的代码。
 
@@ -51,7 +51,7 @@ DRAFT 不得擅自切换到请求 Commit 之外的代码。
 3. `configuration_digest` 和环境清单一致；
 4. Job 成功，且环境清单说明构建、验证均成功。
 
-任一条件不满足都必须拒绝交接。
+任一条件不满足都必须拒绝交接。四类成功产物各一份，kind 和 ID 不得重复。配置 ID 必须对应相同的编译器、运行库和构建配置，不能借重新打包镜像掩盖工具链变化。
 
 `DRAFT_ENVIRONMENT_MANIFEST` 的内容至少应为以下形状；它与 Job 分开保存，因此不会破坏公共 Job 的字段约束：
 

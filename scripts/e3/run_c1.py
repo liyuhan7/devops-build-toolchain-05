@@ -119,14 +119,16 @@ def main():
             c1,
         )
         shutil.rmtree(c1 / ".git")
+        versions = json.loads((ROOT / "fixtures/e3/echecker/commits.json").read_text(encoding="utf-8"))["versions"]
         require(
-            source_digest(c1) == source_digest(ROOT / "fixtures/e3/echecker/project"),
-            "C0 加 C1 Patch 与签入的 C1 项目一致",
+            source_digest(c1) == versions["C1"]["source_tree_sha256"],
+            "C0 加 C1 Patch 与固定 C1 源码摘要一致",
         )
 
         expected = json.loads((ROOT / "fixtures/e3/echecker/c1-expected.json").read_text(encoding="utf-8"))
         execute("c1-configure", ["make", "CC=gcc", "config.h"], c1)
         actual_graph = execute("c1-actual-dependencies", ["gcc", "-MM", "src/options.c"], c1)
+        require(":" in actual_graph, "编译器依赖输出包含目标分隔符")
         actual = {
             os.path.normpath(path)
             for path in actual_graph.replace("\\\n", " ").split(":", 1)[1].split()
@@ -135,7 +137,8 @@ def main():
         require(actual == expected_actual, "C1 编译器实际依赖与人工图一致", sorted(actual))
 
         declared_graph = execute("c1-declared-dependencies", ["make", "CC=gcc", "-pn", "src/options.o"], c1)
-        target_line = next(line for line in declared_graph.splitlines() if line.startswith("src/options.o:"))
+        target_line = next((line for line in declared_graph.splitlines() if line.startswith("src/options.o:")), None)
+        require(target_line is not None, "Make 输出包含选定目标声明")
         declared = {os.path.normpath(path) for path in target_line.split(":", 1)[1].split()}
         expected_declared = {os.path.normpath(path) for path in expected["scope"]["declared_inputs"]}
         require(declared == expected_declared, "C1 Make 声明与人工图一致", sorted(declared))

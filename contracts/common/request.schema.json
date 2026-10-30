@@ -1,0 +1,517 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liyuhan7/devops-build-toolchain-05/contracts/common/request.schema.json",
+  "title": "ServiceRequests",
+  "description": "各服务的创建请求；Job 响应另用公共模型校验。",
+  "type": "object",
+  "$defs": {
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "commit"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://[^/@]+(?:/.*)?$"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configuration_id",
+        "working_directory",
+        "build_system",
+        "targets",
+        "environment",
+        "clean_command",
+        "build_command",
+        "timeout_seconds"
+      ],
+      "properties": {
+        "configuration_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "working_directory": {
+          "type": "string",
+          "minLength": 1
+        },
+        "build_system": {
+          "const": "make"
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "environment": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "clean_command": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "build_command": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "DRAFT": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "trace_id",
+        "repository_url",
+        "source_commit",
+        "working_directory",
+        "docker",
+        "build",
+        "validation",
+        "iteration_limit",
+        "configuration"
+      ],
+      "properties": {
+        "contract_version": {
+          "const": "1.0.0"
+        },
+        "trace_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "repository_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://[^/@]+(?:/.*)?$"
+        },
+        "source_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "working_directory": {
+          "type": "string",
+          "minLength": 1
+        },
+        "docker": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dockerfile_path",
+            "context_path",
+            "image_repository"
+          ],
+          "properties": {
+            "dockerfile_path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "context_path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "image_repository": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "build": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "command",
+            "timeout_seconds"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeout_seconds": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "command",
+            "timeout_seconds"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "timeout_seconds": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "iteration_limit": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "configuration_id",
+            "configuration_digest"
+          ],
+          "properties": {
+            "configuration_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "configuration_digest": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "BUILD_CHECKER": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "trace_id",
+        "job_type",
+        "repository",
+        "configuration",
+        "input_artifacts"
+      ],
+      "properties": {
+        "contract_version": {
+          "const": "1.0.0"
+        },
+        "trace_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "job_type": {
+          "const": "BUILD_CHECKER"
+        },
+        "repository": {
+          "$ref": "#/$defs/repository"
+        },
+        "configuration": {
+          "$ref": "#/$defs/configuration"
+        },
+        "input_artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "artifact.schema.json"
+          }
+        }
+      }
+    },
+    "E_CHECKER": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "trace_id",
+        "job_type",
+        "repository",
+        "configuration",
+        "baseline",
+        "changed_paths",
+        "input_artifacts"
+      ],
+      "properties": {
+        "contract_version": {
+          "const": "1.0.0"
+        },
+        "trace_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "job_type": {
+          "const": "E_CHECKER"
+        },
+        "repository": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "url",
+            "commit",
+            "base_commit"
+          ],
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://[^/@]+(?:/.*)?$"
+            },
+            "commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "base_commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            }
+          }
+        },
+        "configuration": {
+          "$ref": "#/$defs/configuration"
+        },
+        "baseline": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "job_id",
+            "trace_id",
+            "source_commit",
+            "configuration_id"
+          ],
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "trace_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source_commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "configuration_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "changed_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "input_artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "artifact.schema.json"
+          }
+        }
+      }
+    },
+    "MD_FIXER": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "trace_id",
+        "job_type",
+        "repository",
+        "configuration",
+        "finding",
+        "finding_delta",
+        "declaration",
+        "repair_policy",
+        "validation",
+        "input_artifacts"
+      ],
+      "properties": {
+        "contract_version": {
+          "const": "1.0.0"
+        },
+        "trace_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "job_type": {
+          "const": "MD_FIXER"
+        },
+        "repository": {
+          "$ref": "#/$defs/repository"
+        },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "configuration_id",
+            "working_directory",
+            "build_system",
+            "targets"
+          ],
+          "properties": {
+            "configuration_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "working_directory": {
+              "type": "string",
+              "minLength": 1
+            },
+            "build_system": {
+              "const": "make"
+            },
+            "targets": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          }
+        },
+        "finding": {
+          "$ref": "finding.schema.json"
+        },
+        "finding_delta": {
+          "enum": [
+            "introduced",
+            "resolved",
+            "unchanged"
+          ]
+        },
+        "declaration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "format",
+            "target"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "format": {
+              "const": "make"
+            },
+            "target": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "repair_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "strategy",
+            "allowed_paths",
+            "maximum_changed_files",
+            "allow_source_changes"
+          ],
+          "properties": {
+            "strategy": {
+              "const": "ADD_MISSING_DEPENDENCY"
+            },
+            "allowed_paths": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "maximum_changed_files": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "allow_source_changes": {
+              "const": false
+            }
+          }
+        },
+        "validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "build_command",
+            "test_command",
+            "recheck_command",
+            "timeout_seconds"
+          ],
+          "properties": {
+            "build_command": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1
+            },
+            "test_command": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1
+            },
+            "recheck_command": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1
+            },
+            "timeout_seconds": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "input_artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "artifact.schema.json"
+          }
+        }
+      }
+    }
+  }
+}
