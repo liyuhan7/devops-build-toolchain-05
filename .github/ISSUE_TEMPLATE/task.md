@@ -1,14 +1,14 @@
 ---
-name: E2 Task
-about: E2 接口设计与交接任务
-title: "[E2] "
-labels: "stage:E2"
+name: 任务
+about: 通用的开发任务模板，适用于任何阶段
+title: "[任务] "
+labels: ""
 assignees: ""
 ---
 
 ## 目标
 
-一句话说明要完成的接口或交接。
+一句话说明要完成的任务、接口或交接。
 
 ## 交付产物
 

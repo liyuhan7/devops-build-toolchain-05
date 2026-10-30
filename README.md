@@ -1,6 +1,6 @@
 # devops-build-toolchain-05
 
-2026 DevOps 课程教学实验 05 组项目仓库。仓库定义构建工具链的公共数据契约与四段接口，并提供基于固定 fzy 版本的可复现测试基线，供工具实现与后续集成阶段使用。
+2026 DevOps 课程教学实验 05 组项目仓库。仓库定义构建工具链的公共数据契约与四段接口，提供固定 fzy 版本的可复现测试基线，并接入 A 组 BuildChecker 教学检测器及 E5—E7 本地实验入口。
 
 ## 工具链
 
@@ -33,6 +33,8 @@ MDFixer        对已验证的 MISSING Finding 生成修复并重新检查
 | [`evidence/`](evidence/) | 端到端串联记录与实际运行证据 |
 | [`scripts/`](scripts/) | 契约校验、基线复跑与证据整理脚本 |
 | [`tests/`](tests/) | 契约语义与基线推导的回归测试 |
+| [`services/buildchecker/`](services/buildchecker/) | A 组教学依赖检测器、环境冒烟和服务测试 |
+| [`scripts/buildchecker/`](scripts/buildchecker/) | A 组原始采集、检测、修复复检和完整场景验证 |
 | `work/` | 脚本生成的运行副本，不纳入版本控制 |
 
 ## 契约与数据模型
@@ -84,12 +86,19 @@ python3 scripts/e3/run_c0.py --operator <姓名>
 
 其余样本的复跑入口见 [基线项目说明](fixtures/e3/README.md) 与各工具目录的 README。
 
+## A 组 BuildChecker 实验
+
+操作命令、预期结果和交付要求见 [A 组论文复现实验](docs/guides/A组论文复现实验.md)，服务实现与支持范围见 [BuildChecker 说明](services/buildchecker/README.md)。运行副本和个人证据保存在 `work/buildchecker/`，报告使用 [A 组报告模板](docs/templates/buildchecker-report.md)。
+
 ## 持续集成
+
+各工作流验证范围如下。远程运行、分支保护和成员审核需另有实际记录。
 
 | 工作流 | 触发 | 内容 |
 |---|---|---|
 | [`contract-validation.yml`](.github/workflows/contract-validation.yml) | Pull Request、推送到 `main` | 契约校验与回归测试 |
 | [`e3-baseline.yml`](.github/workflows/e3-baseline.yml) | Pull Request、推送到 `main` | 基线材料检查，在固定镜像中运行 C0 行为验证并上传证据 |
+| [`buildchecker-lab.yml`](.github/workflows/buildchecker-lab.yml) | Pull Request、推送到 `main`、手动 | A 组镜像、服务测试、8 场景门禁、错误预期拦截及实验产物上传 |
 
 ## 协作约定
 
