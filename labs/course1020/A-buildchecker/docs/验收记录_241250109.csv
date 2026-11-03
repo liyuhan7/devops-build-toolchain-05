@@ -1,0 +1,10 @@
+项目,实际结果,服务器证据
+E5原始复现,退出0且程序输出1,/root/241250109/e5-e6-buildchecker/work/e5-01
+E5人工结论,"MISSING(main.o config.h); REDUNDANT(main.o unused.h)",/root/241250109/e5-e6-buildchecker/work/e5-01/evidence
+E6原始检测,SUCCEEDED且精确两条Finding,/root/241250109/e5-e6-buildchecker/work/e6-before
+E6修复复检,findings为空且退出0,/root/241250109/e5-e6-buildchecker/work/e6-after
+E6输入变化,仅Makefile,/root/241250109/e5-e6-buildchecker/work/e6-after/evidence/findings.json
+新增测试,匹配声明无Finding,services/buildchecker/tests/test_fullcheck.py
+修改后构建,16项服务测试通过,/root/241250109/e5-e6-buildchecker/work/build-02/unit-tests/stdout.log
+修改后复测,修复前2条修复后0条,/root/241250109/e5-e6-buildchecker/work/e6-before-verified
+PR分支构建,17项服务测试通过,/root/241250109/pr-lab-241250109/work/build-pr-01/unit-tests/stdout.log
