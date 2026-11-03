@@ -35,8 +35,9 @@ MDFixer        对已验证的 MISSING Finding 生成修复并重新检查
 | [`tests/`](tests/) | 契约语义与基线推导的回归测试 |
 | [`services/buildchecker/`](services/buildchecker/) | A 组教学依赖检测器、环境冒烟和服务测试 |
 | [`scripts/buildchecker/`](scripts/buildchecker/) | A 组原始采集、检测、修复复检和完整场景验证 |
-| [`services/draft/`](services/draft/) | B 组 DRAFT E4 环境与服务测试 |
-| [`scripts/draft/`](scripts/draft/) | B 组 E5 失败复现、提示/候选留档及 E6 构建验证 |
+| [`services/draft/`](services/draft/) | B 组 DRAFT E4 环境、E5/E6 两轮重放服务与测试 |
+| [`scripts/draft/`](scripts/draft/) | B 组 E5/E6 真实复现与验证、E7 五场景质量门禁 |
+| [`fixtures/ci-candidates/`](fixtures/ci-candidates/) | 与 E5/E6 实际验证记录关联的 E7 候选与溯源 |
 | `work/` | 脚本生成的运行副本，不纳入版本控制 |
 
 ## 契约与数据模型
@@ -92,6 +93,10 @@ python3 scripts/e3/run_c0.py --operator <姓名>
 
 操作命令、预期结果和交付要求见 [A 组论文复现实验](docs/guides/A组论文复现实验.md)，服务实现与支持范围见 [BuildChecker 说明](services/buildchecker/README.md)。运行副本和个人证据保存在 `work/buildchecker/`，报告使用 [A 组报告模板](docs/templates/buildchecker-report.md)。
 
+## B 组 DRAFT 实验
+
+E5 失败复现与候选溯源、E6 同镜像验证及 E7 五场景门禁见 [B 组 DRAFT 指南](docs/guides/B组DRAFT论文复现实验.md)。报告按组别保存在 `docs/reports/B05/`；课程样例重放和 CI 使用经 E6 记录的候选，不代表通用 DRAFT API 或论文规模评价。
+
 ## 持续集成
 
 各工作流验证范围如下。远程运行、分支保护和成员审核需另有实际记录。
@@ -101,6 +106,7 @@ python3 scripts/e3/run_c0.py --operator <姓名>
 | [`contract-validation.yml`](.github/workflows/contract-validation.yml) | Pull Request、推送到 `main` | 契约校验与回归测试 |
 | [`e3-baseline.yml`](.github/workflows/e3-baseline.yml) | Pull Request、推送到 `main` | 基线材料检查，在固定镜像中运行 C0 行为验证并上传证据 |
 | [`buildchecker-lab.yml`](.github/workflows/buildchecker-lab.yml) | Pull Request、推送到 `main`、手动 | A 组镜像、服务测试、8 场景门禁、错误预期拦截及实验产物上传 |
+| [`draft-lab.yml`](.github/workflows/draft-lab.yml) | Pull Request、推送到 `main`、手动 | B 组镜像、服务测试、E7 五场景门禁、错误预期拦截及实验产物上传 |
 
 ## 协作约定
 

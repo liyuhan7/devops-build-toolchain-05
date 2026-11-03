@@ -1,0 +1,19 @@
+{
+  "candidate_file": "context-driven.Dockerfile",
+  "build_dockerfile_sha256": "e117ce99a66b552b754118e4294a607a468259be178a17725c7c86d8d4bc189d",
+  "source_candidate": "E5 context-driven candidate",
+  "source_candidate_sha256": "e0f4635cceddf909b589f3662c42aa894d11cc41b5049a6ce2ba2b0b7993a978",
+  "source_evidence": "work/draft/e5/B05-20261103-024233Z/candidates/context-driven.Dockerfile",
+  "selection": "E5 selected context-driven candidate; verified in E6 using the exact Debian HTTPS mirror adaptation recorded below",
+  "provider": "OpenAI Codex",
+  "acquisition": "Manual response recorded by E5; no API call in CI",
+  "model_version": "GPT-5 (session did not expose a more specific release)",
+  "build_adaptation": {
+    "kind": "debian_sources_https_rewrite",
+    "from": "http://deb.debian.org",
+    "to": "https://mirrors.aliyun.com"
+  },
+  "e6_trace_id": "e6-b-2dee2351a20449b5b8e4dfb6f01dda1a",
+  "e6_image_id": "sha256:0e1544f46713703144cdef599b8eeba1b211ea00babbc74a485b452e9e74fbfe",
+  "scope": "Recorded teaching fixture from the real B05 E6 run; not a new model generation result"
+}

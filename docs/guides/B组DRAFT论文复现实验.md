@@ -96,4 +96,19 @@ cp -n docs/templates/draft-e5-report.md docs/reports/B05/e5.md
 
 报告目录按组别命名；运行人姓名和学号只写入报告及运行元数据，不用于目录名或镜像标签。
 
-E5 报告应写明固定输入、目标故障行号、两份提示和原始回复、候选哈希与选择依据，以及课程小样例相对论文原型的范围限制。E6 结果填写单独的 [E6 报告模板](../templates/draft-e6-report.md)，记录 E5 运行目录、Docker 两轮结果和同一镜像 ID 验证。E6 未执行时不得填写修复构建或程序验证通过。
+## 6. E7 五场景门禁
+
+E7 使用 E6 已验证且带来源记录的候选回放，不重新生成模型答案。默认候选位于 `fixtures/ci-candidates/`，启动前会比对候选 SHA-256 与 `provenance.json`。也可以传入自己的候选，但应在报告中补齐其来源记录。
+
+```sh
+python3 scripts/draft/lab.py e7 \
+  --replay \
+  --image draft-lab:B05 \
+  --out work/draft/e7/B05-本次运行 \
+  --build-timeout 600
+cat work/draft/e7/B05-本次运行/gate/gate-result.json
+```
+
+门禁运行服务单测，并分别验证正常候选、错误输出、无效 CMD、候选构建失败和运行超时。预期五场景 `passed=true`；超时场景还检查运行容器已清理。CI 使用同一门禁，并额外注入错误 oracle，确认门禁会返回失败。
+
+E5 报告应写明固定输入、目标故障行号、两份提示和原始回复、候选哈希与选择依据，以及课程小样例相对论文原型的范围限制。E6 结果填写单独的 [E6 报告模板](../templates/draft-e6-report.md)，记录 E5 运行目录、Docker 两轮结果和同一镜像 ID 验证。E7 场景与自主测试填写 [B 组 DRAFT 报告模板](../templates/draft-report.md)。未执行的阶段不得填写为通过。
