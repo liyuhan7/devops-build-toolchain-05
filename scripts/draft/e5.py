@@ -20,7 +20,7 @@ def sha256(path):
 
 
 def fresh_output(value=None):
-    run_id = f"run-{datetime.now().strftime('%Y%m%d-%H%M%S')}-{uuid.uuid4().hex[:8]}"
+    run_id = f"e5-b-{datetime.now().strftime('%Y%m%d-%H%M%S')}-{uuid.uuid4().hex[:8]}"
     output = (ROOT / value).resolve() if value else ROOT / "work/draft/e5" / run_id
     work = (ROOT / "work").resolve()
     if work not in output.parents:
@@ -29,6 +29,11 @@ def fresh_output(value=None):
         raise ValueError("请使用新的输出目录，保留此前证据")
     output.mkdir(parents=True, exist_ok=True)
     return output
+
+
+def image_tag(run_id=None):
+    run_id = run_id or uuid.uuid4().hex[:8]
+    return f"draft-e5-broken:e5-b-{run_id}"
 
 
 def validate_fixture(fixture):
@@ -116,7 +121,7 @@ def main(argv=None):
         json.dumps(inputs, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
 
-    tag = f"draft-e5-broken:{args.student_id}-{uuid.uuid4().hex[:8]}"
+    tag = image_tag()
     metadata = {
         "stage": "E5",
         "track": "B-DRAFT",

@@ -1,6 +1,7 @@
 """DRAFT E5 目标故障、提示和候选边界测试。"""
 import unittest
 
+from scripts.draft import e5
 from scripts.draft.prompts import classify_missing_make, render_prompts
 from scripts.draft.record_candidates import extract_candidate, validate_candidate
 
@@ -14,6 +15,11 @@ CMD [\"./hello\"]
 
 
 class E5Tests(unittest.TestCase):
+    def test_e5_image_tag_uses_stage_run_id_not_operator_id(self):
+        tag = e5.image_tag("a1b2c3d4")
+        self.assertEqual(tag, "draft-e5-broken:e5-b-a1b2c3d4")
+        self.assertNotIn("123456789", tag)
+
     def test_target_failure_requires_nonzero_and_make_not_found(self):
         result = classify_missing_make("/bin/sh: 1: make: not found\n", 1)
         self.assertTrue(result["passed"])

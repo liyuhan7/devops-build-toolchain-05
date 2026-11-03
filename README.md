@@ -1,6 +1,6 @@
 # devops-build-toolchain-05
 
-2026 DevOps 课程教学实验 05 组项目仓库。仓库定义构建工具链的公共数据契约与四段接口，提供固定 fzy 版本的可复现测试基线，并接入 A 组 BuildChecker 教学检测器及 E5—E7 本地实验入口。
+2026 DevOps 课程教学实验 05 组项目仓库。仓库定义构建工具链的公共数据契约与四段接口，提供固定 fzy 版本的可复现测试基线，并接入 A 组 BuildChecker 与 B 组 DRAFT 教学实验入口。
 
 ## 工具链
 
@@ -35,6 +35,8 @@ MDFixer        对已验证的 MISSING Finding 生成修复并重新检查
 | [`tests/`](tests/) | 契约语义与基线推导的回归测试 |
 | [`services/buildchecker/`](services/buildchecker/) | A 组教学依赖检测器、环境冒烟和服务测试 |
 | [`scripts/buildchecker/`](scripts/buildchecker/) | A 组原始采集、检测、修复复检和完整场景验证 |
+| [`services/draft/`](services/draft/) | B 组 DRAFT E4 环境与服务测试 |
+| [`scripts/draft/`](scripts/draft/) | B 组 E5 失败复现、提示/候选留档及 E6 构建验证 |
 | `work/` | 脚本生成的运行副本，不纳入版本控制 |
 
 ## 契约与数据模型

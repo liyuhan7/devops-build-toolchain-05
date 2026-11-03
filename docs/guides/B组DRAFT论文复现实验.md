@@ -1,13 +1,13 @@
-# B 组 DRAFT E5 论文复现实验
+# B 组 DRAFT E5-E6 论文复现实验
 
-本指南只覆盖 E5：复现固定 Dockerfile 的真实构建失败，根据日志生成两份提示，保存两份模型原始回复与候选，并记录选择依据。候选构建、镜像运行和 `hello E3` 校验属于 E6，不在本阶段宣称通过。
+本指南覆盖 E5 失败复现、提示与候选留档，以及 E6 候选真实构建与程序验证。E5/E6 使用课程固定的小样例和人工取得的模型回复，不调用模型 API，也不代表已经实现 E2 公共契约中的通用 DRAFT 服务。
 
 ## 1. 前置与边界
 
 - 在 Ubuntu 课程服务器、本人的 `feat/draft-lab` 克隆中执行。
 - 宿主机需能使用 Docker；基础镜像必须固定完整摘要。
 - 每次运行使用新的 `work/draft/e5/` 目录，失败记录不覆盖。
-- `work/` 保持 Git 忽略，正式报告进入 `docs/reports/<学号>/`。
+- `work/` 保持 Git 忽略，正式报告按组别放入 `docs/reports/B05/`，不以成员学号命名。
 - 关联 Issue、PR 和人工审核按实际情况填写。
 
 先确认分支、工作区和工具：
@@ -60,7 +60,26 @@ python3 scripts/draft/record_candidates.py \
 
 该命令只提取并校验候选结构，生成 `candidates/provenance.json`；不会构建候选，状态保持 `PENDING_E6_REAL_BUILD_AND_PROGRAM_VERIFICATION`。
 
-## 4. 测试与报告
+## 4. E6 构建与程序验证
+
+E6 从 E5 `candidates/provenance.json` 读取已选候选，核对候选 SHA-256 和 E5 项目输入哈希。不要修改 E5 原始运行副本；每次使用新的 E6 输出目录。
+
+```sh
+python3 scripts/draft/e6.py \
+  --run-dir work/draft/e5/本次E5目录 \
+  --out work/draft/e6/本次E6目录 \
+  --build-timeout 600 \
+  --verify-timeout 60
+python3 scripts/draft/verify_e6.py --run-dir work/draft/e6/本次E6目录
+```
+
+如果已确认服务器容器访问 `deb.debian.org` 不可用、但实验包所用固定基础镜像可正常使用，可显式指定受支持的 Debian HTTPS 镜像，例如增加 `--debian-mirror mirrors.aliyun.com`。该选项只在 E6 构建副本的 `apt-get update` 前加入源地址替换命令；E5 候选原文件和 SHA-256 保持不变。运行证据会同时保存 `iter-02/source-candidate.Dockerfile`、实际构建的 `iter-02/Dockerfile`、适配原因及两份 SHA-256，核验器检查派生内容只能是该项适配。该选项不能用于替代候选修复，也不能把构建失败改报成功。
+
+第一轮使用 E5 保存的固定 `Dockerfile.broken` 重建基线，必须再次得到 `MISSING_MAKE`；网络、镜像拉取和超时错误均不能代替目标故障。第二轮使用来源记录中选定的完整候选 Dockerfile。候选构建成功后，脚本通过 `docker image inspect` 获取镜像 ID，并以该 ID 在断网容器中运行默认程序；必须退出 0 且标准输出精确为 `hello E3`。
+
+E6 证据包括两份实际 Dockerfile、分轮构建命令/日志/退出码、镜像 ID、运行命令/输出/退出码、E5 来源记录快照、输入哈希、`result.json` 及核验结果。任何一轮不符合预期时状态为 `FAILED`，保留日志后另用新目录重跑。不要覆盖失败证据。
+
+## 5. 测试与报告
 
 本地脚本回归：
 
@@ -71,8 +90,10 @@ python3 -m unittest discover -s tests/draft_lab -v
 创建本人报告时保留已有文件：
 
 ```sh
-mkdir -p docs/reports/你的学号
-cp -n docs/templates/draft-e5-report.md docs/reports/你的学号/e5.md
+mkdir -p docs/reports/B05
+cp -n docs/templates/draft-e5-report.md docs/reports/B05/e5.md
 ```
 
-报告应写明固定输入、目标故障行号、两份提示和原始回复、候选哈希与选择依据，以及课程小样例相对论文原型的范围限制。E6 未执行时不得填写修复构建或程序验证通过。
+报告目录按组别命名；运行人姓名和学号只写入报告及运行元数据，不用于目录名或镜像标签。
+
+E5 报告应写明固定输入、目标故障行号、两份提示和原始回复、候选哈希与选择依据，以及课程小样例相对论文原型的范围限制。E6 结果填写单独的 [E6 报告模板](../templates/draft-e6-report.md)，记录 E5 运行目录、Docker 两轮结果和同一镜像 ID 验证。E6 未执行时不得填写修复构建或程序验证通过。
