@@ -1,0 +1,35 @@
+[
+  {
+    "target": "app",
+    "dependency": "main.o",
+    "kind": "DECLARED",
+    "evidence": {
+      "source": "make_database",
+      "artifact": "make-db.txt",
+      "line": 601,
+      "declaration": "app: main.o"
+    }
+  },
+  {
+    "target": "main.o",
+    "dependency": "main.c",
+    "kind": "DECLARED",
+    "evidence": {
+      "source": "make_database",
+      "artifact": "make-db.txt",
+      "line": 1053,
+      "declaration": "main.o: main.c unused.h"
+    }
+  },
+  {
+    "target": "main.o",
+    "dependency": "unused.h",
+    "kind": "DECLARED",
+    "evidence": {
+      "source": "make_database",
+      "artifact": "make-db.txt",
+      "line": 1053,
+      "declaration": "main.o: main.c unused.h"
+    }
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "before_findings": 2,
+  "after_findings": 0,
+  "changed_inputs": [
+    "Makefile"
+  ],
+  "before_trace_id": "e6-66ab6ca5f5364bdebae1e6819fc3b062",
+  "after_trace_id": "e6-2e057fed480f4c1dad317723ad9faf52",
+  "scope": "Saved report assertions; raw traces are not independently revalidated"
+}

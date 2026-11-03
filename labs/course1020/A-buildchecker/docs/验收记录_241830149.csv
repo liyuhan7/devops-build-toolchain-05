@@ -1,0 +1,7 @@
+﻿项目,状态,证据
+E5,PASS,evidence/241830149/e5-01
+E6,PASS,evidence/241830149/e6-before;evidence/241830149/e6-after
+E7,PASS,evidence/241830149/e7-01/gate
+扩展测试,PASS,evidence/241830149/build-extension/unit-tests
+安全补扫,PASS,evidence/241830149/source-audit
+GitHub CI / 拒绝合并 / 恢复 / 合并,PENDING,已获提交及 PR 授权；CI 待运行，保护需管理员配置

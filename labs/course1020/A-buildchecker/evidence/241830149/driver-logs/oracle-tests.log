@@ -1,0 +1,11 @@
+test_empty_broken_report_does_not_pass (test_e7_a_gate.OracleTests.test_empty_broken_report_does_not_pass) ... ok
+test_exact_errors_rejected_by_cli (test_e7_a_gate.OracleTests.test_exact_errors_rejected_by_cli) ... ok
+test_explicit_unsupported (test_e7_a_gate.OracleTests.test_explicit_unsupported) ... ok
+test_failed_build_not_counted_as_fixed (test_e7_a_gate.OracleTests.test_failed_build_not_counted_as_fixed) ... ok
+test_fixed_passes (test_e7_a_gate.OracleTests.test_fixed_passes) ... ok
+test_timeout_requires_failure_exit (test_e7_a_gate.OracleTests.test_timeout_requires_failure_exit) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.000s
+
+OK
