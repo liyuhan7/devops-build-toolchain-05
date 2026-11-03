@@ -4,4 +4,5 @@ E6,PASS,evidence/241830149/e6-before;evidence/241830149/e6-after
 E7,PASS,evidence/241830149/e7-01/gate
 扩展测试,PASS,evidence/241830149/build-extension/unit-tests
 安全补扫,PASS,evidence/241830149/source-audit
-GitHub CI / 拒绝合并 / 恢复 / 合并,PENDING,已获提交及 PR 授权；CI 待运行，保护需管理员配置
+GitHub CI,PASS,PR 36;run 41649215602;run 41649333183
+拒绝合并 / 恢复 / 合并,PENDING,保护需管理员配置；审核及合并由成员执行
