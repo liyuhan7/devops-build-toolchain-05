@@ -1,0 +1,119 @@
+[
+  {
+    "stage": "e5-01",
+    "command": [
+      "/usr/bin/python3",
+      "scripts/lab_cloud.py",
+      "e5",
+      "--image",
+      "course1020-buildchecker:241830149",
+      "--out",
+      "work/e5-01"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true
+  },
+  {
+    "stage": "e6-before",
+    "command": [
+      "/usr/bin/python3",
+      "scripts/lab_cloud.py",
+      "e6",
+      "--image",
+      "course1020-buildchecker:241830149",
+      "--out",
+      "work/e6-before"
+    ],
+    "exit_code": 1,
+    "expected_exit_code": 1,
+    "passed": true
+  },
+  {
+    "stage": "e6-after",
+    "command": [
+      "/usr/bin/python3",
+      "scripts/lab_cloud.py",
+      "e6",
+      "--image",
+      "course1020-buildchecker:241830149",
+      "--out",
+      "work/e6-after",
+      "--fixed"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true
+  },
+  {
+    "stage": "e6-verify",
+    "command": [
+      "/usr/bin/python3",
+      "scripts/verify_e6_evidence.py",
+      "--before",
+      "work/e6-before/evidence/findings.json",
+      "--after",
+      "work/e6-after/evidence/findings.json"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true
+  },
+  {
+    "stage": "oracle-tests",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/e7",
+      "-v"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true
+  },
+  {
+    "stage": "e7-gate",
+    "command": [
+      "/usr/bin/python3",
+      "scripts/lab_cloud.py",
+      "gate",
+      "--image",
+      "course1020-buildchecker:241830149",
+      "--out",
+      "work/e7-01"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true
+  },
+  {
+    "stage": "e7-reject",
+    "command": [
+      "/usr/bin/python3",
+      "scripts/run_e7_a_gate.py",
+      "--image",
+      "course1020-buildchecker:241830149",
+      "--out",
+      "work/e7-rejection",
+      "--inject-bad-oracle"
+    ],
+    "exit_code": 1,
+    "expected_exit_code": 1,
+    "passed": true
+  },
+  {
+    "stage": "secret-scan",
+    "command": [
+      "/usr/bin/python3",
+      "scripts/secret_scan.py",
+      ".",
+      "--history"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true
+  }
+]

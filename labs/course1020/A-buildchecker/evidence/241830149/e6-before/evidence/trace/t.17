@@ -1,0 +1,104 @@
+execve("/usr/libexec/gcc/x86_64-linux-gnu/14/collect2", ["/usr/libexec/gcc/x86_64-linux-gnu/14/collect2", "-plugin", "/usr/libexec/gcc/x86_64-linux-gnu/14/liblto_plugin.so", "-plugin-opt=/usr/libexec/gcc/x86_64-linux-gnu/14/lto-wrapper", "-plugin-opt=-fresolution=/tmp/cc861IUw.res", "-plugin-opt=-pass-through=-lgcc", "-plugin-opt=-pass-through=-lgcc_s", "-plugin-opt=-pass-through=-lc", "-plugin-opt=-pass-through=-lgcc", "-plugin-opt=-pass-through=-lgcc_s", "--build-id", "--eh-frame-hdr", "-m", "elf_x86_64", "--hash-style=gnu", "--as-needed", "-dynamic-linker", "/lib64/ld-linux-x86-64.so.2", "-pie", "-o", "app", "/usr/lib/gcc/x86_64-linux-gnu/14/../../../x86_64-linux-gnu/Scrt1.o", "/usr/lib/gcc/x86_64-linux-gnu/14/../../../x86_64-linux-gnu/crti.o", "/usr/lib/gcc/x86_64-linux-gnu/14/crtbeginS.o", "-L/usr/lib/gcc/x86_64-linux-gnu/14", "-L/usr/lib/gcc/x86_64-linux-gnu/14/../../../x86_64-linux-gnu", "-L/usr/lib/gcc/x86_64-linux-gnu/14/../../../../lib", "-L/lib/x86_64-linux-gnu", "-L/lib/../lib", "-L/usr/lib/x86_64-linux-gnu", "-L/usr/lib/../lib", "-L/usr/lib/gcc/x86_64-linux-gnu/14/../../..", "main.o", "-lgcc", "--push-state", "--as-needed", "-lgcc_s", "--pop-state", "-lc", "-lgcc", "--push-state", "--as-needed", "-lgcc_s", "--pop-state", "/usr/lib/gcc/x86_64-linux-gnu/14/crtendS.o", "/usr/lib/gcc/x86_64-linux-gnu/14/../../../x86_64-linux-gnu/crtn.o"], 0x1bc2ba10 /* 20 vars */) = 0
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+openat(AT_FDCWD, "/usr/lib/locale/locale-archive", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/usr/share/locale/locale.alias", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_CTYPE", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_CTYPE", O_RDONLY|O_CLOEXEC) = 3
+openat(AT_FDCWD, "/usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache", O_RDONLY|O_CLOEXEC) = 3
+openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_MESSAGES", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_MESSAGES", O_RDONLY|O_CLOEXEC) = 3
+openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_MESSAGES/SYS_LC_MESSAGES", O_RDONLY|O_CLOEXEC) = 3
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/real-ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/real-ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/real-ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/14/real-ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/real-ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/collect-ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/collect-ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/collect-ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/14/collect-ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/collect-ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/14/ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/bin/ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/sbin/ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/bin/ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/sbin/ld", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/bin/ld", {st_mode=S_IFREG|0755, st_size=1861256, ...}, 0) = 0
+access("/usr/bin/ld", X_OK)             = 0
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/gnm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/gnm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/gnm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/14/gnm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/gnm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/bin/gnm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/sbin/gnm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/bin/gnm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/sbin/gnm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/bin/gnm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/sbin/gnm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/bin/gnm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/nm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/nm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/nm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/14/nm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/nm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/bin/nm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/sbin/nm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/bin/nm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/sbin/nm", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/bin/nm", {st_mode=S_IFREG|0755, st_size=45160, ...}, 0) = 0
+access("/usr/bin/nm", X_OK)             = 0
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/gstrip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/gstrip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/gstrip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/14/gstrip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/gstrip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/bin/gstrip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/sbin/gstrip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/bin/gstrip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/sbin/gstrip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/bin/gstrip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/sbin/gstrip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/bin/gstrip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/strip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/strip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/strip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/14/strip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/strip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/bin/strip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/sbin/strip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/bin/strip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/sbin/strip", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/bin/strip", {st_mode=S_IFREG|0755, st_size=159600, ...}, 0) = 0
+access("/usr/bin/strip", X_OK)          = 0
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/cc", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/14/cc", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/libexec/gcc/x86_64-linux-gnu/cc", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/14/cc", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/lib/gcc/x86_64-linux-gnu/cc", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/bin/cc", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/sbin/cc", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/local/bin/cc", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/sbin/cc", 0x7ffc4e28b220, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD, "/usr/bin/cc", {st_mode=S_IFREG|0755, st_size=1162264, ...}, 0) = 0
+access("/usr/bin/cc", X_OK)             = 0
+access("/tmp", R_OK|W_OK|X_OK)          = 0
+newfstatat(AT_FDCWD, "/tmp", {st_mode=S_IFDIR|S_ISVTX|0777, st_size=4096, ...}, 0) = 0
+openat(AT_FDCWD, "/tmp/ccTd3RJc.cdtor.c", O_RDWR|O_CREAT|O_EXCL, 0600) = 3
+openat(AT_FDCWD, "/tmp/cchcj452.cdtor.o", O_RDWR|O_CREAT|O_EXCL, 0600) = 3
+clone3({flags=CLONE_VM|CLONE_VFORK|CLONE_CLEAR_SIGHAND, exit_signal=SIGCHLD, stack=0x7437fa8eb000, stack_size=0x9000}, 88) = -1 ENOSYS (Function not implemented)
+clone(child_stack=0x7437fa8f3ff0, flags=CLONE_VM|CLONE_VFORK|SIGCHLD) = 18
+wait4(18, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 18
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=18, si_uid=0, si_status=0, si_utime=1 /* 0.01 s */, si_stime=1 /* 0.01 s */} ---
+newfstatat(AT_FDCWD, "/tmp/ccTd3RJc.cdtor.c", {st_mode=S_IFREG|0600, st_size=0, ...}, AT_SYMLINK_NOFOLLOW) = 0
+unlink("/tmp/ccTd3RJc.cdtor.c")         = 0
+newfstatat(AT_FDCWD, "/tmp/cchcj452.cdtor.o", {st_mode=S_IFREG|0600, st_size=0, ...}, AT_SYMLINK_NOFOLLOW) = 0
+unlink("/tmp/cchcj452.cdtor.o")         = 0
+exit_group(0)                           = ?
++++ exited with 0 +++

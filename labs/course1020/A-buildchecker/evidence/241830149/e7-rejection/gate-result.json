@@ -1,0 +1,62 @@
+{
+  "passed": false,
+  "image": "course1020-buildchecker:241830149",
+  "cases": [
+    {
+      "case": "unit-tests",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "case": "original-1",
+      "passed": true,
+      "exit_code": 1,
+      "detector_status": "SUCCEEDED",
+      "trace_id": "e6-a3156d3cf38546c889c0ea12e438c502"
+    },
+    {
+      "case": "original-2",
+      "passed": true,
+      "exit_code": 1,
+      "detector_status": "SUCCEEDED",
+      "trace_id": "e6-fe11a21a8cbc45d58a66b2fa9a849ff4"
+    },
+    {
+      "case": "original-3",
+      "passed": true,
+      "exit_code": 1,
+      "detector_status": "SUCCEEDED",
+      "trace_id": "e6-876f1627080f4cf68a7258b570d718ae"
+    },
+    {
+      "case": "fixed",
+      "passed": false,
+      "exit_code": 0,
+      "error": "Intentional failing oracle: repaired fixture was required to have a finding"
+    },
+    {
+      "case": "build-failed",
+      "passed": true,
+      "exit_code": 1,
+      "detector_status": "FAILED",
+      "trace_id": "e6-b3187370ff154c8baa769afd627e1040"
+    },
+    {
+      "case": "unsupported",
+      "passed": true,
+      "exit_code": 1,
+      "detector_status": "FAILED",
+      "trace_id": "e6-f6db182d3b424784a38a64b95946822c"
+    },
+    {
+      "case": "timeout",
+      "passed": true,
+      "exit_code": 1,
+      "detector_status": "TIMED_OUT",
+      "trace_id": "e6-3b252905207c442a8c94af68269192b2"
+    }
+  ],
+  "oracle_scope": "Small explicit teaching fixtures; not full paper benchmark",
+  "repeated_original_cases": 3,
+  "intentional_failure": true
+}
