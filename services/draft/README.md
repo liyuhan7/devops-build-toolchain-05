@@ -5,3 +5,7 @@
 CLI 骨架提供 `version`、`smoke`；4 个骨架单测与原项目回归分别运行。教学冒烟确认缺少 make 的预期构建失败；项目复跑覆盖原始 fzy 功能、MDFixer 参考修复及 DRAFT 失败/参考容器，结果保存在个人 `work/e4/B/<运行编号>/`。
 
 docker.sock 可控制宿主机 Docker，只构建课程指定项目。容器 CPU、内存限制不约束宿主机执行的构建。这里没有实现完整 DRAFT 或 MDFixer 方法。
+
+## E5 论文复现
+
+E5 使用仓库根目录的 `scripts/draft/e5.py` 在课程 Linux 服务器上复现固定 Dockerfile 缺少 `make` 的真实构建失败，并由实际日志生成错误驱动与上下文驱动提示。模型回复与候选通过 `scripts/draft/record_candidates.py` 保存和校验；该阶段不构建候选，验证状态保持 `PENDING_E6`。操作、证据和报告要求见 [B 组 DRAFT E5 指南](../../docs/guides/B组DRAFT论文复现实验.md)。
