@@ -1,2 +1,2 @@
-"""BuildChecker 服务骨架（E4）。E5/E6 在这里实现论文方法。"""
-__version__ = "0.1.0"
+"""面向单 Make 构建的教学依赖检测器。"""
+__version__ = "0.2.0-teaching"

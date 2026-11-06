@@ -1,0 +1,51 @@
+name: BuildChecker Lab
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  buildchecker-lab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build A group image and run service tests
+        run: python3 scripts/buildchecker/lab.py build --image buildchecker-lab:ci --out work/buildchecker/ci-build
+
+      - name: Test lab runner and gate decisions
+        run: docker run --rm --network none buildchecker-lab:ci python3 -m unittest discover -s tests/buildchecker_lab -v
+
+      - name: Run repeated detection and failure scenarios
+        run: python3 scripts/buildchecker/lab.py gate --image buildchecker-lab:ci --out work/buildchecker/ci-gate
+
+      - name: Prove a wrong oracle fails the gate
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/buildchecker/gate.py --image buildchecker-lab:ci --out work/buildchecker/ci-bad-oracle --inject-bad-oracle
+          code=$?
+          set -e
+          test "$code" -eq 1
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path("work/buildchecker/ci-bad-oracle/gate-result.json").read_text())
+          assert result["passed"] is False
+          assert [case["case"] for case in result["cases"] if not case["passed"]] == ["fixed"]
+          PY
+
+      - name: Upload experiment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buildchecker-lab-evidence
+          path: work/buildchecker/ci-*/
+          retention-days: 14

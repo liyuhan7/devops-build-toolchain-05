@@ -3,8 +3,8 @@
 #   2. 系统工具和 Python 包的实际版本在构建时写入 /opt/toolchain.lock
 #   3. Python 依赖按锁文件和哈希安装
 #   4. 以普通用户 app 运行；.env、work/、.git 不会进入镜像（见 .dockerignore）
-# 此镜像站提供与 Docker Hub 相同的 OCI 索引摘要；供无法直连 Docker Hub 的 ECS 使用。
-ARG BASE_IMAGE=m.daocloud.io/docker.io/library/python@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74
+# 默认使用官方镜像；服务器可通过构建参数选择可访问的同 digest 镜像源。
+ARG BASE_IMAGE=python@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74
 FROM ${BASE_IMAGE}
 
 ENV LC_ALL=C.UTF-8 \
@@ -13,8 +13,7 @@ ENV LC_ALL=C.UTF-8 \
     PYTHONUNBUFFERED=1
 
 RUN sed -i \
-      -e 's|deb.debian.org/debian-security|mirrors.tuna.tsinghua.edu.cn/debian-security|g' \
-      -e 's|deb.debian.org/debian|mirrors.tuna.tsinghua.edu.cn/debian|g' \
+      -e 's|http://deb.debian.org|https://deb.debian.org|g' \
       /etc/apt/sources.list.d/debian.sources \
  && apt-get update \
  && apt-get install -y --no-install-recommends gcc make libc6-dev strace git \
