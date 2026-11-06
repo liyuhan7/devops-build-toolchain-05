@@ -1,0 +1,15 @@
+轨道,检查项,预期,实际结果,证据路径或链接,PASS或FAIL
+B,基线构建与服务测试,镜像构建成功且测试通过,基线构建成功且25项服务测试通过,work/draft/e7/B05-E7-20261106-aeb962a/build-baseline/,PASS
+B,最终构建与服务测试,新增测试后镜像构建成功且测试通过,构建成功且26项服务测试通过,work/draft/e7/B05-E7-20261106-aeb962a/build-final/,PASS
+B,E7五场景门禁,passed=true且六项检查全部通过,unit-tests及五场景全部PASS,work/draft/e7/B05-E7-20261106-aeb962a/gate-final/gate/gate-result.json,PASS
+B,正常场景,基线构建按预期以MISSING_MAKE失败且候选构建成功后输出hello E3,SUCCEEDED且退出0并使用第二轮镜像ID验证,work/draft/e7/B05-E7-20261106-aeb962a/gate-final/gate/success/evidence/result.json,PASS
+B,错误输出,识别预期输出不匹配,FAILED且退出1,work/draft/e7/B05-E7-20261106-aeb962a/gate-final/gate/wrong-output/evidence/result.json,PASS
+B,无效候选,构建前拒绝不兼容CMD,FAILED且没有构建轮次,work/draft/e7/B05-E7-20261106-aeb962a/gate-final/gate/invalid-candidate/stdout.log,PASS
+B,候选构建失败,识别候选构建失败并停止运行验证,FAILED且退出1,work/draft/e7/B05-E7-20261106-aeb962a/gate-final/gate/build-failed/evidence/result.json,PASS
+B,运行超时及清理,识别运行超时并移除容器,TIMED_OUT且清理复查为No such container,work/draft/e7/B05-E7-20261106-aeb962a/gate-final/gate/runtime-timeout/evidence/cleanup-check/stderr.log,PASS
+共同,新增测试,测试第二个FROM必须在构建前拒绝,单测通过且服务测试总数增加1,services/draft/tests/test_autobuild.py,PASS
+共同,仓库级回归,tests/draft_lab全部通过,24项通过,work/draft/e7/B05-E7-20261106-aeb962a/repository-tests/,PASS
+B,错误oracle注入,错误预期必须导致门禁失败,实际成功输出被错误oracle判失败且门禁exit 1,work/draft/e7/B05-E7-20261106-aeb962a/bad-oracle/gate/gate-result.json,PASS
+共同,正常CI及artifact,远端工作流通过并下载artifact,未执行：服务器没有gh CLI且本轮不提交或推送,待执行,待完成
+共同,分支保护及拒绝合并,保护启用且普通合并被拒绝,未执行：没有本轮CI与PR,待执行,待完成
+共同,修复恢复及最终合并,同一PR修复后通过并合并,未执行：没有本轮CI与PR,待执行,待完成

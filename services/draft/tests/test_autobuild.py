@@ -25,6 +25,10 @@ class CandidateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             prepare_candidate(BASE, CANDIDATE.replace("RUN make\n", "RUN true\n"))
 
+    def test_second_from_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "single-stage"):
+            prepare_candidate(BASE, CANDIDATE + "FROM scratch\n")
+
     def test_replaced_command_rejected(self):
         with self.assertRaises(ValueError):
             prepare_candidate(BASE, CANDIDATE.replace('CMD ["./hello"]', 'CMD ["echo", "hello E3"]'))
