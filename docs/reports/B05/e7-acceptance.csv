@@ -10,6 +10,6 @@ B,运行超时及清理,识别运行超时并移除容器,TIMED_OUT且清理复�
 共同,新增测试,测试第二个FROM必须在构建前拒绝,单测通过且服务测试总数增加1,services/draft/tests/test_autobuild.py,PASS
 共同,仓库级回归,tests/draft_lab全部通过,24项通过,work/draft/e7/B05-E7-20261106-aeb962a/repository-tests/,PASS
 B,错误oracle注入,错误预期必须导致门禁失败,实际成功输出被错误oracle判失败且门禁exit 1,work/draft/e7/B05-E7-20261106-aeb962a/bad-oracle/gate/gate-result.json,PASS
-共同,正常CI及artifact,远端工作流通过并下载artifact,未执行：服务器没有gh CLI且本轮不提交或推送,待执行,待完成
-共同,分支保护及拒绝合并,保护启用且普通合并被拒绝,未执行：没有本轮CI与PR,待执行,待完成
-共同,修复恢复及最终合并,同一PR修复后通过并合并,未执行：没有本轮CI与PR,待执行,待完成
+共同,正常CI及artifact,PR检查全部通过且DRAFT artifact已下载,Contract Validation/E3/BuildChecker/DRAFT工作流均成功；artifact已下载并校验,PR #38；DRAFT run 42152813697；D:\Codes\DevOps\E7-PR38-draft-lab-evidence.zip,PASS
+共同,分支保护及拒绝合并,保护启用且普通合并被拒绝,未执行：未核对本仓库保护设置且没有尝试合并,PR #38,待完成
+共同,修复恢复及最终合并,故意失败后同一PR修复恢复并最终合并,未执行：PR #38当前正常检查通过且保持OPEN,PR #38,待完成
