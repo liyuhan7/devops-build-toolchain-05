@@ -16,13 +16,26 @@
 | `buildchecker/cli.py` | 版本、环境冒烟、全量检测及退出码 |
 | `buildchecker/contract_output.py` | DRAFT 交接前置检查、公共结果转换、实际产物及证据校验 |
 | `tests/test_fullcheck.py` | 课程参考实现的检测边界测试 |
-| `tests/test_fullcheck_boundaries.py` | 本仓库补充的声明完整基线测试 |
+| `tests/test_fullcheck_boundaries.py` | 声明完整、失败打开、元数据句柄及重复读取的完整报告回归 |
 | `tests/test_fullcheck_cli.py` | 检测状态、请求参数与退出码回归 |
 | `tests/test_collection_failures.py` | 共享超时预算和采集失败阶段回归 |
 | `tests/test_contract_output.py` | 公共输出、上游交接和产物内容校验 |
 | `../../scripts/buildchecker/` | 本仓库的实验编排、证据校验和完整场景验证 |
 
 检测算法、参考测试、修复证据校验和门禁判定来自课程包 `DevOps_E4_E7_GitHub/07_实验包/E5E7/A-buildchecker/`。本仓库适配 CLI、目录和镜像，补充共享超时预算、阶段错误及公共输出。个人报告应分别注明参考代码和本人贡献。
+
+### E6 成员测试与小组回归
+
+根据已核对的 A05 E6 成员交付记录，将测试意图适配为 `test_fullcheck_boundaries.py` 的四个参数场景。原交付目录已由组长清理，本文件保存适配后的用例，不作为成员原始文件的逐字副本。相同行为合并到已有基线，不重复复制旧版检测器或整份测试文件。
+
+| 参数场景 | E6 来源 | 当前回归判据 |
+|---|---|---|
+| `matching-declarations` | 孙鲲华 241250109：声明与实际一致时无发现；复用本仓库已有同类基线 | 目标正确、findings 为空、实际依赖边精确匹配 |
+| `failed-open` | 李宇瀚 241250029：失败打开不得形成依赖 | 不把 missing.h 计入实际图，完整报告无误报 |
+| `metadata-handles` | 管泽昊 241830149：O_DIRECTORY/O_PATH 句柄不形成读取依赖 | include 与 metadata.h 不进入实际图 |
+| `duplicate-reads` | 黄骢驰 241840198：重复读取去重且不误报 | 两条实际依赖边，findings 为空 |
+
+四个场景随服务镜像构建和 E7 门禁中的 `unit-tests` 统一执行。它们属于 E6 来源的小组回归；E7 的个人新增判定测试与来源记录按 [A 组实验指南的 E7 章节](../../docs/guides/A组论文复现实验.md#6-e7-组员本地验证与交付)执行。
 
 ## 范围与契约
 
