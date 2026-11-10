@@ -1,9 +1,9 @@
 轨道,检查项,预期,实际结果,证据路径或链接,PASS或FAIL
-A,E5原始跟踪,成功读取config.h且声明unused.h,程序输出1并得到MD/RD,/root/241250109/e5-e6-buildchecker/work/e5-01,PASS
-A,E6修复前后,两条Finding变为零条且仅Makefile变化,校验passed=true,/root/241250109/e5-e6-buildchecker/work/e6-before/,PASS
-A,E7原始三次,精确MD/RD一致,三次case均passed=true,/root/241250109/pr-lab-241250109/work/e7-student-01/gate/results.csv,PASS
-A,E7故障,FAILED和TIMED_OUT符合预期,八场景全部通过,/root/241250109/pr-lab-241250109/work/e7-student-01/gate/gate-result.json,PASS
-共同,新增测试,输入预期明确且通过,定向1项及服务18项通过,/root/241250109/pr-lab-241250109/work/build-student-01/unit-tests/stdout.log,PASS
+A,E5原始跟踪,成功读取config.h且声明unused.h,程序输出1并得到MD/RD,/root/241250109/a-branch-pr-37/work/buildchecker/241250109-a-pr-37/e5,PASS
+A,E6修复前后,两条Finding变为零条且仅Makefile变化,校验passed=true,/root/241250109/a-branch-pr-37/work/buildchecker/241250109-a-pr-37/e6-before,PASS
+A,E7原始三次,精确MD/RD一致,三次case均passed=true,/root/241250109/a-branch-pr-37/work/buildchecker/241250109-a-pr-37/gate/gate/results.csv,PASS
+A,E7故障,FAILED和TIMED_OUT符合预期,八场景全部通过,/root/241250109/a-branch-pr-37/work/buildchecker/241250109-a-pr-37/gate/gate/gate-result.json,PASS
+共同,新增测试,输入预期明确且通过,判定测试3项及定向1项通过、服务48项通过,tests/buildchecker_lab/test_gate_241250109.py；/root/241250109/a-branch-pr-37/work/buildchecker/241250109-a-pr-37/build/unit-tests/stdout.log,PASS
 共同,本地错误判据,门禁拒绝错误预期,fixed及整体passed=false,/root/241250109/pr-lab-241250109/work/e7-rejection-local/gate-result.json,PASS
 共同,原PR正常CI,检查通过且artifact已下载,运行42814286473成功,/root/241250109/pr-lab-241250109/work/ci-42814286473/,PASS
 共同,A分支CI,移植后检查通过,待本PR新提交检查,本PR Checks,待验证
