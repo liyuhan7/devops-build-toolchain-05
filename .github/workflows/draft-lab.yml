@@ -1,0 +1,69 @@
+name: DRAFT Lab
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  draft-lab:
+    name: e7-b-quality-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Scan tracked sources and Git history
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work/draft/ci-scan
+          git rev-parse HEAD > work/draft/ci-scan/commit.txt
+          python3 scripts/secret_scan.py . --history 2>&1 | tee work/draft/ci-scan/source-scan.log
+
+      - name: Build B group image and run service tests
+        run: python3 scripts/draft/lab.py build --image draft-lab:ci --out work/draft/ci-build --build-timeout 1200
+
+      - name: Check shared repository paths
+        run: docker run --rm --network none draft-lab:ci python3 -m unittest discover -s tests/draft_lab -v
+
+      - name: Scan built image
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/secret_scan.py . --image draft-lab:ci 2>&1 | tee work/draft/ci-scan/image-scan.log
+
+      - name: Run five real DRAFT scenarios
+        run: python3 scripts/draft/lab.py e7 --replay --image draft-lab:ci --out work/draft/ci-gate --build-timeout 600
+
+      - name: Prove a wrong oracle fails the gate
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/draft/gate.py --image draft-lab:ci --candidate fixtures/ci-candidates/context-driven.Dockerfile --out work/draft/ci-bad-oracle --case success --inject-bad-oracle --build-timeout 600
+          code=$?
+          set -e
+          test "$code" -eq 1
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path("work/draft/ci-bad-oracle/gate-result.json").read_text())
+          assert result["passed"] is False
+          assert [row["case"] for row in result["cases"] if not row["passed"]] == ["success"]
+          PY
+
+      - name: Upload experiment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: draft-lab-evidence
+          path: work/draft/ci-*/
+          retention-days: 14

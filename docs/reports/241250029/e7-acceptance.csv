@@ -1,0 +1,13 @@
+轨道,检查项,预期,实际结果,证据路径或链接,PASS或FAIL
+A,原始三次,精确MD与RD一致,三次均精确且集合一致,work/buildchecker/e7-241250029-personal-20261110-222432/local-gate/gate/gate-result.json,PASS
+A,修复,findings为空且仅Makefile变化,2条变0条且仅Makefile变化,work/buildchecker/e7-241250029-personal-20261110-222432/repair-verification.json,PASS
+A,故障,FAILED或UNSUPPORTED或TIMED_OUT符合场景,三个故障场景均符合预期,work/buildchecker/e7-241250029-personal-20261110-222432/local-gate/gate/results.csv,PASS
+B,正常,两轮构建与同镜像hello E3,不适用,不适用,不适用
+B,故障,输出不符及无效候选及构建失败及超时均识别,不适用,不适用,不适用
+B,清理,运行超时容器已移除,不适用,不适用,不适用
+共同,新增测试,输入预期明确且测试通过,3项均PASSED,work/buildchecker/e7-241250029-personal-20261110-222432/oracle-tests.log,PASS
+共同,正常CI,检查通过且artifact已下载,待开展,待开展,待开展
+共同,保护,检查名正确且strict与enforce_admins为true,待开展,待开展,待开展
+共同,拒绝合并,OPEN及BLOCKED且普通合并退出1,待开展,待开展,待开展
+共同,恢复,同一PR最新检查通过,待开展,待开展,待开展
+共同,合并,MERGED及mergeCommit及mergedAt记录齐全,待开展,待开展,待开展
