@@ -4,6 +4,7 @@
 #   3. Python 依赖按锁文件和哈希安装
 #   4. 以普通用户 app 运行；.env、work/、.git 不会进入镜像（见 .dockerignore）
 # 默认使用官方镜像；服务器可通过构建参数选择可访问的同 digest 镜像源。
+# APT 与 PyPI 使用阿里云 HTTPS 镜像；镜像不可用时在同一位置替换源地址后重建。
 ARG BASE_IMAGE=python@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74
 FROM ${BASE_IMAGE}
 
@@ -13,7 +14,7 @@ ENV LC_ALL=C.UTF-8 \
     PYTHONUNBUFFERED=1
 
 RUN sed -i \
-      -e 's|http://deb.debian.org|https://deb.debian.org|g' \
+      -e 's|http://deb.debian.org|https://mirrors.aliyun.com|g' \
       /etc/apt/sources.list.d/debian.sources \
  && apt-get update \
  && apt-get install -y --no-install-recommends gcc make libc6-dev strace git \
@@ -23,7 +24,9 @@ RUN sed -i \
  && echo "arch=$(dpkg --print-architecture)" >> /opt/toolchain.lock
 
 COPY requirements-dev.lock requirements-contracts.lock /tmp/
-RUN pip install --no-cache-dir --require-hashes -r /tmp/requirements-dev.lock \
+RUN pip install --no-cache-dir --require-hashes \
+      -i https://mirrors.aliyun.com/pypi/simple/ \
+      -r /tmp/requirements-dev.lock \
  && pip freeze | sed 's/^/pip:/' >> /opt/toolchain.lock
 
 # 原项目源码与验证入口在同一服务镜像中，运行副本由普通用户创建。
