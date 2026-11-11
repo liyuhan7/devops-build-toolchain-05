@@ -6,8 +6,8 @@ B,正常,两轮构建与同镜像hello E3,A组不适用,,N/A
 B,故障,输出不符及无效候选及构建失败及超时均识别,A组不适用,,N/A
 B,清理,运行超时容器已移除,A组不适用,,N/A
 共同,新增测试,输入预期明确且测试通过,trace_id缺失、空值、None均拒绝；个人1项及独立14项通过；变异检出12项,tests/buildchecker_lab/test_gate_241840198.py,PASS
-共同,正常CI,检查通过且artifact已下载,用户要求先不推送，未执行,,待开展
-共同,保护,检查名正确且strict与enforce_admins为true,本轮未修改，留待小组组织,,待开展
-共同,拒绝合并,OPEN及BLOCKED且普通合并退出1,未创建PR，未执行,,待开展
-共同,恢复,同一PR最新检查通过,未创建PR，未执行,,待开展
-共同,合并,MERGED及mergeCommit及mergedAt记录齐全,用户要求先不推送，未执行,,待开展
+共同,正常CI,检查通过且artifact已下载,PR #39 已合并；CI run 42827296009 success；小组共用 artifact 见 github/ci-normal/,github/ci-normal/,PASS
+共同,保护,检查名正确且strict与enforce_admins为true,小组统一完成（后续补充）：实际生效规则集 protect-main(23800862),github/protection/,PASS
+共同,拒绝合并,OPEN及BLOCKED且普通合并退出1,小组统一完成（后续补充）：PR #45 被 base branch policy 拒绝,github/merge-rejection/,PASS
+共同,恢复,同一PR最新检查通过,小组统一完成（后续补充）：PR #45 恢复 run 42961697891 success,github/ci-recovery/,PASS
+共同,合并,MERGED及mergeCommit及mergedAt记录齐全,PR #39 已合并 2026-11-10T13:56:05Z；小组 PR #45 已合并 dc9b7415f2d3a751f003c1bd99a55f3a8c3fdb4a,github/collaboration.md,PASS
