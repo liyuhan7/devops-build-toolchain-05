@@ -1,6 +1,6 @@
 # A 组论文复现、核心检测与验证
 
-E5、E6 在本组 Ubuntu 服务器上执行。每位 A 组成员使用自己的仓库克隆、镜像标签和运行目录，按本手册收集本人证据。E4 的目录与环境约定见 [E4 操作与交付说明](E4操作与交付说明.md)，实现范围和代码来源见 [BuildChecker 说明](../../services/buildchecker/README.md)。
+E5、E6、E7 本地验证在本组 Ubuntu 服务器上执行。每位 A 组成员使用自己的仓库克隆、镜像标签和运行目录，按本手册收集本人证据。E4 的目录与环境约定见 [E4 操作与交付说明](E4操作与交付说明.md)，实现范围和代码来源见 [BuildChecker 说明](../../services/buildchecker/README.md)。E7 的组员任务与交付见第 6 节，远程 CI 与 PR 门禁见第 7 节。
 
 ## 1. 操作者、位置与前置条件
 
@@ -410,35 +410,277 @@ python3 scripts/buildchecker/contract.py verify \
 
 本地输出使用同机 `file:` URI；跨机器交接需发布产物并更新 URI。入口提供本地契约适配，REST 和远程发布未实现，真实 B→A 联调需另有上游运行记录。
 
-## E7：重复和故障验证
+## 6. E7：组员本地验证与交付
 
-先运行不需要 Docker 的门禁判定与入口回归，再执行真实完整场景。宿主回归需安装根 README 中的锁定 Schema 依赖，也可在已构建镜像内执行相同的 unittest 命令：
+本节对应老师 `DevOps_E7_Student_Cloud` 的 A 组本地验证与新增测试任务，使用本仓库已有入口。组长先提供可获取的源码版本，成员在自己的服务器克隆中完成下列流程。代码获取、分支、提交和后续合并由成员按小组约定操作，继续使用本组仓库。
 
-```sh
-python3 -m unittest discover -s tests/buildchecker_lab -v
-python3 scripts/buildchecker/lab.py gate --out work/buildchecker/e7-01
-echo "E7_GATE_EXIT_CODE=$?"
-cat work/buildchecker/e7-01/gate/gate-result.json
-cat work/buildchecker/e7-01/gate/results.csv
+### 6.1 人员、版本与本次目录
+
+| 人员 | 本轮任务 | 完成后交给谁 |
+|---|---|---|
+| 组长 | 提供包含本节文件的代码版本，核对环境，先跑通一套本地结果，收齐成员材料 | 汇总小组索引，后续组织 CI 与 PR 实验 |
+| A 组每名成员 | 运行小组回归与八场景，核对原始证据，补一项个人判定测试，重建并复跑，填写报告和验收表 | 组长 |
+
+E6 来源的四类测试已集中适配到 `services/buildchecker/tests/test_fullcheck_boundaries.py`，来源与去重方式见 [服务说明](../../services/buildchecker/README.md#e6-成员测试与小组回归)。它们随服务测试执行；E7 个人新增测试另行记录。
+
+执行位置：SSH 登录后的本人仓库根目录。前置：Docker、Compose、Git、Make、Python3 可用；当前用户能访问 Docker；组长已提供可获取的完整源码 SHA。本地验证可直接使用镜像中的锁定依赖。
+
+```bash
+pwd
+git branch --show-current
+git rev-parse HEAD
+git status --short
+test -f scripts/buildchecker/lab.py
+test -f tests/buildchecker_lab/test_gate.py
+test -f docs/templates/buildchecker-e7-report.md
+test -f docs/templates/buildchecker-e7-acceptance.csv
+
+read -r -p '本人数字学号（6—16 位）: ' LAB_SID
+read -r -p '本人 Git 提交邮箱: ' LAB_EMAIL
+git config --local user.name "$LAB_SID"
+git config --local user.email "$LAB_EMAIL"
+
+LAB_IMAGE="buildchecker-lab:$LAB_SID"
+LAB_E7_RUN="work/buildchecker/e7-${LAB_SID}-$(date +%Y%m%d-%H%M%S)"
+mkdir -p "$LAB_E7_RUN"
+git rev-parse HEAD > "$LAB_E7_RUN/source-commit.txt"
+git status --porcelain=v1 > "$LAB_E7_RUN/worktree-status.txt"
+git remote get-url origin > "$LAB_E7_RUN/repository-url.txt"
+printf '镜像：%s\n证据：%s/%s\n' "$LAB_IMAGE" "$PWD" "$LAB_E7_RUN"
 ```
 
-| 场景 | 预期 |
+输入：本人身份、组长提供的代码版本。输出：本次证据根目录和版本记录。后续命令在同一 Bash 会话执行。若有未提交的个人测试，报告同时记录差异与工作区状态；实验源码版本、镜像来源和后续报告提交分别填写。
+
+### 6.2 环境检查、构建与服务测试
+
+首次构建需要下载基础镜像和依赖，组内首次构建按顺序执行。
+
+```bash
+if python3 scripts/buildchecker/lab.py doctor --out "$LAB_E7_RUN/doctor"; then
+  LAB_E7_DOCTOR_CODE=0
+else
+  LAB_E7_DOCTOR_CODE=$?
+fi
+printf 'DOCTOR_EXIT_CODE=%s\n' "$LAB_E7_DOCTOR_CODE"
+```
+
+预期退出 0，`doctor/env.json` 的 `problems=[]`。必需项失败时由组长或管理员处理后，换新目录重试。
+
+```bash
+if python3 scripts/buildchecker/lab.py build \
+  --image "$LAB_IMAGE" --out "$LAB_E7_RUN/build" --build-timeout 1200; then
+  LAB_E7_BUILD_CODE=0
+else
+  LAB_E7_BUILD_CODE=$?
+fi
+printf 'BUILD_EXIT_CODE=%s\n' "$LAB_E7_BUILD_CODE"
+```
+
+预期退出 0，当前服务测试全部通过。`build/image/stdout.log` 保存镜像 ID 与来源标签，`build/toolchain/stdout.log` 保存工具链，`build/unit-tests/` 保存测试命令、日志和退出码。服务测试数量以本次日志为准，课程包的 15 项不作为本仓库固定数量。
+
+构建失败查看 `build/build/stderr.log`；测试失败查看 `build/unit-tests/`。本节完成后再进入判定回归与门禁。
+
+### 6.3 运行独立判定回归
+
+使用刚构建的镜像运行，不要求宿主机另装 pytest 或 Schema 格式校验依赖。
+
+```bash
+if docker run --rm --network none "$LAB_IMAGE" \
+  python3 -m unittest discover -s tests/buildchecker_lab -v \
+  > "$LAB_E7_RUN/oracle-tests.log" 2>&1; then
+  LAB_E7_ORACLE_CODE=0
+else
+  LAB_E7_ORACLE_CODE=$?
+fi
+cat "$LAB_E7_RUN/oracle-tests.log"
+printf 'ORACLE_EXIT_CODE=%s\n' "$LAB_E7_ORACLE_CODE" \
+  | tee "$LAB_E7_RUN/oracle-exit-code.txt"
+```
+
+输入：镜像中的 `tests/buildchecker_lab/`。预期退出 0，日志结尾 `OK`。小组初始回归包含 6 项门禁判定及其他编排、公共入口测试；个人补测试后数量相应增加，按实际日志填写。
+
+### 6.4 运行完整八场景并核对结果
+
+```bash
+if python3 scripts/buildchecker/lab.py gate \
+  --image "$LAB_IMAGE" --out "$LAB_E7_RUN/local-gate"; then
+  LAB_E7_GATE_CODE=0
+else
+  LAB_E7_GATE_CODE=$?
+fi
+printf 'E7_GATE_EXIT_CODE=%s\n' "$LAB_E7_GATE_CODE" \
+  | tee "$LAB_E7_RUN/gate-exit-code.txt"
+cat "$LAB_E7_RUN/local-gate/gate/gate-result.json"
+cat "$LAB_E7_RUN/local-gate/gate/results.csv"
+```
+
+输入：`fixtures/md-rd/` 的独立副本和本人的服务镜像。预期整体退出 0、`passed=true`，共 8 行且每行 `passed=true`。
+
+| 场景 | 故障或输入 | 预期状态／工具退出码 | 需要解释的结果 |
+|---|---|---|---|
+| unit-tests | 当前服务全部测试 | 测试通过／0 | E6 来源回归也参与执行 |
+| original-1 | 原始 md-rd | SUCCEEDED／1 | 精确 MISSING(main.o, config.h)、REDUNDANT(main.o, unused.h) |
+| original-2 | 新的原始副本 | SUCCEEDED／1 | 错误集合与第一次一致 |
+| original-3 | 新的原始副本 | SUCCEEDED／1 | 错误集合与前两次一致 |
+| fixed | 补 config.h、去 unused.h | SUCCEEDED／0 | findings 为空 |
+| build-failed | 删除 config.h | FAILED／1、CHECK_FAILED | build_exit_code 非零，不能当作修复成功 |
+| unsupported | 同一作业写出两个最终文件 | FAILED／1、UNSUPPORTED | 构建本身成功，分析明确拒绝不支持的输入 |
+| timeout | sleep 10 与 1 秒预算 | TIMED_OUT／1、TIMEOUT | 超时与普通构建失败区分 |
+
+故障场景返回失败状态但符合预期时，该场景判定为 PASS。`original-*` 返回 1 表示发现依赖问题，报告仍为 SUCCEEDED。
+
+```text
+local-gate/
+  source-commit.txt、worktree-status.txt、invocation.json
+  image/                  实际镜像信息
+  driver/                 门禁脚本命令、完整输出与退出码
+  gate/
+    gate-result.json、results.csv
+    unit-tests/           服务测试命令、输出与退出码
+    original-1/           原始检测，另有 original-2/、original-3/
+    fixed/                修复后的检测
+    build-failed/、unsupported/、timeout/
+```
+
+七个构建检测场景各自保存 `fixture/`、`evidence/`、`command.json`、`stdout.log`、`stderr.log` 和 `exit-code.json`。正常检测的 evidence 包含两张图、进程、trace、Make 数据库和 findings。故障目录按实际失败阶段保存诊断材料，不要求失败构建产出成功依赖图。
+
+在报告中记录三个 original 的真实 trace_id；从一个 original 找到 config.h 的成功只读打开、main.o 的输出与 Make 声明位置，说明进程归属。对照 fixed 的图与报告解释修复效果。失败时保留原目录，修正后使用新的输出目录。
+
+### 6.5 校验修复、扫描并保存日志
+
+```bash
+if python3 scripts/buildchecker/verify_evidence.py \
+  --before "$LAB_E7_RUN/local-gate/gate/original-1/evidence/findings.json" \
+  --after "$LAB_E7_RUN/local-gate/gate/fixed/evidence/findings.json" \
+  > "$LAB_E7_RUN/repair-verification.json" \
+  2> "$LAB_E7_RUN/repair-verification.stderr.log"; then
+  LAB_E7_VERIFY_CODE=0
+else
+  LAB_E7_VERIFY_CODE=$?
+fi
+cat "$LAB_E7_RUN/repair-verification.json"
+printf 'VERIFY_EXIT_CODE=%s\n' "$LAB_E7_VERIFY_CODE" \
+  | tee "$LAB_E7_RUN/verify-exit-code.txt"
+```
+
+预期退出 0、`passed=true`、2 条变 0 条、`changed_inputs=["Makefile"]`。该脚本比较保存的报告及输入哈希；原始记录的文件和行号按第 6.4 节人工核对。
+
+```bash
+if diff -u \
+  "$LAB_E7_RUN/local-gate/gate/original-1/fixture/Makefile" \
+  "$LAB_E7_RUN/local-gate/gate/fixed/fixture/Makefile" \
+  > "$LAB_E7_RUN/repair.diff"; then
+  LAB_E7_DIFF_CODE=0
+else
+  LAB_E7_DIFF_CODE=$?
+fi
+cat "$LAB_E7_RUN/repair.diff"
+printf 'DIFF_EXIT_CODE=%s\n' "$LAB_E7_DIFF_CODE"
+```
+
+diff 预期退出 1，表示依赖规则有差异；大于 1 表示执行错误。
+
+```bash
+if python3 scripts/secret_scan.py . --history --image "$LAB_IMAGE" \
+  > "$LAB_E7_RUN/secret-scan.log" 2>&1; then
+  LAB_E7_SCAN_CODE=0
+else
+  LAB_E7_SCAN_CODE=$?
+fi
+cat "$LAB_E7_RUN/secret-scan.log"
+printf 'SCAN_EXIT_CODE=%s\n' "$LAB_E7_SCAN_CODE" \
+  | tee "$LAB_E7_RUN/scan-exit-code.txt"
+```
+
+预期退出 0。扫描器在 Git 仓库中检查已跟踪源码，并检查历史和指定镜像；个人未跟踪测试先人工检查，正式纳入仓库后再随最新版本扫描。日志保存在本人 work/，不要将凭据放入报告。
+
+### 6.6 每名成员补充一项 E7 判定测试
+
+阅读 `scripts/buildchecker/gate.py` 的 `evaluate()` 与 `tests/buildchecker_lab/test_gate.py`。在本人克隆中创建 `tests/buildchecker_lab/test_gate_<学号>.py`，使用 `unittest.TestCase` 编写至少一项有明确输入、预期和断言的测试。组内建议选择不同方向：
+
+| 成员 | 建议覆盖方向 | 预期 |
+|---|---|---|
+| 李宇瀚 241250029 | 正确的两条发现之外多出一条 | 抛出 ValueError，拒绝多报 |
+| 孙鲲华 241250109 | 正确 Finding 的 evidence 为空 | 抛出 ValueError，拒绝无依据报告 |
+| 管泽昊 241830149 | 同一条 Finding 重复出现 | 抛出 ValueError，不能用集合去重掩盖重复 |
+| 黄骢驰 241840198 | 正常报告缺少 trace_id | 抛出 ValueError，拒绝不可追踪报告 |
+
+本表是待执行分工，不代表成员已完成。可按实际情况协调其他有效测试，报告写明与现有覆盖的差别。测试只构造小报告并调用判定函数，不需要为此改检测器业务逻辑。E6 来源回归、E7 个人新增测试和后续 CI 故意失败演示分别记录。
+
+个人测试完成后重新设置一个新的 `LAB_E7_RUN`，例如：
+
+```bash
+LAB_E7_RUN="work/buildchecker/e7-${LAB_SID}-personal-$(date +%Y%m%d-%H%M%S)"
+mkdir -p "$LAB_E7_RUN"
+git rev-parse HEAD > "$LAB_E7_RUN/source-commit.txt"
+git status --porcelain=v1 > "$LAB_E7_RUN/worktree-status.txt"
+git remote get-url origin > "$LAB_E7_RUN/repository-url.txt"
+```
+
+在该目录从第 6.2 节重建镜像开始，重新执行服务测试、独立判定回归、完整门禁、修复校验和扫描。门禁仍为 8 场景；只在 `tests/buildchecker_lab/` 添加用例时，服务测试数不变，独立判定回归数增加。报告同时列出修改前后目录和真实测试数量。
+
+### 6.7 编写报告、验收表并打包
+
+```bash
+LAB_E7_REPORT="docs/reports/$LAB_SID/e7.md"
+LAB_E7_ACCEPTANCE="docs/reports/$LAB_SID/e7-acceptance.csv"
+LAB_E7_TEST="tests/buildchecker_lab/test_gate_${LAB_SID}.py"
+mkdir -p "$(dirname "$LAB_E7_REPORT")"
+cp -n docs/templates/buildchecker-e7-report.md "$LAB_E7_REPORT"
+cp -n docs/templates/buildchecker-e7-acceptance.csv "$LAB_E7_ACCEPTANCE"
+printf '报告：%s\n验收表：%s\n个人测试：%s\n' \
+  "$LAB_E7_REPORT" "$LAB_E7_ACCEPTANCE" "$LAB_E7_TEST"
+```
+
+输入：本轮个人结果与 [E7 报告模板](../templates/buildchecker-e7-report.md)、[课程验收 CSV](../templates/buildchecker-e7-acceptance.csv)。输出：填写后的个人报告和验收表。CSV 的 A 项与本轮本地共同项填写真实结果和证据路径，B 项标为不适用；CI、保护、拒绝、恢复及合并项标为待开展。只有实际通过的项目填写 PASS。
+
+| 每人本轮交付 | 内容 | 验收条件 |
+|---|---|---|
+| 版本与环境 | 仓库 URL、完整 SHA、工作区状态、镜像 ID/来源、doctor、工具链、构建日志 | 能取回代码，说明镜像实际来源；未提交测试另附差异 |
+| 独立判定与服务回归 | oracle-tests.log、退出码、build/unit-tests/，修改前后测试数 | 测试通过，个人用例确实被发现和执行 |
+| 八场景 | gate-result.json、results.csv、整体退出码、七次构建检测的完整输入和原始记录 | 8 项全部符合各自预期，三个 original 错误集合一致 |
+| 人工核对与修复 | trace/Make 行号、进程归属、repair.diff、repair-verification.json | 两条错误有原始依据，修复后为空，仅 Makefile 变化 |
+| 个人新增测试 | 测试文件、输入、预期、断言、来源与实际结果 | 本人新增至少一项有效 E7 测试，重建后复跑 |
+| 扫描 | secret-scan.log 与退出码 | 已跟踪源码、历史和本次镜像扫描通过 |
+| 正式报告与备份 | 报告、验收 CSV、服务器绝对路径及电脑端备份位置 | 路径可读取，状态与证据一致 |
+
+完成个人测试并填写文档后打包最终一轮证据、报告、验收表和个人测试。修改前的运行目录若需解释测试数量变化，另行备份并在报告中注明。
+
+```bash
+LAB_E7_ARCHIVE="${LAB_E7_RUN}-local.tar.gz"
+tar --exclude='app' --exclude='main.o' --exclude='__pycache__' \
+  -czf "$LAB_E7_ARCHIVE" \
+  "$LAB_E7_RUN" "$LAB_E7_REPORT" "$LAB_E7_ACCEPTANCE" "$LAB_E7_TEST"
+tar -tzf "$LAB_E7_ARCHIVE" | sed -n '1,60p'
+sha256sum "$LAB_E7_ARCHIVE" > "${LAB_E7_ARCHIVE}.sha256"
+printf '归档：%s/%s\n' "$PWD" "$LAB_E7_ARCHIVE"
+```
+
+通过 SFTP 下载归档和摘要，解压抽查报告、CSV、测试文件、各场景 findings 与 trace。正式报告和测试按团队约定入库，work/ 原始证据单独交付。只打包本轮文件，排除凭据、本地配置与编译产物。
+
+### 6.8 组长收件与本轮完成标准
+
+组长收齐四名成员的报告、验收表、个人测试和证据包，用下面的表记录；共同环境记录写明执行人，每人原始门禁结果分别保留。
+
+| 姓名／学号 | 源码 SHA／镜像 ID | 报告／CSV／测试路径 | 服务器证据与电脑备份 | 服务／判定测试数及八场景结果 | 缺项 |
+|---|---|---|---|---|---|
+| 李宇瀚／241250029 | | | | | |
+| 孙鲲华／241250109 | | | | | |
+| 管泽昊／241830149 | | | | | |
+| 黄骢驰／241840198 | | | | | |
+
+抽查一条 MD 与 RD 的原始依据、修复后的零发现、个人测试输入和断言、归档可读性。材料满足第 6.7 节后登记“E7 本地验证完成”，远程部分按下一节继续。小样例结果、fzy 全量检测、论文项目提高实验及真实公共交接分别记录。
+
+## 7. E7 后续：CI 与 PR 合并门禁
+
+本轮先完成第 6 节，以下由组长后续组织并补入同一份 E7 报告：
+
+| 后续工作 | 需要保留的材料 |
 |---|---|
-| unit-tests | 当前 A 组全部服务测试通过 |
-| original-1/2/3 | 三次 SUCCEEDED/1，精确相同的两条依赖错误，有证据锚点 |
-| fixed | SUCCEEDED/0，无发现 |
-| build-failed | 删除头文件后编译失败，FAILED/1、CHECK_FAILED |
-| unsupported | 作业写出多个最终输出，FAILED/1、UNSUPPORTED，构建本身成功 |
-| timeout | 构建预算 1 秒，TIMED_OUT/1、TIMEOUT |
+| 完善并运行远程 CI | 正常运行链接、运行 ID、head SHA、实际检出 SHA、检查结果和下载的 artifact |
+| 对齐主分支保护 | 实际必需检查名及 App ID、strict、管理员约束、保护配置快照；保留小组原有审核与其他检查要求 |
+| 故意失败 PR | 错误版本返回码预期导致的失败日志、失败提交和 artifact |
+| 实际拒绝合并 | 普通合并拒绝日志与退出码、OPEN/BLOCKED 快照 |
+| 同一 PR 修复恢复 | 正确预期、最新通过检查、审核及 MERGED/mergeCommit/mergedAt 记录 |
 
-完整门禁共 8 行，只有全部场景符合各自预期才整体退出 0。各子目录保存完整命令、标准输出、错误输出和退出码。单个故障报告 FAILED 与场景通过不矛盾。
-
-每位成员提交至少一项本人测试或有明确理由的实现改动，说明输入、预期和实际结果，并注明参考来源。修改后重建镜像，用新目录复跑受影响实验及完整门禁。
-
-## 报告与交付
-
-使用 [A 组报告模板](../templates/buildchecker-report.md)。正式报告按团队约定放入仓库，个人原始证据在 `work/buildchecker/` 单独备份，排除凭据、本地配置和编译产物。报告引用本人的实际运行结果。
-
-`.github/workflows/buildchecker-lab.yml` 构建镜像、运行测试及八场景门禁，验证错误预期的拒绝结果，并上传 `work/buildchecker/ci-*` 证据。检查名为 `buildchecker-lab`，使用课程保护配置前需与实际检查名对齐；当前工作流未接入源码、Git 历史和镜像扫描。远程 CI、分支保护、失败 PR 拦截与修复合并需保存实际运行记录。
-
-每人交付报告、E5 原始证据、E6 修复前后报告与图、E7 门禁结果、个人贡献及复现命令。公共交接按实际执行情况记录。小样例的验收范围与 fzy 全量检测、3—5 个论文项目提高任务分别记录。
+`.github/workflows/buildchecker-lab.yml` 的检查名已统一为 `e7-a-quality-gate`，并接入源码、Git 历史和镜像扫描。当前工作流中的错误预期自测会捕获预期失败，不能替代真实失败 PR 被禁止合并的记录。分支保护、真实 PR 演示与 CI 运行记录完成后，再填写完成状态。

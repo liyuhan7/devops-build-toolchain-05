@@ -104,6 +104,12 @@ class TestFullCheck(unittest.TestCase):
         self.assertEqual({(x["type"], x["target"], x["dependency"]) for x in result["findings"]},
                          {("MISSING", "unit.o", "needed.h"), ("REDUNDANT", "unit.o", "unused.h")})
 
+    def test_matching_declaration_has_no_findings(self):
+        self.traces()
+        db=self.write("db.txt", '# Files\nunit.o: unit.c needed.h\n# files hash-table stats:\n')
+        result=analyze(self.folder, db, self.root)
+        self.assertEqual(result["findings"], [])
+
     def test_make_database_without_files_section_is_not_an_empty_success(self):
         db=self.write("db.txt", 'unit.o: unit.c needed.h\n')
         with self.assertRaisesRegex(Unsupported, "Files section"):
