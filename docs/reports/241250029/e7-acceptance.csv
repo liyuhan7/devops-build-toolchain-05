@@ -6,8 +6,8 @@ B,正常,两轮构建与同镜像hello E3,不适用,不适用,不适用
 B,故障,输出不符及无效候选及构建失败及超时均识别,不适用,不适用,不适用
 B,清理,运行超时容器已移除,不适用,不适用,不适用
 共同,新增测试,输入预期明确且测试通过,3项均PASSED,work/buildchecker/e7-241250029-personal-20261110-222432/oracle-tests.log,PASS
-共同,正常CI,检查通过且artifact已下载,待开展,待开展,待开展
-共同,保护,检查名正确且strict与enforce_admins为true,待开展,待开展,待开展
-共同,拒绝合并,OPEN及BLOCKED且普通合并退出1,待开展,待开展,待开展
-共同,恢复,同一PR最新检查通过,待开展,待开展,待开展
-共同,合并,MERGED及mergeCommit及mergedAt记录齐全,待开展,待开展,待开展
+共同,正常CI,检查通过且artifact已下载,PR #45 正常 CI 42956160605 success；artifact ID 13826834294,https://github.com/liyuhan7/devops-build-toolchain-05/actions/runs/42956160605,PASS
+共同,保护,检查名正确且strict与enforce_admins为true,检查名 e7-a-quality-gate 生效并阻止合并；App ID/strict/enforce_admins 快照待补充,work/buildchecker/e7-pr-record/failure/pr-blocked.json,PASS
+共同,拒绝合并,OPEN及BLOCKED且普通合并退出1,gh pr merge 45 --merge 被 base branch policy 拒绝,work/buildchecker/e7-pr-record/failure/pr-blocked.json,PASS
+共同,恢复,同一PR最新检查通过,PR #45 恢复 CI 42961697891 success,https://github.com/liyuhan7/devops-build-toolchain-05/actions/runs/42961697891,PASS
+共同,合并,MERGED及mergeCommit及mergedAt记录齐全,待合并后回填,,待开展
