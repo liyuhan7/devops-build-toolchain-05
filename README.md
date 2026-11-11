@@ -105,7 +105,7 @@ E5 失败复现与候选溯源、E6 同镜像验证及 E7 五场景门禁见 [B 
 |---|---|---|
 | [`contract-validation.yml`](.github/workflows/contract-validation.yml) | Pull Request、推送到 `main` | 契约校验与回归测试 |
 | [`e3-baseline.yml`](.github/workflows/e3-baseline.yml) | Pull Request、推送到 `main` | 基线材料检查，在固定镜像中运行 C0 行为验证并上传证据 |
-| [`buildchecker-lab.yml`](.github/workflows/buildchecker-lab.yml) | Pull Request、推送到 `main`、手动 | A 组镜像、服务测试、8 场景门禁、错误预期拦截及实验产物上传 |
+| [`buildchecker-lab.yml`](.github/workflows/buildchecker-lab.yml) | Pull Request、推送到 `main`、手动 | A 组镜像、服务测试、源码/历史/镜像扫描、8 场景门禁、错误预期拦截及实验产物上传；检查名 `e7-a-quality-gate` |
 | [`draft-lab.yml`](.github/workflows/draft-lab.yml) | Pull Request、推送到 `main`、手动 | B 组镜像、服务测试、E7 五场景门禁、错误预期拦截及实验产物上传 |
 
 ## 协作约定

@@ -683,4 +683,4 @@ printf '归档：%s/%s\n' "$PWD" "$LAB_E7_ARCHIVE"
 | 实际拒绝合并 | 普通合并拒绝日志与退出码、OPEN/BLOCKED 快照 |
 | 同一 PR 修复恢复 | 正确预期、最新通过检查、审核及 MERGED/mergeCommit/mergedAt 记录 |
 
-现有 `.github/workflows/buildchecker-lab.yml` 检查名为 `buildchecker-lab`，课程 E7 配置要求 `e7-a-quality-gate`；后续统一实际检查名，并接入源码、Git 历史和镜像扫描。当前工作流中的错误预期自测会捕获预期失败，不能替代真实失败 PR 被禁止合并的记录。CI、保护与 PR 验收有实际记录后再填写完成状态。
+`.github/workflows/buildchecker-lab.yml` 的检查名已统一为 `e7-a-quality-gate`，并接入源码、Git 历史和镜像扫描。当前工作流中的错误预期自测会捕获预期失败，不能替代真实失败 PR 被禁止合并的记录。分支保护、真实 PR 演示与 CI 运行记录完成后，再填写完成状态。

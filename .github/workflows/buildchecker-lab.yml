@@ -11,14 +11,32 @@ permissions:
 
 jobs:
   buildchecker-lab:
+    name: e7-a-quality-gate
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Scan tracked sources and Git history
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work/buildchecker/ci-scan
+          git rev-parse HEAD > work/buildchecker/ci-scan/commit.txt
+          python3 scripts/secret_scan.py . --history 2>&1 | tee work/buildchecker/ci-scan/source-scan.log
 
       - name: Build A group image and run service tests
         run: python3 scripts/buildchecker/lab.py build --image buildchecker-lab:ci --out work/buildchecker/ci-build
+
+      - name: Scan built image
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/secret_scan.py . --image buildchecker-lab:ci 2>&1 | tee work/buildchecker/ci-scan/image-scan.log
 
       - name: Test lab runner and gate decisions
         run: docker run --rm --network none buildchecker-lab:ci python3 -m unittest discover -s tests/buildchecker_lab -v
