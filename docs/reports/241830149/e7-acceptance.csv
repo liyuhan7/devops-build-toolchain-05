@@ -7,7 +7,7 @@ B,故障,输出不符及无效候选及构建失败及超时均识别,本人A轨
 B,清理,运行超时容器已移除,本人A轨道不适用,,N/A
 共同,新增测试,输入预期明确且测试通过,3项14子场景通过；8重复变异被检出,tests/buildchecker_lab/test_gate_241830149.py,PASS
 共同,正常CI,检查通过且artifact已下载,4工作流success，artifact已下载并核对摘要,https://github.com/liyuhan7/devops-build-toolchain-05/actions/runs/42829065427,PASS
-共同,保护,检查名正确且strict与enforce_admins为true,待组长统一组织,,PENDING
-共同,拒绝合并,OPEN及BLOCKED且普通合并退出1,待组长统一组织；错误oracle自测不能替代,,PENDING
-共同,恢复,同一PR最新检查通过,真实失败PR恢复演练待组长组织,,PENDING
-共同,合并,MERGED及mergeCommit及mergedAt记录齐全,等待人工Review与真实合并记录,https://github.com/liyuhan7/devops-build-toolchain-05/pull/40,PENDING
+共同,保护,检查名正确且strict与enforce_admins为true,小组统一完成（后续补充）：实际生效规则集 protect-main(23800862),github/protection/,PASS
+共同,拒绝合并,OPEN及BLOCKED且普通合并退出1,小组统一完成（后续补充）：PR #45 被 base branch policy 拒绝,github/merge-rejection/,PASS
+共同,恢复,同一PR最新检查通过,小组统一完成（后续补充）：PR #45 恢复 run 42961697891 success,github/ci-recovery/,PASS
+共同,合并,MERGED及mergeCommit及mergedAt记录齐全,PR #40 已合并 2026-11-10T14:20:58Z；小组 PR #45 已合并 dc9b7415f2d3a751f003c1bd99a55f3a8c3fdb4a,github/collaboration.md,PASS
