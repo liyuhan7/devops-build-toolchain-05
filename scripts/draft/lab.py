@@ -51,15 +51,28 @@ def main(argv=None):
     choice.add_argument('--candidate', help='E7：本人保存的完整 Dockerfile 路径')
     choice.add_argument('--replay', action='store_true', help='E7：使用本仓库 E5/E6 已验证候选')
     parser.add_argument('--build-timeout', type=int, default=600)
+    parser.add_argument('--apt-mirror', help='build：覆盖 Dockerfile APT 源前缀，例如境外 CI 使用 http://deb.debian.org')
+    parser.add_argument('--pip-index', help='build：覆盖 Dockerfile PyPI 索引，例如境外 CI 使用 https://pypi.org/simple')
+    parser.add_argument('--docker-cli-image', help='build：覆盖 Dockerfile DOCKER_CLI_IMAGE，例如境外 CI 使用官方 docker.io 地址')
+    parser.add_argument('--build-mirror',
+                        help='gate/e7：仅替换构建副本中的 Debian 源主机，候选原文与哈希保持不变')
+    parser.add_argument('--cache-from', help='build：buildx 缓存来源，例如 type=gha')
+    parser.add_argument('--cache-to', help='build：buildx 缓存导出，例如 type=gha,mode=max')
     args = parser.parse_args(argv)
     if sys.platform != 'linux':
         parser.error('Run after SSH login on the Linux cloud host; Windows is not the experiment host')
     if args.build_timeout <= 0:
         parser.error('Build timeout must be positive')
+    if args.stage != 'build' and (args.apt_mirror is not None or args.pip_index is not None
+                                  or args.docker_cli_image is not None
+                                  or args.cache_from is not None or args.cache_to is not None):
+        parser.error('--apt-mirror、--pip-index、--docker-cli-image、--cache-from 与 --cache-to 仅用于 build')
     if args.stage in ('gate', 'e7') and not (args.candidate or args.replay):
         parser.error('Specify --candidate PATH or --replay; replay is not fresh model generation')
     if args.stage not in ('gate', 'e7') and (args.candidate or args.replay):
         parser.error('--candidate and --replay are for gate/e7 only')
+    if args.build_mirror is not None and args.stage not in ('gate', 'e7'):
+        parser.error('--build-mirror 仅用于 gate/e7')
     output = (ROOT / args.out).resolve() if args.out else ROOT / 'work/draft' / f'B05-{args.stage}-{datetime.now().strftime("%Y%m%d-%H%M%S")}-{uuid.uuid4().hex[:6]}'
     if output != ROOT / 'work' and ROOT / 'work' not in output.parents:
         parser.error('Keep evidence below this repository work/ directory')
@@ -72,7 +85,20 @@ def main(argv=None):
     if args.stage == 'doctor':
         return subprocess.run([sys.executable, 'scripts/doctor.py', '--group', 'B', '--out', str(output / 'env.json')], cwd=ROOT).returncode
     if args.stage == 'build':
-        code = execute(['docker', 'build', '--load', '--progress=plain', '-f', 'services/draft/Dockerfile', '-t', args.image, '.'], output / 'build', args.build_timeout)
+        build_args = []
+        if args.apt_mirror is not None:
+            build_args += ['--build-arg', 'APT_MIRROR=' + args.apt_mirror]
+        if args.pip_index is not None:
+            build_args += ['--build-arg', 'PIP_INDEX=' + args.pip_index]
+        if args.docker_cli_image is not None:
+            build_args += ['--build-arg', 'DOCKER_CLI_IMAGE=' + args.docker_cli_image]
+        if args.cache_from is not None:
+            build_args += ['--cache-from', args.cache_from]
+        if args.cache_to is not None:
+            build_args += ['--cache-to', args.cache_to]
+        # 缓存参数需要 buildx；本地不带缓存时仍用 docker build。
+        builder = ['docker', 'buildx', 'build'] if (args.cache_from is not None or args.cache_to is not None) else ['docker', 'build']
+        code = execute([*builder, '--load', '--progress=plain', *build_args, '-f', 'services/draft/Dockerfile', '-t', args.image, '.'], output / 'build', args.build_timeout)
         if code:
             return code
         if execute(['docker', 'image', 'inspect', args.image], output / 'image', 30):
@@ -94,6 +120,8 @@ def main(argv=None):
         (output / 'invocation.json').write_text(json.dumps(meta, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         command = [sys.executable, 'scripts/draft/gate.py', '--image', args.image, '--out', str(output / 'gate'),
                    '--candidate', str(candidate), '--build-timeout', str(args.build_timeout)]
+        if args.build_mirror is not None:
+            command += ['--build-mirror', args.build_mirror]
         return execute(command, output / 'driver', 12 * args.build_timeout + 1200)
 
 if __name__ == '__main__':

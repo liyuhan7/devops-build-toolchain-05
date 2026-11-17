@@ -29,8 +29,15 @@ jobs:
           git rev-parse HEAD > work/buildchecker/ci-scan/commit.txt
           python3 scripts/secret_scan.py . --history 2>&1 | tee work/buildchecker/ci-scan/source-scan.log
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Build A group image and run service tests
-        run: python3 scripts/buildchecker/lab.py build --image buildchecker-lab:ci --out work/buildchecker/ci-build
+        run: >-
+          python3 scripts/buildchecker/lab.py build --image buildchecker-lab:ci
+          --out work/buildchecker/ci-build
+          --apt-mirror http://deb.debian.org --pip-index https://pypi.org/simple
+          --cache-from type=gha --cache-to type=gha,mode=max
 
       - name: Scan built image
         shell: bash
