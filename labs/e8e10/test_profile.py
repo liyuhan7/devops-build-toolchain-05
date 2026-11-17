@@ -39,4 +39,25 @@ class ProfileTests(unittest.TestCase):
         (self.p/'Makefile').write_text((self.p/'Makefile').read_text().replace('-O0','-include unknown.h'))
         with self.assertRaisesRegex(ValueError,'UNSUPPORTED_FLAGS'):scan(self.p)
 
+class StudentE9BTests(unittest.TestCase):
+    def test_macro_patch_preserves_reference_and_resolves_missing(self):
+        from lab import run
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            project=root/'project'
+            fixture(project,'macro')
+            report=scan(project)
+            diff,plan=patch(project,report)
+            patchfile=root/'candidate.patch'
+            patchfile.write_text(diff)
+            run(['git','apply',str(patchfile.resolve())],project)
+
+            makefile=(project/'Makefile').read_text()
+            self.assertIn('DEPS = main.c unused.h config.h',makefile)
+            self.assertIn('main.o: $(DEPS)',makefile)
+            self.assertEqual(plan[0]['style'],'macro')
+            findings=scan(project)['findings']
+            self.assertFalse(any(item['type']=='MISSING' for item in findings))
+            self.assertIn(('REDUNDANT','unused.h'),{(item['type'],item['dependency']) for item in findings})
+
 if __name__=='__main__':unittest.main()
