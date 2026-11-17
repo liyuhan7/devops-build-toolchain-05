@@ -20,10 +20,18 @@ def main(argv=None):
     parser.add_argument("--image", help="与 BuildChecker 共用 buildchecker-lab:本人学号")
     parser.add_argument("--out", help="本仓库 work/ 下的新目录")
     parser.add_argument("--base-image", help="build 阶段传给现有 A 组构建入口")
+    parser.add_argument("--apt-mirror", help="build 阶段覆盖 A 组镜像的 APT 源前缀")
+    parser.add_argument("--pip-index", help="build 阶段覆盖 A 组镜像的 PyPI 索引")
+    parser.add_argument("--cache-from", help="build 阶段传给 buildx 的缓存来源")
+    parser.add_argument("--cache-to", help="build 阶段传给 buildx 的缓存导出")
     parser.add_argument("--build-timeout", type=int, default=1200)
     args = parser.parse_args(argv)
     if args.base_image and args.stage != "build":
         parser.error("--base-image 仅用于 build")
+    if (args.apt_mirror is not None or args.pip_index is not None) and args.stage != "build":
+        parser.error("--apt-mirror 与 --pip-index 仅用于 build")
+    if (args.cache_from is not None or args.cache_to is not None) and args.stage != "build":
+        parser.error("--cache-from 与 --cache-to 仅用于 build")
     out = args.out or f"work/echecker/{args.stage}-{datetime.now():%Y%m%d-%H%M%S}-{uuid.uuid4().hex[:8]}"
     if args.stage in {"build", "doctor"}:
         command = [args.stage, "--out", out]
@@ -33,6 +41,14 @@ def main(argv=None):
             command += ["--build-timeout", str(args.build_timeout)]
             if args.base_image:
                 command += ["--base-image", args.base_image]
+            if args.apt_mirror is not None:
+                command += ["--apt-mirror", args.apt_mirror]
+            if args.pip_index is not None:
+                command += ["--pip-index", args.pip_index]
+            if args.cache_from is not None:
+                command += ["--cache-from", args.cache_from]
+            if args.cache_to is not None:
+                command += ["--cache-to", args.cache_to]
         return buildchecker_main(command)
     image = student_image(args.image)
     output = fresh_output(out)
