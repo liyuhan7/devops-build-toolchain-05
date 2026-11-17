@@ -1,0 +1,39 @@
+name: EChecker Lab
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  echecker-lab:
+    name: echecker-quality-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build shared A group image and test BuildChecker
+        run: python3 scripts/echecker/lab.py build --image buildchecker-lab:ci --out work/echecker/ci-build
+
+      - name: Test incremental detection and repository integration
+        run: python3 scripts/echecker/lab.py test --image buildchecker-lab:ci --out work/echecker/ci-tests
+
+      - name: Run real BuildChecker baseline and history reuse
+        run: python3 scripts/echecker/lab.py e8 --image buildchecker-lab:ci --out work/echecker/ci-e8
+
+      - name: Run C0 to C3 updates and independent assertions
+        run: python3 scripts/echecker/lab.py e9 --image buildchecker-lab:ci --out work/echecker/ci-e9
+
+      - name: Upload experiment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: echecker-lab-evidence
+          path: work/echecker/ci-*/
+          retention-days: 14

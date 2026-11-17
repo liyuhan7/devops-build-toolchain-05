@@ -6,6 +6,8 @@
 
 实验命令、预期退出码和报告要求见 [A 组实验指南](../../docs/guides/A组论文复现实验.md)。E4 环境和基线复跑见 [E4 指南](../../docs/guides/E4操作与交付说明.md)。
 
+[EChecker](../echecker/README.md) 共用本服务的镜像、根依赖锁文件和运行日志，并直接调用 full_check 建立真实历史图、compare_graphs 计算依赖差集。E8—E9 入口为 `scripts/echecker/lab.py`，沿用当前 BuildChecker 实现及成员回归。
+
 镜像保持整个仓库的 `/repo` 布局和 `PYTHONPATH=/repo/services/buildchecker`。Dockerfile、Compose 和根 Makefile 继续承担原有环境与基线验证。基础镜像按原 digest 固定，默认从官方地址获取；APT 与 PyPI 使用阿里云 HTTPS 镜像，`lab.py build --base-image` 可覆盖基础镜像地址。实验入口仅选 A 组，不根据其他服务目录推断轨道。
 
 ## 实现与来源
