@@ -10,6 +10,6 @@
 
 人工修改：用户提供服务器地址、学号、个人项目目录，并指出所属项目目录为 Group-B；本轮个人测试、报告和验证由 Codex 执行。姓名和校区未知，报告中明确标注未提供。
 
-实际验证命令/输入/结果：构建 `course-e8e10:241250105` 镜像成功；容器内执行 `python3 -m unittest discover -s labs/e8e10 -p test_profile.py -v`，8 项通过；分别运行 `python3 run_lab.py e8 --track B ...` 和 `python3 run_lab.py e9 --track B ...`，均成功。E8 旧报告被 `STALE_REPORT` 拒绝，候选补丁 apply-check 通过且源 Makefile 不变；E9 direct/macro/mixed 三份补丁 apply-check 通过，macro 补丁在副本应用成功。
+实际验证命令/输入/结果：构建 `course-e8e10:241250105` 镜像成功；合并目标分支测试后容器内执行 `python3 -m unittest discover -s labs/e8e10 -p test_profile.py -v`，9 项通过；分别运行 `python3 run_lab.py e8 --track B ...` 和 `python3 run_lab.py e9 --track B ...`，均成功。E8 旧报告被 `STALE_REPORT` 拒绝，候选补丁 apply-check 通过且源 Makefile 不变；E9 direct/macro/mixed 三份补丁 apply-check 通过，macro 补丁在副本应用成功。
 
 参考实现和个人贡献边界：`labs/e8e10/lab.py` 来自课程实验包；个人贡献为 `labs/e8e10/test_profile.py` 中的 E9 B 组 macro Patch 独立测试，以及本目录中的实验记录。未调用外部模型服务。
