@@ -1,7 +1,7 @@
 # EChecker 个人实验决策记录
 
 - 姓名 / 学号：管泽昊 / 241830149。
-- 日期 / 任务：2026-11-17；Related to [Issue #47](https://github.com/liyuhan7/devops-build-toolchain-05/issues/47)，个人 PR 待创建；用户已追加授权提交与推送。
+- 日期 / 任务：2026-11-17；Related to [Issue #47](https://github.com/liyuhan7/devops-build-toolchain-05/issues/47)，个人 [PR #52](https://github.com/liyuhan7/devops-build-toolchain-05/pull/52)；用户已追加授权提交、推送与创建 PR。
 - 准备版本：`484dccd01c5a8d5cb4d63ab6187d80278a941900`；个人测试运行时未提交，实验后固定为 `5f1c1352391426b6472131841c23d554d5ddf2b5`，文件 SHA-256 `93e8d59d6132f5af2d2111129eea5e39ecc8bff3bd8e33597f1b1f579a0f751e`。
 - 证据：`work/echecker/e8-e9-241830149-20261117/`，完整绝对路径见个人报告。
 

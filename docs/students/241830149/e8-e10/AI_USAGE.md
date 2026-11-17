@@ -2,12 +2,12 @@
 
 - 成员：管泽昊 / 241830149。
 - 工具与日期：Codex；2026-11-17；具体运行模型标识未单独记录，不猜测型号。
-- 关联：Related to [Issue #47](https://github.com/liyuhan7/devops-build-toolchain-05/issues/47)；个人分支 `codex/e8-e9-241830149`。
+- 关联：Related to [Issue #47](https://github.com/liyuhan7/devops-build-toolchain-05/issues/47)；个人 [PR #52](https://github.com/liyuhan7/devops-build-toolchain-05/pull/52)，分支 `codex/e8-e9-241830149`。
 - 准备源码：`484dccd01c5a8d5cb4d63ab6187d80278a941900`；个人测试运行时未提交，实验后固定为 `5f1c1352391426b6472131841c23d554d5ddf2b5`，文件快照与哈希见报告。
 
 ## 输入上下文与任务
 
-成员要求完成 E8/E9，指定前置准备位于 feat/EChecker-lab，镜像直连官方；随后明确授权创建和切换个人分支。Codex 阅读仓库规范、实验指南、接口、教学实现、既有测试与上轮身份材料，沿用管泽昊 / 241830149。实验完成后，成员追加“请推送”授权，Codex 提交本次测试和三份文档并推送个人分支，不代发 PR 或执行合并。
+成员要求完成 E8/E9，指定前置准备位于 feat/EChecker-lab，镜像直连官方；随后明确授权创建和切换个人分支。Codex 阅读仓库规范、实验指南、接口、教学实现、既有测试与上轮身份材料，沿用管泽昊 / 241830149。实验完成后，成员追加“请推送”授权，Codex 提交本次测试和三份文档并推送个人分支；再按成员“创建PR”的追加授权，创建面向 feat/EChecker-lab 的 PR #52。未代成员执行人工批准或合并。
 
 ## AI 建议与实际采纳
 
@@ -36,4 +36,4 @@ Codex 按代码审查技能安排独立只读子代理审查个人测试，未�
 | 内存变异与正常复跑 | 省略配置身份时个人用例拒绝错误复用 | `personal-final/mutation` detected=true；`personal-tests-final` 正常两项通过 |
 | 契约、仓库回归与扫描 | 保留共享材料完整性和原回归 | 30 份 JSON / 5 份 Schema、103 项仓库回归通过，镜像扫描 1004 份文件未发现问题；见 `personal-final/summary.json`、`additional-checks.json` 及原始日志 |
 
-人工逐项核对、指定 Reviewer 审核、PR、Actions 和最终合并尚未取得，不将 AI 检查当成人工 Review。成员审阅后，按后续真实协作记录回填 PR 与远程验收状态。
+个人 PR #52 已创建；人工逐项核对、指定 Reviewer 审核、Actions 最终结论和合并记录尚未取得，不将 AI 检查当成人工 Review。成员审阅后，按后续真实协作记录回填远程验收状态。
