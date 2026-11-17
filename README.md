@@ -1,6 +1,6 @@
 # devops-build-toolchain-05
 
-2026 DevOps 课程教学实验 05 组项目仓库。仓库定义构建工具链的公共数据契约与四段接口，提供固定 fzy 版本的可复现测试基线，并接入 A 组 BuildChecker 与 B 组 DRAFT 教学实验入口。
+2026 DevOps 课程教学实验 05 组项目仓库。仓库定义构建工具链的公共数据契约与四段接口，提供固定 fzy 版本的可复现测试基线，并接入 A 组 BuildChecker、EChecker 与 B 组 DRAFT 教学实验入口。
 
 ## 工具链
 
@@ -38,6 +38,10 @@ MDFixer        对已验证的 MISSING Finding 生成修复并重新检查
 | [`services/draft/`](services/draft/) | B 组 DRAFT E4 环境、E5/E6 两轮重放服务与测试 |
 | [`scripts/draft/`](scripts/draft/) | B 组 E5/E6 真实复现与验证、E7 五场景质量门禁 |
 | [`fixtures/ci-candidates/`](fixtures/ci-candidates/) | 与 E5/E6 实际验证记录关联的 E7 候选与溯源 |
+| [`services/echecker/`](services/echecker/) | A 组增量检测，复用 BuildChecker 的图比较与真实基线采集 |
+| [`scripts/echecker/`](scripts/echecker/) | 共用 A 组镜像、日志和版本记录的 E8/E9 实验编排 |
+| [`fixtures/echecker/`](fixtures/echecker/) | EChecker 双对象教学输入，运行时在 work 副本建立提交历史 |
+| [`docs/students/`](docs/guides/A组EChecker实验.md#6-作业文档与必交清单) | E8—E9 按作业要求由成员建立的个人报告、ADR 和 AI 使用记录目录 |
 | `work/` | 脚本生成的运行副本，不纳入版本控制 |
 
 ## 契约与数据模型
@@ -97,6 +101,10 @@ python3 scripts/e3/run_c0.py --operator <姓名>
 
 E5 失败复现与候选溯源、E6 同镜像验证及 E7 五场景门禁见 [B 组 DRAFT 指南](docs/guides/B组DRAFT论文复现实验.md)。报告按组别保存在 `docs/reports/B05/`；课程样例重放和 CI 使用经 E6 记录的候选，不代表通用 DRAFT API 或论文规模评价。
 
+## A 组 EChecker 实验
+
+E8 真实 BuildChecker 历史图与复用、E9 C0—C3 增量更新、个人测试和逐项交付要求见 [A 组 EChecker 成员指南](docs/guides/A组EChecker实验.md)。实现与复用关系见 [EChecker 说明](services/echecker/README.md)。在 Linux 仓库根目录使用 `python3 scripts/echecker/lab.py` 执行 build、test、e8、e9，沿用现有 A 组镜像和根依赖；个人三份文档放在 `docs/students/<学号>/e8-e10/`，原始证据在 `work/echecker/` 单独归档。模板为 [个人报告](docs/templates/echecker-report.md)、[ADR](docs/templates/echecker-adr.md) 和 [AI 使用记录](docs/templates/echecker-ai-usage.md)。
+
 ## 持续集成
 
 各工作流验证范围如下。远程运行、分支保护和成员审核需另有实际记录。
@@ -107,6 +115,7 @@ E5 失败复现与候选溯源、E6 同镜像验证及 E7 五场景门禁见 [B 
 | [`e3-baseline.yml`](.github/workflows/e3-baseline.yml) | Pull Request、推送到 `main` | 基线材料检查，在固定镜像中运行 C0 行为验证并上传证据 |
 | [`buildchecker-lab.yml`](.github/workflows/buildchecker-lab.yml) | Pull Request、推送到 `main`、手动 | A 组镜像、服务测试、源码/历史/镜像扫描、8 场景门禁、错误预期拦截及实验产物上传；检查名 `e7-a-quality-gate` |
 | [`draft-lab.yml`](.github/workflows/draft-lab.yml) | Pull Request、推送到 `main`、手动 | B 组镜像、服务测试、E7 五场景门禁、错误预期拦截及实验产物上传 |
+| [`echecker-lab.yml`](.github/workflows/echecker-lab.yml) | Pull Request、推送到 `main`、手动 | 共用 A 组镜像与 BuildChecker 回归，EChecker 服务/编排测试、真实 E8 基线及 E9 提交变化验证；检查名 `echecker-quality-gate` |
 
 ## 协作约定
 
