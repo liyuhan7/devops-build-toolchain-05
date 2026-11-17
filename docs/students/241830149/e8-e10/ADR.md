@@ -1,7 +1,7 @@
 # EChecker 个人实验决策记录
 
 - 姓名 / 学号：管泽昊 / 241830149；服务器最终实验日期 2026-11-18。
-- 任务：Related to [Issue #47](https://github.com/liyuhan7/devops-build-toolchain-05/issues/47)。原 [PR #52](https://github.com/liyuhan7/devops-build-toolchain-05/pull/52) 已合并，本次修正其服务器执行材料。
+- 任务：Related to [Issue #47](https://github.com/liyuhan7/devops-build-toolchain-05/issues/47)。原 [PR #52](https://github.com/liyuhan7/devops-build-toolchain-05/pull/52) 已合并，本次 [PR #57](https://github.com/liyuhan7/devops-build-toolchain-05/pull/57) 修正其服务器执行材料。
 - 运行版本：原始 `484dccd01c5a8d5cb4d63ab6187d80278a941900`，个人 `5568b2d33382a6ada903efd5b8daadeab468d028`；均为服务器干净工作区。
 - 证据：`/root/241830149/build-toolchain/work/echecker/server-e8-e9-241830149-20261117`。
 

@@ -1,7 +1,7 @@
 # E8—E9 个人 AI 使用记录
 
 - 成员：管泽昊 / 241830149；工具：Codex。具体模型标识未独立记录，不猜测型号。
-- 关联：Related to [Issue #47](https://github.com/liyuhan7/devops-build-toolchain-05/issues/47)，原 [PR #52](https://github.com/liyuhan7/devops-build-toolchain-05/pull/52) 已合并。
+- 关联：Related to [Issue #47](https://github.com/liyuhan7/devops-build-toolchain-05/issues/47)，原 [PR #52](https://github.com/liyuhan7/devops-build-toolchain-05/pull/52) 已合并；服务器纠正见 [PR #57](https://github.com/liyuhan7/devops-build-toolchain-05/pull/57)。
 - 本次服务器运行日期：2026-11-18；原始源码 `484dccd01c5a8d5cb4d63ab6187d80278a941900`，个人源码 `5568b2d33382a6ada903efd5b8daadeab468d028`。
 
 ## 任务、授权与执行纠正
@@ -30,4 +30,4 @@ Codex 通过 SSH 辅助执行自检、构建、服务与编排回归、E8 真实
 
 原始 WSL 的独立 AI 测试审查指出变异第二个子场景不是独立的撤销方向证明，当前报告保留该边界；未将 AI 检查记为人工批准。官方网络失败、主动停止的慢速构建、缓存环境试跑与最终标准轮次全部保留，如实说明，不删除失败来制造通过。
 
-本次以服务器证据修正已合并报告，不将此前 WSL 材料改名充数。未向第三方模型 API 发送代码或凭据；人工审核、后续 PR、最新 Actions 和最终合并以真实协作记录为准，E10 未开展。
+本次以服务器证据修正已合并报告，不将此前 WSL 材料改名充数。独立 Codex 只读审查核对了服务器镜像、trace/PID、Make 行号、提交 SHA、测试数量和归档摘要，未发现实质阻塞；官方镜像来源措辞按内容身份收窄，完整交付包生成与双端核验在收尾完成。未向第三方模型 API 发送代码或凭据；PR #57 的 Actions、人工审核和最终合并以真实协作记录为准，E10 未开展。
