@@ -2,6 +2,8 @@
 
 服务镜像保留 E4 环境，提供 `version`、`smoke` 和 `auto-build` 命令。`auto-build` 接受人工保存的候选 Dockerfile，在隔离的课程固定样例中先确认基线 `MISSING_MAKE`，再构建候选，并以候选镜像 ID 在断网容器中核对程序输出。E7 五场景门禁通过宿主机驱动脚本调用该服务命令。
 
+镜像构建默认使用阿里云 APT 与 PyPI 镜像，与 A 组一致；公共服务镜像地址默认与基础镜像相同，走 DaoCloud 加速器。境外 CI 通过 `scripts/draft/lab.py build --apt-mirror`、`--pip-index`、`--docker-cli-image` 改用官方源，`--cache-from`、`--cache-to` 启用 buildx 层缓存并在后续构建复用。E7 场景重放可用 `--build-mirror deb.debian.org` 只替换构建副本的 Debian 源主机；候选原文、`--replay` 的哈希校验和 E5/E6 记录保持不变，每份场景证据同时保存 `source-candidate.Dockerfile` 与 `build-adaptation.json`。
+
 E5/E6 的权威采集、溯源和证据核验入口位于仓库根目录 `scripts/draft/e5.py`、`scripts/draft/record_candidates.py`、`scripts/draft/e6.py` 和 `scripts/draft/verify_e6.py`。E7 门禁入口为 `scripts/draft/lab.py e7`，场景判据位于 `scripts/draft/gate.py`。操作、证据目录及报告要求见 [B 组 DRAFT 指南](../../docs/guides/B组DRAFT论文复现实验.md)。
 
 运行时通过 `/var/run/docker.sock` 使用宿主机 Docker，因此服务容器的 CPU、内存限制不约束宿主机执行的构建。只应在课程受信任环境运行；该教学重放不实现 E2 通用 DRAFT Job、模型调用或 OCI Artifact 交接，也不等同于论文规模实验。

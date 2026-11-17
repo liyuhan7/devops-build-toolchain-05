@@ -29,8 +29,16 @@ jobs:
           git rev-parse HEAD > work/draft/ci-scan/commit.txt
           python3 scripts/secret_scan.py . --history 2>&1 | tee work/draft/ci-scan/source-scan.log
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Build B group image and run service tests
-        run: python3 scripts/draft/lab.py build --image draft-lab:ci --out work/draft/ci-build --build-timeout 1200
+        run: >-
+          python3 scripts/draft/lab.py build --image draft-lab:ci
+          --out work/draft/ci-build --build-timeout 1200
+          --apt-mirror http://deb.debian.org --pip-index https://pypi.org/simple
+          --docker-cli-image docker.io/library/docker@sha256:9190b0613792e658a7783cf14b2d5ace5941bb68ede7276922ea36ee457d76ad
+          --cache-from type=gha --cache-to type=gha,mode=max
 
       - name: Check shared repository paths
         run: docker run --rm --network none draft-lab:ci python3 -m unittest discover -s tests/draft_lab -v
@@ -42,13 +50,15 @@ jobs:
           python3 scripts/secret_scan.py . --image draft-lab:ci 2>&1 | tee work/draft/ci-scan/image-scan.log
 
       - name: Run five real DRAFT scenarios
-        run: python3 scripts/draft/lab.py e7 --replay --image draft-lab:ci --out work/draft/ci-gate --build-timeout 600
+        run: >-
+          python3 scripts/draft/lab.py e7 --replay --image draft-lab:ci
+          --out work/draft/ci-gate --build-timeout 600 --build-mirror deb.debian.org
 
       - name: Prove a wrong oracle fails the gate
         shell: bash
         run: |
           set +e
-          python3 scripts/draft/gate.py --image draft-lab:ci --candidate fixtures/ci-candidates/context-driven.Dockerfile --out work/draft/ci-bad-oracle --case success --inject-bad-oracle --build-timeout 600
+          python3 scripts/draft/gate.py --image draft-lab:ci --candidate fixtures/ci-candidates/context-driven.Dockerfile --out work/draft/ci-bad-oracle --case success --inject-bad-oracle --build-timeout 600 --build-mirror deb.debian.org
           code=$?
           set -e
           test "$code" -eq 1

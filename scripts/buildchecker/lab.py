@@ -89,6 +89,10 @@ def main(argv=None):
     parser.add_argument("--out", help="本仓库 work/ 下的新目录")
     parser.add_argument("--image", help="覆盖默认的 buildchecker-lab:本人学号")
     parser.add_argument("--base-image", help="仅 build：覆盖 Dockerfile BASE_IMAGE，例如同 digest 的官方镜像引用")
+    parser.add_argument("--apt-mirror", help="仅 build：覆盖 Dockerfile APT 源前缀，例如境外 CI 使用 http://deb.debian.org")
+    parser.add_argument("--pip-index", help="仅 build：覆盖 Dockerfile PyPI 索引，例如境外 CI 使用 https://pypi.org/simple")
+    parser.add_argument("--cache-from", help="仅 build：buildx 缓存来源，例如 type=gha；传入时改用 docker buildx build")
+    parser.add_argument("--cache-to", help="仅 build：buildx 缓存导出，例如 type=gha,mode=max")
     parser.add_argument("--fixed", action="store_true", help="只修复 E6 的独立 Makefile 副本")
     parser.add_argument("--build-timeout", type=int, default=1200)
     parser.add_argument("--timeout", type=int, default=120, help="E6 clean/build 共用总执行预算（秒）")
@@ -99,6 +103,10 @@ def main(argv=None):
         parser.error("--fixed 仅用于 e6")
     if args.base_image and args.stage != "build":
         parser.error("--base-image 仅用于 build")
+    if (args.apt_mirror is not None or args.pip_index is not None) and args.stage != "build":
+        parser.error("--apt-mirror 与 --pip-index 仅用于 build")
+    if (args.cache_from is not None or args.cache_to is not None) and args.stage != "build":
+        parser.error("--cache-from 与 --cache-to 仅用于 build")
     if args.timeout <= 0 or args.build_timeout <= 0:
         parser.error("超时预算必须为正整数")
     image = student_image(args.image) if args.stage != "doctor" else args.image
@@ -118,7 +126,17 @@ def main(argv=None):
                            "--out", str(output / "env.json")], output / "doctor")
     elif args.stage == "build":
         build_args = ["--build-arg", "BASE_IMAGE=" + args.base_image] if args.base_image else []
-        code = run_logged(["docker", "build", "--load", "--progress=plain", *build_args, "-f", "services/buildchecker/Dockerfile",
+        if args.apt_mirror is not None:
+            build_args += ["--build-arg", "APT_MIRROR=" + args.apt_mirror]
+        if args.pip_index is not None:
+            build_args += ["--build-arg", "PIP_INDEX=" + args.pip_index]
+        # 缓存参数需要 buildx；本地不带缓存时仍用 docker build。
+        if args.cache_from is not None:
+            build_args += ["--cache-from", args.cache_from]
+        if args.cache_to is not None:
+            build_args += ["--cache-to", args.cache_to]
+        builder = ["docker", "buildx", "build"] if (args.cache_from is not None or args.cache_to is not None) else ["docker", "build"]
+        code = run_logged([*builder, "--load", "--progress=plain", *build_args, "-f", "services/buildchecker/Dockerfile",
                            "--label", f"org.opencontainers.image.revision={revision}",
                            "--label", f"io.devops.buildchecker.dirty={str(bool(status)).lower()}",
                            "-t", image, "."], output / "build", args.build_timeout)

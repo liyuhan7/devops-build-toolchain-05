@@ -1,6 +1,7 @@
 """用已记录候选和显式故障注入运行真实 Docker 门禁。"""
 import argparse
 import csv
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -10,6 +11,27 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 SERVICE_TEST_ARGS = ["pytest", "-c", "services/draft/pytest.ini", "services/draft/tests"]
+
+# E7 重放沿用 E6 的构建适配思路：只替换构建副本中的 Debian 源主机，候选原文与哈希不变。
+OFFICIAL_DEBIAN_HOST = "deb.debian.org"
+DOMESTIC_DEBIAN_HOSTS = (
+    "mirrors.aliyun.com",
+    "mirrors.tuna.tsinghua.edu.cn",
+    "mirrors.ustc.edu.cn",
+)
+SUPPORTED_BUILD_MIRRORS = {OFFICIAL_DEBIAN_HOST, *DOMESTIC_DEBIAN_HOSTS}
+
+
+def adapt_build_mirror(text, mirror):
+    """把构建副本中的国内 Debian 源主机替换为本次构建使用的主机。"""
+    if mirror not in SUPPORTED_BUILD_MIRRORS:
+        raise ValueError("Unsupported build mirror: " + mirror)
+    adapted, count = text, 0
+    for host in DOMESTIC_DEBIAN_HOSTS:
+        prefix = "https://" + host
+        count += adapted.count(prefix)
+        adapted = adapted.replace(prefix, "https://" + mirror)
+    return adapted, count
 
 def evaluate(name, code, report):
     if name == "invalid-candidate":
@@ -102,6 +124,8 @@ def main():
     parser.add_argument("--build-timeout", type=int, default=300)
     parser.add_argument("--case", action="append", choices=("success", "wrong-output", "invalid-candidate", "build-failed", "runtime-timeout"), help="Run selected cases only; repeat flag for multiple cases")
     parser.add_argument("--inject-bad-oracle", action="store_true")
+    parser.add_argument("--build-mirror", choices=sorted(SUPPORTED_BUILD_MIRRORS),
+                        help="仅替换构建副本中的 Debian 源主机，候选原文与哈希保持不变")
     args = parser.parse_args()
     if args.build_timeout <= 0:
         parser.error("Build timeout must be positive")
@@ -159,7 +183,23 @@ def main():
                     "note": "Controlled test mutation, not an additional model response"
                 }, indent=2), encoding="utf-8")
             path = case / "candidate.Dockerfile"
-            path.write_text(text, encoding="utf-8")
+            if args.build_mirror is None:
+                path.write_text(text, encoding="utf-8")
+            else:
+                # 只调整构建副本的软件源；候选原文与 --replay 的哈希校验保持不变。
+                adapted, count = adapt_build_mirror(text, args.build_mirror)
+                (case / "source-candidate.Dockerfile").write_text(text, encoding="utf-8")
+                path.write_text(adapted, encoding="utf-8")
+                (case / "build-adaptation.json").write_text(json.dumps({
+                    "kind": "debian_sources_rewrite",
+                    "from": sorted(DOMESTIC_DEBIAN_HOSTS),
+                    "to": "https://" + args.build_mirror,
+                    "replacement_count": count,
+                    "source_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+                    "build_sha256": hashlib.sha256(adapted.encode("utf-8")).hexdigest(),
+                    "reason": "CI 位于境外，构建副本改用官方源；候选原文与 replay 校验不变",
+                }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                print(f"[{name}] build mirror adapted: {count} replacement(s) -> https://{args.build_mirror}", flush=True)
             expected = "intentionally wrong output" if name == "wrong-output" else "hello E3"
             # Buildx 可能通过客户端读取仓库凭据，服务容器需联网；构建产物运行时仍断网。
             command = ["docker", "run", "--rm", "--network", "bridge", "--user", f"{os.getuid()}:{os.getgid()}", "-e", "HOME=/tmp",
@@ -190,6 +230,7 @@ def main():
         rows.append({"case": "runner", "passed": False, "error": str(exc)})
     passed = len(rows) == len(cases) + 1 and all(row["passed"] for row in rows)
     result = {"passed": passed, "image": args.image, "cases": rows, "intentional_failure": args.inject_bad_oracle,
+              "build_mirror": args.build_mirror,
               "selected_cases": cases, "build_timeout_seconds": args.build_timeout,
               "scope": "Recorded candidate replay for selected real workflow cases; not model generation or a three-project benchmark"}
     (output / "gate-result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
