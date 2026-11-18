@@ -1,4 +1,4 @@
-name: E8-E10 teaching validation
+name: MDFixer E8-E10 teaching validation
 on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
@@ -10,16 +10,15 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
       - name: Build teaching environment
-        run: docker build -f labs/e8e10/environment/services/buildchecker/Dockerfile -t course-e8e10:ci labs/e8e10/environment
-      - name: Validate both tracks
+        run: docker build --build-arg APT_MIRROR=http://deb.debian.org --build-arg PIP_INDEX=https://pypi.org/simple -f services/mdfixer/Dockerfile -t course-e8e10:ci .
+      - name: Validate MDFixer track
         shell: bash
         run: |
           set -euo pipefail
-          docker run --rm --network none --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/course" -w /course course-e8e10:ci python3 -m unittest discover -s labs/e8e10 -p test_profile.py -v
-          for track in A B; do
-            for stage in e8 e9 e10; do
-              docker run --rm --network none --cap-add SYS_PTRACE --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/course" -w /course course-e8e10:ci python3 labs/e8e10/lab.py "$stage" --track "$track" --out "/course/work/$track-$stage"
-            done
+          mkdir -p work
+          docker run --rm --network none course-e8e10:ci python3 -m unittest discover -s tests/e8e10 -p test_profile.py -v
+          for stage in e8 e9 e10; do
+            docker run --rm --network none --cap-add SYS_PTRACE --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD/work:/repo/work" -w /repo course-e8e10:ci python3 scripts/e8e10/lab.py "$stage" --track B --out "/repo/work/B-$stage"
           done
       - uses: actions/upload-artifact@v7.0.2
         if: always()

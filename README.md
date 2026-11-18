@@ -1,6 +1,6 @@
 # devops-build-toolchain-05
 
-2026 DevOps 课程教学实验 05 组项目仓库。仓库定义构建工具链的公共数据契约与四段接口，提供固定 fzy 版本的可复现测试基线，并接入 A 组 BuildChecker 与 B 组 DRAFT 教学实验入口。
+2026 DevOps 课程教学实验 05 组项目仓库。仓库定义构建工具链的公共数据契约与四段接口，提供固定 fzy 版本的可复现测试基线，并接入 A 组 BuildChecker、B 组 DRAFT 与 B 组 MDFixer 教学实验入口。
 
 ## 工具链
 
@@ -96,6 +96,12 @@ python3 scripts/e3/run_c0.py --operator <姓名>
 ## B 组 DRAFT 实验
 
 E5 失败复现与候选溯源、E6 同镜像验证及 E7 五场景门禁见 [B 组 DRAFT 指南](docs/guides/B组DRAFT论文复现实验.md)。报告按组别保存在 `docs/reports/B05/`；课程样例重放和 CI 使用经 E6 记录的候选，不代表通用 DRAFT API 或论文规模评价。
+
+## E8-E10 集成实验
+
+E8-E10 的 B 组 MDFixer 教学实现位于 [services/mdfixer/](services/mdfixer/)；阶段编排位于 [scripts/e8e10/](scripts/e8e10/)，回归测试位于 [tests/e8e10/](tests/e8e10/)。MDFixer 使用自己的 Dockerfile 和质量门禁，修复后调用项目已有 [BuildChecker](services/buildchecker/) 作上游重检。根目录 [run_lab.py](run_lab.py) 提供构建、测试和 E8/E9/E10 阶段入口；证据写入各成员自己的 work/ 子目录。原实验包目录已移除，统一使用项目根目录的入口。
+
+操作方式与教学 profile、生产接口契约之间的边界见 [E8-E10 集成运行说明](docs/guides/E8-E10集成运行说明.md)。
 
 ## 持续集成
 

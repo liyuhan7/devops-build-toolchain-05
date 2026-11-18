@@ -81,3 +81,11 @@ lock:
 # 只清理本人服务镜像，不删除其他同学的镜像或共享缓存。
 clean:
 	-docker image rm $(IMAGE)
+
+.PHONY: e8e10-build e8e10-test
+
+e8e10-build:
+	python3 run_lab.py build
+
+e8e10-test:
+	python3 run_lab.py test

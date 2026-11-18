@@ -1,6 +1,6 @@
 import json, tempfile, unittest
 from pathlib import Path
-from lab import fixture,scan,patch,commit
+from scripts.e8e10.lab import fixture,scan,patch,commit
 
 class ProfileTests(unittest.TestCase):
     def setUp(self):
@@ -41,7 +41,7 @@ class ProfileTests(unittest.TestCase):
 
 class StudentE8B(unittest.TestCase):
     def test_patch_keeps_recipe_bytes(self):
-        from lab import run
+        from scripts.e8e10.lab import run
         with tempfile.TemporaryDirectory() as directory:
             p=Path(directory)/'sample'
             fixture(p)
@@ -58,7 +58,7 @@ class StudentE8B(unittest.TestCase):
 
 class StudentE9B(unittest.TestCase):
     def test_macro_style_patch_updates_definition(self):
-        from lab import run
+        from scripts.e8e10.lab import run
         with tempfile.TemporaryDirectory() as directory:
             p=Path(directory)/'sample'
             fixture(p,'macro')

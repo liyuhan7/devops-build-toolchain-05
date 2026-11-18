@@ -1,15 +1,16 @@
-"""E8-E10 teaching profile: explicit C/Make rules, GCC dependency observation."""
-import argparse, csv, difflib, json, re, shutil, subprocess, time
+"""E8-E10 显式 C/Make 规则与 GCC 依赖观察教学流程。"""
+import argparse, csv, json, re, sys, time
 from pathlib import Path
 
-def save(p, data):
-    p=Path(p); p.parent.mkdir(parents=True,exist_ok=True)
-    p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT/'services/mdfixer'))
+from mdfixer.teaching import save, run, commit, patch, validate as validate_patch
 
-def run(cmd, cwd):
-    p=subprocess.run(cmd,cwd=cwd,text=True,capture_output=True,timeout=30)
-    if p.returncode: raise ValueError('COMMAND_FAILED '+repr(cmd)+'\n'+p.stdout+p.stderr)
-    return p.stdout
+def validate(p, patchfile, evidence, fail_test=False):
+    return validate_patch(p, patchfile, evidence, scan, fail_test)
+
+
+
 
 def fixture(p, style='direct'):
     p.mkdir(parents=True)
@@ -27,9 +28,6 @@ def fixture(p, style='direct'):
     (p/'.gitignore').write_text('*.o\napp\n')
     commit(p,'C0 baseline')
 
-def commit(p, msg):
-    run(['git','add','.'],p); run(['git','commit','-m',msg],p)
-    return run(['git','rev-parse','HEAD'],p).strip()
 
 def declarations(p):
     text=(p/'Makefile').read_text()
@@ -48,7 +46,7 @@ def declarations(p):
 def scan(p, old=None):
     start=time.perf_counter(); declared,flags=declarations(p)
     if flags not in ['-O0','-O1','-O0 -DMODE=1']: raise ValueError('UNSUPPORTED_FLAGS')
-    # Conservative invalidation: all local preprocessor lines, source set and recipes.
+    # 本教学范围内保守地使头文件指令、源文件集合及配方变化失效。
     files={x.name:x.read_text() for x in sorted(p.glob('*')) if x.suffix in ['.c','.h']}
     key={'directives':{n:[l for l in t.splitlines() if l.lstrip().startswith('#')] for n,t in files.items()},
          'recipes':[l for l in (p/'Makefile').read_text().splitlines() if l.startswith('\t')],
@@ -73,57 +71,11 @@ def scan(p, old=None):
             'resolved':[list(x) for x in sorted(previous-current)],'refreshed':refreshed,'reused':reused,
             'elapsed_s':time.perf_counter()-start}
 
-def patch(p,report):
-    if report['commit']!=run(['git','rev-parse','HEAD'],p).strip(): raise ValueError('STALE_REPORT')
-    original=(p/'Makefile').read_text(); changed=original; edits=[]
-    for f in report['findings']:
-        if f['type']!='MISSING': continue
-        t,d=f['target'],f['dependency']
-        if not re.fullmatch(r'[\w./-]+',d) or '..' in Path(d).parts or Path(d).is_absolute(): raise ValueError('UNSAFE_PATH')
-        if not (p/d).is_file(): raise ValueError('MISSING_INPUT')
-        m=re.search(r'^'+re.escape(t)+r': (.*)$',changed,re.M)
-        if not m: raise ValueError('UNSUPPORTED_TARGET')
-        raw=m[1]; macros=re.findall(r'\$\((\w+)\)',raw)
-        if raw.strip()==('$(%s)'%macros[0] if macros else ''):
-            name=macros[0]; vm=re.search(r'^'+name+r' = (.*)$',changed,re.M)
-            if not vm: raise ValueError('UNSUPPORTED_MACRO')
-            changed=changed[:vm.end()]+ ' '+d+changed[vm.end():]; style='macro'
-        else:
-            changed=changed[:m.end()]+' '+d+changed[m.end():]; style='mixed' if macros else 'direct'
-        edits.append({'target':t,'dependency':d,'style':style})
-    diff=''.join(difflib.unified_diff(original.splitlines(True),changed.splitlines(True),fromfile='a/Makefile',tofile='b/Makefile'))
-    return diff,edits
 
-def validate(p, patchfile, evidence, fail_test=False):
-    evidence.mkdir(parents=True); before=(p/'Makefile').read_bytes()
-    sandbox=evidence/'sandbox'; shutil.copytree(p,sandbox,ignore=shutil.ignore_patterns('.git','*.o','app'))
-    run(['git','init','-b','main'],sandbox)
-    run(['git','config','user.name','ValidationSandbox'],sandbox)
-    run(['git','config','user.email','fixture@localhost'],sandbox)
-    commit(sandbox,'sandbox input')
-    checks={}; error=None
-    try:
-        run(['git','apply','--check',str(patchfile.resolve())],sandbox); checks['patch_applies']=True
-        run(['git','apply',str(patchfile.resolve())],sandbox)
-        log=run(['make','clean'],sandbox)+run(['make','app'],sandbox);(evidence/'build.log').write_text(log);checks['build']=True
-        output=run(['./app'],sandbox).strip(); checks['test']=output==('99' if fail_test else '1')
-        # Real header-change build checks the originally broken incremental behavior.
-        time.sleep(1.05); (sandbox/'config.h').write_text('#define VALUE 2\n')
-        (evidence/'incremental.log').write_text(run(['make','app'],sandbox))
-        checks['header_change']=run(['./app'],sandbox).strip()=='2'
-        recheck=scan(sandbox); save(evidence/'recheck.json',recheck)
-        checks['no_missing']=not any(f['type']=='MISSING' for f in recheck['findings'])
-    except (ValueError,subprocess.TimeoutExpired) as ex: error=str(ex)
-    accepted=bool(checks) and all(checks.values()) and error is None
-    # Source remains untouched until all checks pass. Evidence sandbox is retained.
-    if accepted: (p/'Makefile').write_bytes((sandbox/'Makefile').read_bytes())
-    unchanged=(p/'Makefile').read_bytes()==before
-    result={'accepted':accepted,'checks':checks,'error':error,'source_unchanged':unchanged,'rollback':not accepted and unchanged}
-    save(evidence/'validation.json',result);return result
 
 def buildchecker(p,out):
     import sys
-    sys.path.insert(0,'/app')
+    sys.path.insert(0,str(ROOT/'services/buildchecker'))
     from buildchecker.fullcheck import full_check
     full_check(p,out)
     report=json.loads((out/'findings.json').read_text())
