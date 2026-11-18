@@ -72,4 +72,35 @@ class StudentE9B(unittest.TestCase):
             self.assertEqual(plan[0]['style'],'macro')
             self.assertFalse(any(x['type']=='MISSING' for x in scan(p)['findings']))
 
+class StudentE8BExtensionTests(unittest.TestCase):
+    def test_unknown_target_rejected_without_changing_makefile(self):
+        with tempfile.TemporaryDirectory() as directory:
+            p=Path(directory)/'sample'
+            fixture(p)
+            report=scan(p)
+            report['findings']=[{'type':'MISSING','target':'ghost.o','dependency':'config.h'}]
+            before=(p/'Makefile').read_bytes()
+            with self.assertRaisesRegex(ValueError,'UNSUPPORTED_TARGET'):
+                patch(p,report)
+            self.assertEqual((p/'Makefile').read_bytes(),before)
+
+class StudentE9BExtensionTests(unittest.TestCase):
+    def test_duplicate_declared_dependencies_are_normalized(self):
+        with tempfile.TemporaryDirectory() as directory:
+            p=Path(directory)/'sample'
+            fixture(p,'macro')
+            makefile=(p/'Makefile').read_text().replace(
+                'DEPS = main.c unused.h\n',
+                'DEPS = main.c unused.h unused.h\n')
+            (p/'Makefile').write_text(makefile)
+            commit(p,'student: duplicate declared dependency')
+            report=scan(p)
+            self.assertEqual(report['declared']['main.o'],['main.c','unused.h'])
+            self.assertEqual(
+                {(f['type'],f['dependency']) for f in report['findings']},
+                {('MISSING','config.h'),('REDUNDANT','unused.h')})
+            diff,plan=patch(p,report)
+            self.assertEqual(plan,[{'target':'main.o','dependency':'config.h','style':'macro'}])
+            self.assertEqual(diff.count('config.h'),1)
+
 if __name__=='__main__':unittest.main()
